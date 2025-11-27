@@ -101,4 +101,3 @@ The calculator considers:
 **Scenario 3: All teams lose + fantasy loses**
 - Multiple losses stack up
 - Can easily hit 50+ points (Pretty to Very Depressed)
-
