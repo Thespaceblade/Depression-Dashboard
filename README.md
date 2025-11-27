@@ -57,23 +57,6 @@ python3 depression_calculator.py --f1-dnf 1
 python3 depression_calculator.py --fantasy-wins 5 --fantasy-losses 7
 ```
 
-## Depression Levels
-
-- **0-10**: 😊 Feeling Great!
-- **11-25**: 😐 Mildly Disappointed
-- **26-50**: 😔 Pretty Depressed
-- **51-75**: 😢 Very Depressed
-- **76-100**: 😭 Rock Bottom
-- **100+**: 💀 Call for Help
-
-## Configuration
-
-Edit `teams_config.json` to:
-- Set expectations for each team
-- Add/remove rivals
-- Adjust interest levels
-- Update records manually
-
 ## How It Works
 
 The calculator considers:
