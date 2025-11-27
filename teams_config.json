@@ -1,0 +1,68 @@
+{
+  "teams": [
+    {
+      "name": "Dallas Cowboys",
+      "sport": "NFL",
+      "record": {"wins": 0, "losses": 0},
+      "expected_performance": 8,
+      "jasons_expectations": 9,
+      "rivals": ["Philadelphia Eagles", "New York Giants", "Washington Commanders"],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "America's Team - always high expectations"
+    },
+    {
+      "name": "Dallas Mavericks",
+      "sport": "NBA",
+      "record": {"wins": 0, "losses": 0},
+      "expected_performance": 7,
+      "jasons_expectations": 8,
+      "rivals": ["San Antonio Spurs", "Houston Rockets", "Phoenix Suns"],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "Luka magic"
+    },
+    {
+      "name": "Golden State Warriors",
+      "sport": "NBA",
+      "record": {"wins": 0, "losses": 0},
+      "expected_performance": 6,
+      "jasons_expectations": 7,
+      "rivals": ["Los Angeles Lakers", "Boston Celtics", "Cleveland Cavaliers"],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "Dynasty team"
+    },
+    {
+      "name": "Texas Rangers",
+      "sport": "MLB",
+      "record": {"wins": 0, "losses": 0},
+      "expected_performance": 5,
+      "jasons_expectations": 4,
+      "rivals": ["Houston Astros", "Los Angeles Angels"],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "Not that big - barely watches",
+      "interest_level": 0.3
+    }
+  ],
+  "f1_driver": {
+    "name": "Max Verstappen",
+    "sport": "F1",
+    "championship_position": 1,
+    "expected_performance": 10,
+    "jasons_expectations": 10,
+    "recent_races": [],
+    "recent_dnfs": 0,
+    "rivals": ["Lewis Hamilton", "Charles Leclerc", "Lando Norris"],
+    "notes": "Huge fan - Red Bull dominance"
+  },
+  "fantasy_team": {
+    "name": "Jason's Fantasy Squad",
+    "record": {"wins": 0, "losses": 0},
+    "expected_performance": 7,
+    "jasons_expectations": 8,
+    "recent_streak": []
+  }
+}
+
