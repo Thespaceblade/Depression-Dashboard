@@ -1,4 +1,4 @@
-# Jason's Depression Calculator 😢
+# Jason's Depression Calculator
 
 A script that calculates how depressed Jason is based on how his favorite teams are performing.
 
@@ -6,7 +6,7 @@ A script that calculates how depressed Jason is based on how his favorite teams 
 
 - **NFL**: Dallas Cowboys
 - **NBA**: Dallas Mavericks, Golden State Warriors  
-- **MLB**: Texas Rangers (low interest - barely watches)
+- **MLB**: Texas Rangers (low interest: barely watches)
 - **F1**: Max Verstappen (huge fan!)
 
 ## Features
