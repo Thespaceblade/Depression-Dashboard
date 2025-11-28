@@ -23,3 +23,31 @@ Thumbs.db
 # Project specific
 IsJasonDepressed/
 
+# Config files with sensitive data (cookies, API keys)
+teams_config.json
+
+# Build artifacts
+frontend/dist/
+frontend/node_modules/
+
+# Logs
+logs/*.log
+logs/*.json
+
+# Cache
+f1_cache/
+*.sqlite
+
+# Cache and data files
+f1_cache/
+*.sqlite
+*.ff1pkl
+
+# Logs
+logs/
+*.log
+
+# Frontend build artifacts
+frontend/dist/
+frontend/node_modules/
+
