@@ -6,7 +6,7 @@
   "functions": {
     "api/**/*.py": {
       "runtime": "python3.11",
-      "includeFiles": "teams_config.json"
+      "includeFiles": "teams_config.json,depression_calculator.py,sports_api.py"
     }
   },
   "crons": [

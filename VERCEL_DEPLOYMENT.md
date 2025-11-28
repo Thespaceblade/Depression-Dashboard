@@ -104,3 +104,5 @@ The `vercel.json` file is already configured to:
 - Serve the built files from `frontend/dist/`
 - Handle React Router (SPA routing)
 
+
+
