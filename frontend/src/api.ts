@@ -1,9 +1,8 @@
 import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData } from './types';
 
-// Use environment variable for production, fallback to proxy for development
-const API_BASE = import.meta.env.VITE_API_URL 
-  ? `${import.meta.env.VITE_API_URL}/api`
-  : '/api';
+// For Vercel, use relative paths (same domain)
+// No need for environment variable since frontend and API are on same domain
+const API_BASE = '/api';
 
 export async function fetchDepression(): Promise<DepressionData> {
   const response = await fetch(`${API_BASE}/depression`);

@@ -1,30 +1,28 @@
 """
-Vercel serverless function for /api/depression
+Vercel serverless function for /api/refresh
+Note: In serverless, we can't easily update files, so this just triggers a fetch
+For actual updates, use the cron job
 """
 from http.server import BaseHTTPRequestHandler
 import sys
 import os
 from datetime import datetime
 
-# Add utils to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from _utils import get_calculator, json_response, error_response
+from _utils import json_response, error_response
 
 class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        """Handle GET request"""
+    def do_POST(self):
+        """Handle POST request"""
         try:
-            calc = get_calculator()
-            result = calc.calculate_total_depression()
-            emoji, level = calc.get_depression_level(result["total_score"])
-            
+            # In serverless, we can't easily update files
+            # This endpoint just returns a message
+            # Actual updates should be done via cron job
             response = json_response({
                 "success": True,
-                "score": round(result["total_score"], 1),
-                "level": level,
-                "emoji": emoji,
-                "breakdown": result["breakdown"],
-                "timestamp": datetime.now().isoformat()
+                "message": "Refresh triggered. Data will be updated by scheduled cron job.",
+                "timestamp": datetime.now().isoformat(),
+                "note": "In serverless environment, use cron job for automatic updates"
             })
             
             self.send_response(response['statusCode'])
@@ -34,10 +32,7 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(response['body'].encode())
             
         except Exception as e:
-            import traceback
-            error_details = traceback.format_exc()
-            response = error_response(e, 500, error_details)
-            
+            response = error_response(e, 500)
             self.send_response(response['statusCode'])
             for key, value in response['headers'].items():
                 self.send_header(key, value)
@@ -51,3 +46,4 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
+
