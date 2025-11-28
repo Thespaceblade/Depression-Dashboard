@@ -49,5 +49,5 @@ backend/f1_cache/
 *.ff1pkl
 *.sqlite
 
-# Config (if you want to keep it private)
-# teams_config.json
+# Config files with sensitive data (cookies, API keys)
+teams_config.json

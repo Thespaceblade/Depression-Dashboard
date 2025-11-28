@@ -4,9 +4,9 @@
       "name": "Dallas Cowboys",
       "sport": "NFL",
       "record": {
-        "wins": 5,
-        "losses": 5,
-        "ties": 1
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
@@ -23,8 +23,8 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 5,
-        "losses": 14
+        "wins": 0,
+        "losses": 0
       },
       "expected_performance": 7,
       "jasons_expectations": 8,
@@ -41,8 +41,8 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 10,
-        "losses": 10
+        "wins": 0,
+        "losses": 0
       },
       "expected_performance": 6,
       "jasons_expectations": 7,
@@ -59,8 +59,8 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 81,
-        "losses": 81
+        "wins": 0,
+        "losses": 0
       },
       "expected_performance": 5,
       "jasons_expectations": 4,
@@ -90,13 +90,21 @@
     "notes": "Huge fan - Red Bull dominance"
   },
   "fantasy_team": {
-    "name": "Jason's Fantasy Squad",
+    "name": "Your Fantasy Team Name",
     "record": {
       "wins": 0,
       "losses": 0
     },
     "expected_performance": 7,
     "jasons_expectations": 8,
-    "recent_streak": []
+    "recent_streak": [],
+    "espn": {
+      "league_id": 0,
+      "year": 2024,
+      "team_name": "Your Team Name",
+      "espn_s2": "YOUR_ESPN_S2_COOKIE_HERE",
+      "swid": "YOUR_SWID_COOKIE_HERE"
+    }
   }
 }
+
