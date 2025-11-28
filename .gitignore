@@ -43,9 +43,11 @@ Thumbs.db
 *.log
 logs/
 
-# F1 Cache (can be large)
-f1_cache/*.pkl
-f1_cache/*.sqlite
+# F1 Cache (can be large - exclude entire directory)
+f1_cache/
+backend/f1_cache/
+*.ff1pkl
+*.sqlite
 
 # Config (if you want to keep it private)
 # teams_config.json

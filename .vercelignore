@@ -1,0 +1,64 @@
+# Exclude large cache directories from Vercel deployment
+f1_cache/
+backend/f1_cache/
+**/f1_cache/
+**/*.ff1pkl
+**/*.sqlite
+
+# Exclude Python cache
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*$py.class
+
+# Exclude logs
+logs/
+**/*.log
+
+# Exclude node_modules (should already be excluded, but just in case)
+node_modules/
+**/node_modules/
+
+# Exclude build artifacts
+*.egg-info/
+dist/
+build/
+frontend/dist/
+frontend/build/
+
+# Exclude environment files
+.env
+.env.local
+.env.production
+**/.env*
+
+# Exclude IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Exclude OS files
+.DS_Store
+Thumbs.db
+
+# Exclude test files
+tests/
+**/tests/
+
+# Exclude documentation (not needed in deployment)
+docs/
+*.md
+!README.md
+
+# Exclude scripts (not needed in serverless)
+scripts/
+
+# Exclude other large/unnecessary files
+*.pkl
+*.pickle
+

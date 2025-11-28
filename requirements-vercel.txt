@@ -1,7 +1,7 @@
-# Sports Data APIs
+# Sports Data APIs (fastf1 excluded - too large for serverless)
 sportsipy>=0.4.0
 nba_api>=1.2.1
-# fastf1>=3.1.0  # Optional - excluded from Vercel due to size (250MB limit). Install locally if needed.
+# fastf1>=3.1.0  # Excluded - too large for Vercel serverless (250MB limit)
 espn-api>=0.23.0
 
 # HTTP & Utilities
@@ -15,3 +15,4 @@ pytz>=2023.3
 flask>=3.0.0
 flask-cors>=4.0.0
 gunicorn>=21.2.0
+
