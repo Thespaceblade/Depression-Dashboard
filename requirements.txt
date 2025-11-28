@@ -1,4 +1,5 @@
 # Core dependencies (required for serverless functions)
+# Optimized for Vercel deployment - minimal dependencies to stay under 250MB limit
 requests>=2.31.0
 python-dateutil>=2.8.2
 pytz>=2023.3
