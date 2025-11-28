@@ -1,6 +1,6 @@
 # Exclude large cache directories from Vercel deployment
 f1_cache/
-backend/f1_cache/
+backend/
 **/f1_cache/
 **/*.ff1pkl
 **/*.sqlite
