@@ -1,4 +1,4 @@
-# Depression Dashboard 😢
+# Depression Dashboard
 
 A script that calculates how depressed Jason is based on how his favorite teams are performing.
 
