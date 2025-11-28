@@ -38,3 +38,5 @@ def error_response(error, status_code=500, details=None):
         data['details'] = details
     return json_response(data, status_code)
 
+
+
