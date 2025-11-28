@@ -192,6 +192,7 @@ See `docs/OPPONENT_CONTEXT.md` for detailed examples.
 
 ## Example Scenarios
 
+
 **Scenario 1: Cowboys lose to Eagles**
 - Base loss: 5 points
 - Rivalry multiplier: 2.5x = 12.5 points

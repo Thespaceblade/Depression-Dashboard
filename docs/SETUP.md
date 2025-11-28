@@ -204,3 +204,5 @@ The built files will be in `frontend/dist/`
 3. Add fantasy football API integration (requires league credentials)
 4. Add notifications (email, Slack, etc.) when depression gets too high
 
+
+

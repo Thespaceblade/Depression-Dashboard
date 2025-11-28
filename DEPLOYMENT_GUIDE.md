@@ -486,3 +486,5 @@ curl https://your-backend-url.com/api/depression
 
 Your dashboard will now run completely independently! 🚀
 
+
+

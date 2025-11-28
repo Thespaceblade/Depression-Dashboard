@@ -216,3 +216,5 @@ Since the F1 API is down, update `teams_config.json` manually:
 8. Add automatic score fetching
 9. Schedule updates (cron job or scheduled task)
 
+
+

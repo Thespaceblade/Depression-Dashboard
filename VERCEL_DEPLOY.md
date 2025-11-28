@@ -232,3 +232,5 @@ curl https://your-project.vercel.app/api/teams
 
 **That's it!** Your dashboard is now fully deployed on Vercel and runs completely autonomously! 🚀
 
+
+
