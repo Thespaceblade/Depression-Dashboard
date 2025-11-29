@@ -31,7 +31,7 @@ pip install -r requirements.txt
 This installs:
 - `sportsipy` - NFL and MLB data
 - `nba_api` - NBA data
-- `fastf1` - F1 data
+- OpenF1 REST API - F1 data (no Python package needed, uses HTTP requests)
 - `espn-api` - ESPN data (optional)
 - `requests` - HTTP requests
 

@@ -26,13 +26,10 @@
 ### ❌ Issues
 
 #### F1 (Max Verstappen)
-- **Problem**: Ergast API (ergast.com) is completely down/unreachable
-- **Error**: Connection refused on both HTTP and HTTPS
-- **Status**: ❌ Not Working
-- **Solution**: 
-  1. Manual input required in config file
-  2. Or use FastF1 library (requires session data, more complex)
-  3. Or find alternative F1 API
+- **Source**: OpenF1 REST API (api.openf1.org)
+- **Status**: ✅ Working - Uses simple HTTP requests, no dependencies
+- **Implementation**: Simplified REST API calls to OpenF1 endpoints
+- **Fallback**: Gracefully falls back to manual config data if API unavailable
 
 #### Recent Games
 - **Problem**: Events endpoints returning empty arrays
@@ -41,16 +38,14 @@
 
 ## Recommended Solutions (Free/Open Source)
 
-### 1. **Ergast F1 API** (Formula 1) - FREE ✅
-- **URL**: http://ergast.com/mrd/
-- **Status**: Free, no API key required (currently down)
-- **Coverage**: Historical and current F1 data
-- **Python Library**: `fastf1` (unofficial, but excellent)
-  ```bash
-  pip install fastf1
-  ```
-- **What it provides**: Race results, driver standings, lap times, DNFs
+### 1. **OpenF1 REST API** (Formula 1) - FREE ✅
+- **URL**: https://api.openf1.org/v1
+- **Status**: ✅ Working - Free, no API key required, simple HTTP requests
+- **Coverage**: Current F1 data (sessions, results, standings)
+- **Implementation**: Direct REST API calls via `requests` library (no extra dependencies)
+- **What it provides**: Race results, driver standings, DNFs
 - **Perfect for**: Tracking Max Verstappen's position, race results, DNFs
+- **Advantage**: Much simpler than FastF1 - no session loading or caching required
 
 ### 2. **sportsipy** (NFL, NBA, MLB) - FREE ✅
 - **GitHub**: https://github.com/roclark/sportsipy
@@ -128,7 +123,7 @@
 ## Recommended Implementation Strategy
 
 ### Phase 1: Free Solutions (Start Here)
-1. **F1**: Use `fastf1` library (Ergast API) - currently down, manual input needed
+1. **F1**: Use OpenF1 REST API (simple HTTP requests, no dependencies) - ✅ Working
 2. **NBA**: Use `nba_api` (official NBA API)
 3. **NFL/MLB**: Use `sportsipy` or `espn-api`
 4. **Fantasy**: Use `espn-api` if ESPN, or Yahoo API if Yahoo
@@ -141,9 +136,9 @@
 
 ```bash
 # Core sports data
-pip install sportsipy nba_api fastf1 espn-api
+pip install sportsipy nba_api espn-api
 
-# HTTP requests (if needed)
+# HTTP requests (required)
 pip install requests
 
 # Date handling
@@ -153,8 +148,8 @@ pip install python-dateutil
 ## Example Integration Code Structure
 
 ```python
-# F1 - Max Verstappen
-from fastf1 import api
+# F1 - Max Verstappen (using OpenF1 REST API)
+# No imports needed - uses requests library directly
 
 # NBA - Mavericks, Warriors
 from nba_api.stats.endpoints import scoreboard, teamgamelog

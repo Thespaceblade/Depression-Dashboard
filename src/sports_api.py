@@ -104,7 +104,6 @@ class NFLAPI(SportsAPI):
                     comp = competitions[0]
                     comp_status = comp.get('status', {}).get('type', {})
                     status_name = comp_status.get('name', '').upper() if isinstance(comp_status, dict) else str(comp_status).upper()
-                    completed = comp_status.get('completed', False) if isinstance(comp_status, dict) else False
                     
                     # Game is completed if it has scores and status indicates completion
                     competitors = comp.get('competitors', [])
@@ -177,11 +176,17 @@ class NFLAPI(SportsAPI):
                         'is_home': is_home,
                         'is_overtime': is_overtime
                     })
-                    
-                    if len(results) >= num_games:
-                        break
                 
-                return list(reversed(results))  # Most recent first
+                # Sort by date (most recent first) and return top N
+                def sort_key(game):
+                    try:
+                        from dateutil import parser as date_parser
+                        return date_parser.parse(game['date'])
+                    except:
+                        return datetime.min
+                
+                results.sort(key=sort_key, reverse=True)
+                return results[:num_games]  # Return most recent N games
         except Exception as e:
             print(f"Error fetching NFL schedule: {e}")
             return []
@@ -324,7 +329,6 @@ class NBAAPI(SportsAPI):
                     comp = competitions[0]
                     comp_status = comp.get('status', {}).get('type', {})
                     status_name = comp_status.get('name', '').upper() if isinstance(comp_status, dict) else str(comp_status).upper()
-                    completed = comp_status.get('completed', False) if isinstance(comp_status, dict) else False
                     
                     # Game is completed if it has scores and status indicates completion
                     competitors = comp.get('competitors', [])
@@ -391,11 +395,17 @@ class NBAAPI(SportsAPI):
                         'is_home': is_home,
                         'is_overtime': is_overtime
                     })
-                    
-                    if len(results) >= num_games:
-                        break
                 
-                return list(reversed(results))  # Most recent first
+                # Sort by date (most recent first) and return top N
+                def sort_key(game):
+                    try:
+                        from dateutil import parser as date_parser
+                        return date_parser.parse(game['date'])
+                    except:
+                        return datetime.min
+                
+                results.sort(key=sort_key, reverse=True)
+                return results[:num_games]  # Return most recent N games
         except Exception as e:
             print(f"Error fetching NBA schedule from ESPN: {e}")
             # Fallback to nba_api (returns simple list)
@@ -493,53 +503,67 @@ class MLBAPI(SportsAPI):
 
 
 class F1API(SportsAPI):
-    """F1 API using OpenF1 (primary) or FastF1 (fallback)"""
+    """F1 API using OpenF1 REST API (simplified, no dependencies)"""
     
     def __init__(self):
         super().__init__()
         self.openf1_base = "https://api.openf1.org/v1"
-        try:
-            import fastf1
-            import os
-            # Setup FastF1 cache
-            cache_dir = './f1_cache'
-            if not os.path.exists(cache_dir):
-                os.makedirs(cache_dir)
-            fastf1.Cache.enable_cache(cache_dir)
-            self.fastf1 = fastf1
-        except ImportError:
-            print("Warning: fastf1 not installed. Install with: pip install fastf1")
-            self.fastf1 = None
+        # Verstappen's driver number is 1
+        self.driver_number = 1
     
     def get_driver_standings(self, driver_name: str = "Verstappen") -> Optional[Dict]:
-        """Get Max Verstappen's championship position using OpenF1 or FastF1"""
+        """Get Max Verstappen's championship position using OpenF1 API"""
         current_year = datetime.now().year
         # F1 season typically runs March-November
         if datetime.now().month < 3:
             current_year -= 1
         
-        # Method 1: Try OpenF1 API (faster, simpler)
         try:
-            # Get all race sessions for the year
+            # Use OpenF1's simple standings endpoint if available, otherwise calculate from sessions
+            # Try to get standings directly first
+            standings_url = f"{self.openf1_base}/standings?year={current_year}"
+            try:
+                response = self.session.get(standings_url, timeout=10)
+                if response.status_code == 200:
+                    standings = response.json()
+                    if standings:
+                        # Find Verstappen in standings (driver_number = 1)
+                        for entry in standings:
+                            if entry.get('driver_number') == self.driver_number:
+                                return {
+                                    'position': entry.get('position', 1),
+                                    'points': entry.get('points', 0),
+                                    'wins': entry.get('wins', 0)
+                                }
+            except Exception:
+                # Standings endpoint might not exist, continue to session-based method
+                pass
+            
+            # Fallback: Calculate from race sessions (simpler approach)
             url = f"{self.openf1_base}/sessions?year={current_year}&session_type=Race"
-            response = self.session.get(url, timeout=15)
+            response = self.session.get(url, timeout=10)
             
             if response.status_code == 200:
                 sessions = response.json()
                 if sessions and len(sessions) > 0:
-                    # Calculate standings from all race results
+                    # Sort sessions by date to process chronologically
+                    sessions.sort(key=lambda x: x.get('date_start', ''))
+                    
                     driver_points = {}
                     driver_wins = {}
                     
-                    for session in sessions:
+                    # Process only completed races (limit to last 10 for speed)
+                    completed_sessions = [s for s in sessions if s.get('date_end')][-10:]
+                    
+                    for session in completed_sessions:
                         session_key = session.get('session_key')
                         if not session_key:
                             continue
                         
-                        # Get results for this race
-                        results_url = f"{self.openf1_base}/results?session_key={session_key}"
                         try:
-                            results_response = self.session.get(results_url, timeout=10)
+                            # Get results for this race
+                            results_url = f"{self.openf1_base}/results?session_key={session_key}"
+                            results_response = self.session.get(results_url, timeout=5)
                             
                             if results_response.status_code == 200:
                                 results = results_response.json()
@@ -553,95 +577,72 @@ class F1API(SportsAPI):
                                             if driver_num not in driver_points:
                                                 driver_points[driver_num] = 0
                                                 driver_wins[driver_num] = 0
-                                            driver_points[driver_num] += float(points)
+                                            driver_points[driver_num] += float(points or 0)
                                             if position == 1:
                                                 driver_wins[driver_num] += 1
-                        except Exception as e:
+                        except Exception:
                             # Skip this race if it fails, continue with others
                             continue
                     
-                    # Find Verstappen (driver number 1)
-                    if 1 in driver_points:
+                    # Find Verstappen (driver number 1) and calculate position
+                    if self.driver_number in driver_points:
                         # Calculate position by sorting all drivers
                         sorted_drivers = sorted(driver_points.items(), key=lambda x: x[1], reverse=True)
-                        position = next((i+1 for i, (num, pts) in enumerate(sorted_drivers) if num == 1), None)
+                        position = next((i+1 for i, (num, pts) in enumerate(sorted_drivers) if num == self.driver_number), 1)
                         
-                        if position:
-                            return {
-                                'position': position,
-                                'points': driver_points[1],
-                                'wins': driver_wins.get(1, 0)
-                            }
+                        return {
+                            'position': position,
+                            'points': driver_points[self.driver_number],
+                            'wins': driver_wins.get(self.driver_number, 0)
+                        }
         except requests.exceptions.RequestException as e:
             print(f"OpenF1 API connection error: {e}")
         except Exception as e:
             print(f"OpenF1 API error: {e}")
         
-        # Method 2: Try FastF1 as fallback
-        if self.fastf1:
-            try:
-                schedule = self.fastf1.get_event_schedule(current_year)
-                if len(schedule) > 0:
-                    # Get the last completed race
-                    last_race = schedule.iloc[-1]
-                    session = self.fastf1.get_session(current_year, last_race['RoundNumber'], 'R')
-                    session.load()
-                    
-                    # Get championship standings from FastF1
-                    # FastF1 doesn't directly provide standings, but we can calculate from results
-                    results = session.results
-                    verstappen = results[results['Abbreviation'] == 'VER']
-                    if not verstappen.empty:
-                        # For position, we'd need to calculate from all races
-                        # For now, return the last race position
-                        last_pos = int(verstappen.iloc[0]['Position'])
-                        return {
-                            'position': last_pos,  # This is just last race, not championship
-                            'points': 0,  # Would need to calculate
-                            'wins': 0
-                        }
-            except Exception as e:
-                print(f"FastF1 error: {e}")
-        
-        # If all methods fail, return None (will require manual input)
-        print(f"Warning: Could not fetch F1 data for {driver_name}. Manual input required in teams_config.json")
+        # Graceful fallback - return None so manual input can be used
+        print(f"Warning: Could not fetch F1 standings for {driver_name}. Using manual data from config.")
         return None
     
     def get_recent_race_results(self, driver_name: str = "Verstappen", num_races: int = 5) -> List[str]:
-        """Get recent race results for Max using OpenF1 or FastF1"""
+        """Get recent race results for Max using OpenF1 API"""
         current_year = datetime.now().year
         if datetime.now().month < 3:
             current_year -= 1
         
-        # Method 1: Try OpenF1
         try:
             url = f"{self.openf1_base}/sessions?year={current_year}&session_type=Race"
-            response = self.session.get(url, timeout=15)
+            response = self.session.get(url, timeout=10)
             
             if response.status_code == 200:
                 sessions = response.json()
                 if sessions and len(sessions) > 0:
+                    # Sort by date and get completed races only
+                    completed_sessions = [s for s in sessions if s.get('date_end')]
+                    completed_sessions.sort(key=lambda x: x.get('date_start', ''))
+                    
                     results = []
-                    # Get last N races (most recent first)
-                    for session in reversed(sessions[-num_races:]):
+                    # Get last N completed races (most recent first)
+                    for session in reversed(completed_sessions[-num_races:]):
                         session_key = session.get('session_key')
                         if not session_key:
                             continue
                         
                         try:
                             results_url = f"{self.openf1_base}/results?session_key={session_key}"
-                            results_response = self.session.get(results_url, timeout=10)
+                            results_response = self.session.get(results_url, timeout=5)
                             
                             if results_response.status_code == 200:
                                 race_results = results_response.json()
                                 if race_results:
                                     # Find Verstappen (driver number 1)
                                     for result in race_results:
-                                        if result.get('driver_number') == 1:
+                                        if result.get('driver_number') == self.driver_number:
                                             position = result.get('position')
-                                            status = result.get('status', '')
+                                            status = result.get('status', '') or ''
                                             
-                                            if status and 'Finished' not in status and 'DNF' in status.upper():
+                                            # Check for DNF
+                                            if not position or status.upper() in ['DNF', 'DSQ', 'DNS']:
                                                 results.append('DNF')
                                             elif position == 1:
                                                 results.append('W')
@@ -650,10 +651,10 @@ class F1API(SportsAPI):
                                             elif position:
                                                 results.append(f'P{position}')
                                             else:
-                                                results.append('DNF')  # Default if no position
+                                                results.append('DNF')
                                             break
-                        except Exception as e:
-                            # Skip this race if it fails
+                        except Exception:
+                            # Skip this race if it fails, continue with others
                             continue
                     
                     if results:
@@ -663,38 +664,8 @@ class F1API(SportsAPI):
         except Exception as e:
             print(f"OpenF1 race results error: {e}")
         
-        # Method 2: Try FastF1 as fallback
-        if self.fastf1:
-            try:
-                schedule = self.fastf1.get_event_schedule(current_year)
-                if len(schedule) >= num_races:
-                    results = []
-                    # Get last N races
-                    for i in range(len(schedule) - num_races, len(schedule)):
-                        try:
-                            race = schedule.iloc[i]
-                            session = self.fastf1.get_session(current_year, race['RoundNumber'], 'R')
-                            session.load()
-                            race_results = session.results
-                            verstappen = race_results[race_results['Abbreviation'] == 'VER']
-                            if not verstappen.empty:
-                                pos = int(verstappen.iloc[0]['Position'])
-                                if pos == 1:
-                                    results.append('W')
-                                elif pos in [2, 3]:
-                                    results.append(f'P{pos}')
-                                else:
-                                    results.append(f'P{pos}')
-                        except Exception as e:
-                            # Skip this race if it fails
-                            continue
-                    if results:
-                        return list(reversed(results))  # Most recent first
-            except Exception as e:
-                print(f"FastF1 race results error: {e}")
-        
-        # If all methods fail, return empty list
-        print(f"Warning: Could not fetch recent F1 race results for {driver_name}")
+        # Graceful fallback - return empty list so manual data can be used
+        print(f"Warning: Could not fetch recent F1 race results for {driver_name}. Using manual data from config.")
         return []
 
 
@@ -738,28 +709,113 @@ class CollegeBasketballAPI(SportsAPI):
         return None
     
     def get_recent_games(self, team_name: str, num_games: int = 5) -> List[str]:
-        """Get recent game results"""
+        """Get recent game results (W/L) from ESPN"""
+        game_data = self.get_recent_games_detailed(team_name, num_games)
+        return [game['result'] for game in game_data]
+    
+    def get_recent_games_detailed(self, team_name: str, num_games: int = 5) -> List[Dict]:
+        """Get recent game results with detailed data (dates, scores, opponents, home/away)"""
         try:
-            url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/153/events"
+            # UNC's ESPN team ID is 153
+            team_id = 153
+            
+            # Use schedule endpoint instead of events (more reliable)
+            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/schedule"
             response = self.session.get(url, timeout=10)
+            
             if response.status_code == 200:
                 data = response.json()
                 events = data.get('events', [])
                 results = []
-                for event in events[:num_games]:
+                
+                # Process all events, filter completed ones
+                for event in events:
                     competitions = event.get('competitions', [])
-                    if competitions:
-                        comp = competitions[0]
-                        competitors = comp.get('competitors', [])
-                        if len(competitors) == 2:
-                            # Find UNC
-                            unc = next((c for c in competitors if c.get('team', {}).get('id') == '153'), None)
-                            if unc:
-                                winner = unc.get('winner', False)
-                                results.append('W' if winner else 'L')
-                return list(reversed(results))
+                    if not competitions:
+                        continue
+                    
+                    comp = competitions[0]
+                    competitors = comp.get('competitors', [])
+                    if len(competitors) != 2:
+                        continue
+                    
+                    # Check if both teams have scores (game has been played)
+                    team1_score_obj = competitors[0].get('score')
+                    team2_score_obj = competitors[1].get('score')
+                    
+                    # Extract score value
+                    def get_score_value(score_obj):
+                        if score_obj is None:
+                            return None
+                        if isinstance(score_obj, dict):
+                            return score_obj.get('value')
+                        return score_obj
+                    
+                    team1_score = get_score_value(team1_score_obj)
+                    team2_score = get_score_value(team2_score_obj)
+                    
+                    # If no scores, game hasn't been played yet
+                    if team1_score is None or team2_score is None:
+                        continue
+                    
+                    # Find UNC
+                    team = next((c for c in competitors if c.get('team', {}).get('id') == str(team_id)), None)
+                    if not team:
+                        continue
+                    
+                    # Get opponent
+                    other_team = next((c for c in competitors if c.get('team', {}).get('id') != str(team_id)), None)
+                    
+                    # Extract game data
+                    team_score = get_score_value(team.get('score')) or 0
+                    other_score = get_score_value(other_team.get('score')) if other_team else 0
+                    team_winner = team.get('winner', False)
+                    
+                    # Determine result
+                    result = 'W' if team_winner else 'L'
+                    
+                    # Extract date
+                    event_date = event.get('date', '')
+                    
+                    # Determine home/away
+                    is_home = team.get('homeAway', '').lower() == 'home'
+                    
+                    # Get opponent name
+                    opponent_name = other_team.get('team', {}).get('displayName', 'Unknown') if other_team else 'Unknown'
+                    
+                    # Calculate score margin
+                    score_margin = abs(team_score - other_score)
+                    
+                    # Check for overtime
+                    comp_status = comp.get('status', {}).get('type', {})
+                    status_name = comp_status.get('name', '').upper() if isinstance(comp_status, dict) else str(comp_status).upper()
+                    is_overtime = 'OT' in status_name or 'OVERTIME' in status_name
+                    
+                    results.append({
+                        'result': result,
+                        'date': event_date,
+                        'opponent': opponent_name,
+                        'team_score': team_score,
+                        'opponent_score': other_score,
+                        'score_margin': score_margin,
+                        'is_home': is_home,
+                        'is_overtime': is_overtime
+                    })
+                
+                # Sort by date (most recent first) and return top N
+                def sort_key(game):
+                    try:
+                        from dateutil import parser as date_parser
+                        return date_parser.parse(game['date'])
+                    except:
+                        return datetime.min
+                
+                results.sort(key=sort_key, reverse=True)
+                return results[:num_games]  # Return most recent N games
         except Exception as e:
             print(f"Error fetching college basketball schedule: {e}")
+            import traceback
+            traceback.print_exc()
         return []
 
 
@@ -800,28 +856,119 @@ class CollegeFootballAPI(SportsAPI):
         return None
     
     def get_recent_games(self, team_name: str, num_games: int = 5) -> List[str]:
-        """Get recent game results"""
+        """Get recent game results (W/L/T) from ESPN"""
+        game_data = self.get_recent_games_detailed(team_name, num_games)
+        return [game['result'] for game in game_data]
+    
+    def get_recent_games_detailed(self, team_name: str, num_games: int = 5) -> List[Dict]:
+        """Get recent game results with detailed data (dates, scores, opponents, home/away)"""
         try:
-            url = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/153/events"
+            # UNC's ESPN team ID is 153
+            team_id = 153
+            
+            # Use schedule endpoint instead of events (more reliable)
+            url = f"https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/schedule"
             response = self.session.get(url, timeout=10)
+            
             if response.status_code == 200:
                 data = response.json()
                 events = data.get('events', [])
                 results = []
-                for event in events[:num_games]:
+                
+                # Process all events, filter completed ones
+                for event in events:
                     competitions = event.get('competitions', [])
-                    if competitions:
-                        comp = competitions[0]
-                        competitors = comp.get('competitors', [])
-                        if len(competitors) == 2:
-                            # Find UNC
-                            unc = next((c for c in competitors if c.get('team', {}).get('id') == '153'), None)
-                            if unc:
-                                winner = unc.get('winner', False)
-                                results.append('W' if winner else 'L')
-                return list(reversed(results))
+                    if not competitions:
+                        continue
+                    
+                    comp = competitions[0]
+                    competitors = comp.get('competitors', [])
+                    if len(competitors) != 2:
+                        continue
+                    
+                    # Check if both teams have scores (game has been played)
+                    team1_score_obj = competitors[0].get('score')
+                    team2_score_obj = competitors[1].get('score')
+                    
+                    # Extract score value
+                    def get_score_value(score_obj):
+                        if score_obj is None:
+                            return None
+                        if isinstance(score_obj, dict):
+                            return score_obj.get('value')
+                        return score_obj
+                    
+                    team1_score = get_score_value(team1_score_obj)
+                    team2_score = get_score_value(team2_score_obj)
+                    
+                    # If no scores, game hasn't been played yet
+                    if team1_score is None or team2_score is None:
+                        continue
+                    
+                    # Find UNC
+                    team = next((c for c in competitors if c.get('team', {}).get('id') == str(team_id)), None)
+                    if not team:
+                        continue
+                    
+                    # Get opponent
+                    other_team = next((c for c in competitors if c.get('team', {}).get('id') != str(team_id)), None)
+                    
+                    # Extract game data
+                    team_score = get_score_value(team.get('score')) or 0
+                    other_score = get_score_value(other_team.get('score')) if other_team else 0
+                    team_winner = team.get('winner', False)
+                    other_winner = other_team.get('winner', False) if other_team else False
+                    
+                    # Determine result (college football can have ties)
+                    if team_score == other_score and team_score > 0 and not team_winner and not other_winner:
+                        result = 'T'
+                    elif team_winner:
+                        result = 'W'
+                    else:
+                        result = 'L'
+                    
+                    # Extract date
+                    event_date = event.get('date', '')
+                    
+                    # Determine home/away
+                    is_home = team.get('homeAway', '').lower() == 'home'
+                    
+                    # Get opponent name
+                    opponent_name = other_team.get('team', {}).get('displayName', 'Unknown') if other_team else 'Unknown'
+                    
+                    # Calculate score margin
+                    score_margin = abs(team_score - other_score)
+                    
+                    # Check for overtime
+                    comp_status = comp.get('status', {}).get('type', {})
+                    status_name = comp_status.get('name', '').upper() if isinstance(comp_status, dict) else str(comp_status).upper()
+                    is_overtime = 'OT' in status_name or 'OVERTIME' in status_name
+                    
+                    results.append({
+                        'result': result,
+                        'date': event_date,
+                        'opponent': opponent_name,
+                        'team_score': team_score,
+                        'opponent_score': other_score,
+                        'score_margin': score_margin,
+                        'is_home': is_home,
+                        'is_overtime': is_overtime
+                    })
+                
+                # Sort by date (most recent first) and return top N
+                def sort_key(game):
+                    try:
+                        from dateutil import parser as date_parser
+                        return date_parser.parse(game['date'])
+                    except:
+                        return datetime.min
+                
+                results.sort(key=sort_key, reverse=True)
+                return results[:num_games]  # Return most recent N games
         except Exception as e:
             print(f"Error fetching college football schedule: {e}")
+            import traceback
+            traceback.print_exc()
         return []
 
 
