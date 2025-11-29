@@ -7,7 +7,7 @@ const API_BASE = '/api';
 export async function fetchDepression(): Promise<DepressionData> {
   const response = await fetch(`${API_BASE}/depression`);
   if (!response.ok) {
-    throw new Error('Failed to fetch depression data');
+    throw new Error('Failed to fetch Jason team data');
   }
   return response.json();
 }

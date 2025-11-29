@@ -78,7 +78,7 @@ After deployment:
 
 ## Troubleshooting
 
-### Frontend shows "Failed to load depression data"
+### Frontend shows "Failed to load Jason team data"
 - Check that `VITE_API_URL` is set correctly in Vercel
 - Make sure backend is running and accessible
 - Check browser console for CORS errors

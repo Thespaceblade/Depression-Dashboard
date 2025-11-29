@@ -119,7 +119,7 @@ Visit your Vercel URL: `https://your-project.vercel.app`
 # Health check
 curl https://your-project.vercel.app/api/health
 
-# Depression data
+# Jason team data
 curl https://your-project.vercel.app/api/depression
 
 # Teams data

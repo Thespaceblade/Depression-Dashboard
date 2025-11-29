@@ -132,7 +132,7 @@ pip install -r requirements.txt
 - Run `npm install` in the frontend directory
 - Check that port 3000 is not in use (Vite will auto-use next available port)
 
-### "Error Loading Data" or "Failed to load depression data"
+### "Error Loading Data" or "Failed to load Jason team data"
 **Solution**: Make sure the backend is running!
 
 1. Check if backend is running:
@@ -169,7 +169,7 @@ Test if the backend works:
 # Health check
 curl http://localhost:5001/api/health
 
-# Get depression data
+# Get Jason team data
 curl http://localhost:5001/api/depression
 
 # Get teams data
