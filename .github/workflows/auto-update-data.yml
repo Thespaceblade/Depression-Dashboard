@@ -107,9 +107,9 @@ jobs:
             # Force add in case file is in .gitignore (it contains public data, not secrets)
             git add -f teams_config.json || git add teams_config.json
             if ! git diff --staged --quiet; then
+              # Pull latest changes first to avoid conflicts
+              git pull --rebase origin main || git pull origin main || true
               git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
-              # Pull latest changes and rebase before pushing to avoid conflicts
-              git pull --rebase origin main || git pull origin main
               git push origin main
             else
               echo "No changes to commit"
