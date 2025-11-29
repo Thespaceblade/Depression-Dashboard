@@ -147,8 +147,15 @@
 
 1. **Test Backend Locally:**
    ```bash
+   # Install dependencies first
+   pip install -r requirements.txt
+   
+   # Option 1: Use start script
+   ./scripts/start_backend.sh
+   
+   # Option 2: Run directly
    cd backend
-   python app.py
+   python3 app.py
    # Test: curl http://localhost:5001/api/health
    ```
 
