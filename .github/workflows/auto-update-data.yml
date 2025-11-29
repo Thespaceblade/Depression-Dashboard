@@ -28,6 +28,38 @@ jobs:
           # Heavy fetch-only deps (CI only, not on Vercel)
           pip install fastf1 nba_api sportsipy espn-api
       
+      - name: Ensure teams_config.json exists
+        run: |
+          if [ ! -f teams_config.json ]; then
+            echo "Creating default teams_config.json..."
+            cat > teams_config.json << 'EOF'
+          {
+            "teams": [],
+            "f1_driver": {
+              "name": "Max Verstappen",
+              "sport": "F1",
+              "championship_position": 1,
+              "expected_performance": 10,
+              "jasons_expectations": 10,
+              "recent_races": [],
+              "recent_dnfs": 0,
+              "rivals": ["Lewis Hamilton", "Charles Leclerc", "Lando Norris"],
+              "notes": "Huge fan - Red Bull dominance"
+            },
+            "fantasy_team": {
+              "name": "Jason's Fantasy Squad",
+              "record": {
+                "wins": 0,
+                "losses": 0
+              },
+              "expected_performance": 7,
+              "jasons_expectations": 8,
+              "recent_streak": []
+            }
+          }
+          EOF
+          fi
+      
       - name: Fetch latest sports data
         run: |
           python fetch_all_data.py
