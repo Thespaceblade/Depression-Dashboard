@@ -23,7 +23,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          # Install lightweight deps from requirements.txt (kept small for Vercel)
           pip install -r requirements.txt
+          # Install heavy fetch-time deps ONLY in CI (not on Vercel)
+          # These power nba / MLB / F1 / fantasy fetching but are not needed in production bundle
+          pip install fastf1 nba_api sportsipy espn-api
       
       - name: Fetch latest sports data
         run: |
