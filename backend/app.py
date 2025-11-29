@@ -11,10 +11,10 @@ from flask_cors import CORS
 from datetime import datetime
 from dateutil import parser as date_parser
 
-# Add parent directory to path to import depression_calculator
+# Add parent directory to path to import from src
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from depression_calculator import DepressionCalculator
+from src.depression_calculator import DepressionCalculator
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for frontend
@@ -142,7 +142,7 @@ def get_recent_games():
         games = []
         
         # Try to fetch enhanced game data from APIs
-        from sports_api import SportsDataFetcher
+        from src.sports_api import SportsDataFetcher
         fetcher = SportsDataFetcher()
         
         # Process team games with enhanced data
@@ -286,7 +286,7 @@ def get_recent_games():
 def get_upcoming_events():
     """Get upcoming games, races, and events"""
     try:
-        from sports_api import SportsDataFetcher
+        from src.sports_api import SportsDataFetcher
         fetcher = SportsDataFetcher()
         upcoming_events = []
         
@@ -449,7 +449,7 @@ def refresh_data():
         import sys
         
         # Use the comprehensive fetch_all_data.py script
-        script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "fetch_all_data.py")
+        script_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "scripts", "fetch_all_data.py")
         config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
         
         # Run the fetch script
@@ -493,7 +493,7 @@ def refresh_data():
         
         # Fallback: try basic refresh without fantasy
         try:
-            from sports_api import SportsDataFetcher
+            from src.sports_api import SportsDataFetcher
             config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
             fetcher = SportsDataFetcher()
             fetcher.update_config_file(config_path)

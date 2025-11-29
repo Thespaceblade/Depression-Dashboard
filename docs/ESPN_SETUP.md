@@ -82,13 +82,13 @@ Once you've configured ESPN in your config file, test it:
 
 ```bash
 # Show setup instructions
-python3 depression_calculator.py --espn-help
+python3 -m src.depression_calculator --espn-help
 
 # Refresh fantasy data from ESPN
-python3 depression_calculator.py --refresh-fantasy
+python3 -m src.depression_calculator --refresh-fantasy
 
 # Run the calculator (will auto-fetch from ESPN)
-python3 depression_calculator.py
+python3 -m src.depression_calculator
 ```
 
 ## Troubleshooting
@@ -112,7 +112,7 @@ If you prefer to manually update your fantasy team record:
 
 ```bash
 # Disable ESPN API
-python3 depression_calculator.py --no-espn
+python3 -m src.depression_calculator --no-espn
 
 # Or manually update in the config file and don't include the "espn" section
 ```

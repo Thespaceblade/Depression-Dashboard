@@ -89,7 +89,7 @@ Railway supports cron jobs via their "Cron" service:
        {
          "name": "fetch-sports-data",
          "schedule": "0 */6 * * *",
-         "command": "python fetch_all_data.py"
+         "command": "python scripts/fetch_all_data.py"
        }
      ]
    }
@@ -97,7 +97,7 @@ Railway supports cron jobs via their "Cron" service:
 
 2. **Or use Railway's Cron Service**:
    - Add a new service in Railway dashboard
-   - Set it to run: `python fetch_all_data.py`
+   - Set it to run: `python scripts/fetch_all_data.py`
    - Schedule: Every 6 hours (`0 */6 * * *`)
 
 ### Frontend Setup (Vercel)
@@ -157,7 +157,7 @@ Railway supports cron jobs via their "Cron" service:
        name: fetch-sports-data
        schedule: "0 */6 * * *"
        buildCommand: pip install -r requirements.txt
-       startCommand: python fetch_all_data.py
+       startCommand: python scripts/fetch_all_data.py
    ```
 
 ### Frontend Setup (Netlify)
@@ -199,7 +199,7 @@ Railway supports cron jobs via their "Cron" service:
 
 5. **Add Heroku Scheduler** (for cron):
    - Install addon: `heroku addons:create scheduler:standard`
-   - Set command: `python fetch_all_data.py`
+   - Set command: `python scripts/fetch_all_data.py`
    - Schedule: Every 6 hours
 
 ---
@@ -273,7 +273,7 @@ Railway supports cron jobs via their "Cron" service:
    ```bash
    crontab -e
    # Add:
-   0 */6 * * * cd /path/to/Depression-Dashboard && /path/to/venv/bin/python fetch_all_data.py
+   0 */6 * * * cd /path/to/Depression-Dashboard && /path/to/venv/bin/python scripts/fetch_all_data.py
    ```
 
 ---
@@ -282,7 +282,7 @@ Railway supports cron jobs via their "Cron" service:
 
 ### 1. Automated Data Fetching Script
 
-Create `fetch_all_data.py` (if it doesn't exist):
+Create `scripts/fetch_all_data.py` (if it doesn't exist):
 
 ```python
 #!/usr/bin/env python3
@@ -293,7 +293,7 @@ Runs on schedule to update teams_config.json
 
 import sys
 import os
-from sports_api import SportsDataFetcher
+from src.sports_api import SportsDataFetcher
 
 def main():
     config_path = os.path.join(os.path.dirname(__file__), "teams_config.json")
@@ -349,7 +349,7 @@ jobs:
         run: |
           pip install -r requirements.txt
       - name: Fetch data
-        run: python fetch_all_data.py
+        run: python scripts/fetch_all_data.py
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
@@ -390,7 +390,7 @@ VITE_API_URL=https://your-backend-url.com
 4. Deploy
 
 ### Step 3: Automated Updates
-1. Use Railway cron to run `fetch_all_data.py` every 6 hours
+1. Use Railway cron to run `scripts/fetch_all_data.py` every 6 hours
 2. Config file updates automatically
 3. Backend reloads config on next request
 
@@ -461,7 +461,7 @@ curl https://your-backend-url.com/api/depression
 ### Data not updating
 - Verify cron job is running
 - Check cron logs
-- Verify `fetch_all_data.py` has execute permissions
+- Verify `scripts/fetch_all_data.py` has execute permissions
 
 ### Frontend can't reach backend
 - Check CORS settings
@@ -485,6 +485,8 @@ curl https://your-backend-url.com/api/depression
 6. Set up monitoring
 
 Your dashboard will now run completely independently! 🚀
+
+
 
 
 

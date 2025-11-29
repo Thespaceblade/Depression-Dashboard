@@ -17,13 +17,13 @@ pip install -r requirements.txt
 ### 2. Test API Integration (Optional)
 
 ```bash
-python3 sports_api.py
+python3 -m src.sports_api
 ```
 
 ### 3. Calculate Depression with Live Data
 
 ```bash
-python3 depression_calculator.py --fetch
+python3 -m src.depression_calculator --fetch
 ```
 
 ## Dashboard Setup
@@ -98,9 +98,9 @@ You can also use the convenience scripts:
 
 ## What Each File Does
 
-- **`depression_calculator.py`** - Main script that calculates depression level
-- **`sports_api.py`** - Fetches data from sports APIs
-- **`fetch_all_data.py`** - Automated data fetching script
+- **`src/depression_calculator.py`** - Main script that calculates depression level
+- **`src/sports_api.py`** - Fetches data from sports APIs
+- **`scripts/fetch_all_data.py`** - Automated data fetching script
 - **`teams_config.json`** - Configuration with your teams and expectations
 - **`requirements.txt`** - Python dependencies
 - **`backend/app.py`** - Flask API server
@@ -156,7 +156,7 @@ pip install -r requirements.txt
 ### No data returned
 - Check internet connection
 - Some APIs may be down
-- Try running `sports_api.py` separately to debug
+- Try running `python3 -m src.sports_api` separately to debug
 
 ### CORS errors
 - The backend includes CORS headers, but if you see errors, check that `flask-cors` is installed
@@ -203,6 +203,8 @@ The built files will be in `frontend/dist/`
 2. Set up automatic daily data fetching (see `docs/DAILY_FETCH.md`)
 3. Add fantasy football API integration (requires league credentials)
 4. Add notifications (email, Slack, etc.) when depression gets too high
+
+
 
 
 
