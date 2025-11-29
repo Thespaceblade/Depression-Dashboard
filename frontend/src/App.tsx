@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import Header from './components/Header';
 import DepressionScoreCard from './components/DepressionScoreCard';
 import TeamCard from './components/TeamCard';
@@ -203,6 +204,7 @@ function App() {
           </p>
         </footer>
       </div>
+      <Analytics />
     </div>
   );
 }
