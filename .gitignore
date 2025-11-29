@@ -50,4 +50,5 @@ backend/f1_cache/
 *.sqlite
 
 # Config files with sensitive data (cookies, API keys)
-teams_config.json
+# Note: teams_config.json is tracked - it only contains public sports data, not API keys
+# ESPN API credentials should be in environment variables or a separate .env file
