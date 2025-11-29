@@ -20,7 +20,7 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
   ls teams_config.json  # Should exist
   ```
 
-- [ ] **Test backend locally** (optional but recommended)
+- [✅] **Test backend locally** (optional but recommended)
   ```bash
   # First, install Python dependencies
   pip install -r requirements.txt
@@ -39,6 +39,7 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
   
   **Note:** The backend is a Python Flask app, NOT Node.js. Use `python3` or `pip`, not `npm`.
 
+- [✅] **Test backend locally** (optional but recommended)
 - [ ] **Test frontend locally** (optional but recommended)
   ```bash
   cd frontend
@@ -53,20 +54,20 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
 ## 🚂 Step 1: Deploy Backend to Railway
 
 ### 1.1 Connect Railway to GitHub
-- [ ] Go to [railway.app](https://railway.app)
-- [ ] Sign up/Login (use GitHub OAuth)
-- [ ] Click **"New Project"**
-- [ ] Select **"Deploy from GitHub repo"**
-- [ ] Choose your **Depression-Dashboard** repository
-- [ ] Railway will auto-detect it's a Python project
+- [✅] Go to [railway.app](https://railway.app)
+- [✅] Sign up/Login (use GitHub OAuth)
+- [✅] Click **"New Project"**
+- [✅] Select **"Deploy from GitHub repo"**
+- [✅] Choose your **Depression-Dashboard** repository
+- [✅] Railway will auto-detect it's a Python project
 
 ### 1.2 Configure Railway Service
-- [ ] Railway should auto-detect:
+- [✅] Railway should auto-detect:
   - ✅ Root directory: `.` (root)
   - ✅ Build command: Auto-detected from `nixpacks.toml`
   - ✅ Start command: `gunicorn --bind 0.0.0.0:$PORT backend.app:app`
 
-- [ ] **Verify settings match:**
+- [✅] **Verify settings match:**
   - Build command: Should use `nixpacks.toml` (auto-detected)
   - Start command: `gunicorn --bind 0.0.0.0:$PORT backend.app:app`
   - Port: Auto-set via `$PORT` environment variable

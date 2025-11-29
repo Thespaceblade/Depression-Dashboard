@@ -519,6 +519,23 @@ def refresh_data():
                 "error": f"Refresh failed: {str(e)}"
         }), 500
 
+@app.route('/', methods=['GET'])
+def root():
+    """Root endpoint - lists available API endpoints"""
+    return jsonify({
+        "message": "Depression Dashboard API",
+        "version": "1.0",
+        "endpoints": {
+            "health": "/api/health",
+            "depression": "/api/depression",
+            "teams": "/api/teams",
+            "recent_games": "/api/recent-games",
+            "upcoming_events": "/api/upcoming-events",
+            "refresh": "/api/refresh (POST)"
+        },
+        "timestamp": datetime.now().isoformat()
+    })
+
 @app.route('/api/health', methods=['GET'])
 def health():
     """Health check endpoint"""
