@@ -66,7 +66,7 @@ crontab -e
 Create `/etc/systemd/system/depression-fetch.service`:
 ```ini
 [Unit]
-Description=Daily Depression Data Fetch
+Description=Daily Jason Team Data Fetch
 After=network.target
 
 [Service]
@@ -79,7 +79,7 @@ ExecStart=/usr/bin/python3 /path/to/Depression-Dashboard/scripts/fetch_all_data.
 Create `/etc/systemd/system/depression-fetch.timer`:
 ```ini
 [Unit]
-Description=Daily Depression Data Fetch Timer
+Description=Daily Jason Team Data Fetch Timer
 Requires=depression-fetch.service
 
 [Timer]
@@ -101,7 +101,7 @@ sudo systemctl start depression-fetch.timer
 
 1. Open Task Scheduler
 2. Create Basic Task
-3. Name: "Daily Depression Data Fetch"
+3. Name: "Daily Jason Team Data Fetch"
 4. Trigger: Daily at 6:00 PM
 5. Action: Start a program
    - Program: `python.exe`
