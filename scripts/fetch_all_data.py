@@ -8,14 +8,15 @@ import sys
 import os
 from datetime import datetime
 
-# Add current directory to path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Add parent directory to path
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent_dir)
 
-from sports_api import SportsDataFetcher
+from src.sports_api import SportsDataFetcher
 
 def main():
     """Fetch all sports data and update config file"""
-    config_path = os.path.join(os.path.dirname(__file__), "teams_config.json")
+    config_path = os.path.join(parent_dir, "teams_config.json")
     
     print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Starting data fetch...")
     

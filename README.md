@@ -42,7 +42,13 @@ This installs:
 Just run the script to see your current depression level:
 
 ```bash
-python3 depression_calculator.py
+python3 -m src.depression_calculator
+```
+
+Or if you have the src directory in your path:
+
+```bash
+python3 src/depression_calculator.py
 ```
 
 ### Automatic Data Fetching
@@ -50,7 +56,7 @@ python3 depression_calculator.py
 Fetch the latest scores from APIs automatically:
 
 ```bash
-python3 depression_calculator.py --fetch
+python3 -m src.depression_calculator --fetch
 ```
 
 This will:
@@ -85,27 +91,27 @@ Update a team's record:
 
 ```bash
 # Update Cowboys to 8-3
-python3 depression_calculator.py --update-team "Cowboys" --wins 8 --losses 3
+python3 -m src.depression_calculator --update-team "Cowboys" --wins 8 --losses 3
 
 # Add a rivalry loss
-python3 depression_calculator.py --update-team "Cowboys" --rivalry-loss "Eagles"
+python3 -m src.depression_calculator --update-team "Cowboys" --rivalry-loss "Eagles"
 ```
 
 ### Update F1 Status
 
 ```bash
 # Max drops to 2nd place
-python3 depression_calculator.py --f1-position 2
+python3 -m src.depression_calculator --f1-position 2
 
 # Max has a DNF
-python3 depression_calculator.py --f1-dnf 1
+python3 -m src.depression_calculator --f1-dnf 1
 ```
 
 ### Update Fantasy Team
 
 ```bash
 # Fantasy team is 5-7
-python3 depression_calculator.py --fantasy-wins 5 --fantasy-losses 7
+python3 -m src.depression_calculator --fantasy-wins 5 --fantasy-losses 7
 ```
 
 ## Depression Levels
@@ -133,7 +139,7 @@ See `docs/API.md` for more details on available APIs and alternatives.
 Test the API integration separately:
 
 ```bash
-python3 sports_api.py
+python3 -m src.sports_api
 ```
 
 This will fetch data for all teams and update the config file.

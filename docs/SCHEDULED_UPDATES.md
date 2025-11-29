@@ -27,7 +27,7 @@ This will:
 
 2. Add this line (update paths as needed):
    ```
-   0 18 * * * cd /path/to/DepressionDashboard && /usr/bin/python3 auto_update.py >> /path/to/DepressionDashboard/logs/auto_update.log 2>&1
+   0 18 * * * cd /path/to/DepressionDashboard && /usr/bin/python3 scripts/auto_update.py >> /path/to/DepressionDashboard/logs/auto_update.log 2>&1
    ```
 
 3. Save and exit
@@ -52,7 +52,7 @@ To change the time, modify the hour (18 = 6 PM). Examples:
 4. Trigger: Daily at 6:00 PM
 5. Action: Start a program
    - Program: `python.exe` (or full path to python)
-   - Arguments: `auto_update.py`
+   - Arguments: `scripts/auto_update.py`
    - Start in: `C:\path\to\DepressionDashboard`
 
 ## What It Does
@@ -78,7 +78,7 @@ tail -f logs/auto_update.log
 
 ### Run Manually
 ```bash
-python3 auto_update.py
+python3 scripts/auto_update.py
 ```
 
 ## Troubleshooting
@@ -87,7 +87,7 @@ python3 auto_update.py
 - Check if cron has permission: `crontab -l`
 - Check logs: `tail -f logs/auto_update.log`
 - Verify Python path: `which python3`
-- Test manually: `python3 auto_update.py`
+- Test manually: `python3 scripts/auto_update.py`
 
 **API errors?**
 - Some APIs may be rate-limited
@@ -102,12 +102,12 @@ python3 auto_update.py
 
 ```bash
 crontab -e
-# Delete the line with auto_update.py
+# Delete the line with scripts/auto_update.py
 # Save and exit
 ```
 
 Or:
 ```bash
-crontab -l | grep -v "auto_update.py" | crontab -
+crontab -l | grep -v "scripts/auto_update.py" | crontab -
 ```
 

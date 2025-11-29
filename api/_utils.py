@@ -8,7 +8,7 @@ import json
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from depression_calculator import DepressionCalculator
+from src.depression_calculator import DepressionCalculator
 
 def get_calculator():
     """Get calculator instance (creates new one each time since serverless is stateless)"""
@@ -37,6 +37,8 @@ def error_response(error, status_code=500, details=None):
     if details:
         data['details'] = details
     return json_response(data, status_code)
+
+
 
 
 

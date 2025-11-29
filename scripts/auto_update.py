@@ -23,13 +23,16 @@ def main():
     
     try:
         # Import modules
-        from sports_api import SportsDataFetcher
-        from depression_calculator import DepressionCalculator
+        # Add parent directory to path
+        parent_dir = script_dir.parent
+        sys.path.insert(0, str(parent_dir))
+        from src.sports_api import SportsDataFetcher
+        from src.depression_calculator import DepressionCalculator
         
         # Change to script directory
         os.chdir(script_dir)
         
-        config_path = "teams_config.json"
+        config_path = os.path.join(parent_dir, "teams_config.json")
         
         # Fetch latest data
         print("Fetching latest scores from APIs...")
@@ -44,7 +47,7 @@ def main():
         print(report)
         
         # Save report to file
-        report_file = script_dir / "depression_reports" / f"depression_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
+        report_file = Path(parent_dir) / "depression_reports" / f"depression_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt"
         report_file.parent.mkdir(exist_ok=True)
         with open(report_file, 'w') as f:
             f.write(report)

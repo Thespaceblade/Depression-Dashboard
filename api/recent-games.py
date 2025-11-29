@@ -17,7 +17,7 @@ class handler(BaseHTTPRequestHandler):
             games = []
             
             # Try to fetch enhanced game data from APIs
-            from sports_api import SportsDataFetcher
+            from src.sports_api import SportsDataFetcher
             fetcher = SportsDataFetcher()
             
             # Process team games with enhanced data
@@ -172,6 +172,8 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
+
+
 
 
 
