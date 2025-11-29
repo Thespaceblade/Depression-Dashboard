@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Header from './components/Header';
 import DepressionScoreCard from './components/DepressionScoreCard';
-import SportSection from './components/SportSection';
+import TeamCard from './components/TeamCard';
 import GameTimeline from './components/GameTimeline';
 import DepressionBreakdown from './components/DepressionBreakdown';
 import UpcomingEvents from './components/UpcomingEvents';
@@ -50,17 +50,61 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // Group teams by sport
-  const groupTeamsBySport = (teams: Team[]): Record<string, Team[]> => {
-    return teams.reduce((acc, team) => {
-      const sport = team.sport;
-      if (!acc[sport]) {
-        acc[sport] = [];
+  const teamKey = (name: string, sport: string) =>
+    `${name.toLowerCase()}|${sport.toLowerCase()}`;
+
+  const activityMap = useMemo(() => {
+    if (!gamesData?.games) return new Map<string, { label: string; order: number }>();
+
+    const map = new Map<string, { label: string; order: number }>();
+    const total = gamesData.games.length;
+
+    gamesData.games.forEach((game, index) => {
+      const key = teamKey(game.team, game.sport);
+      if (map.has(key)) return;
+
+      const labelParts: string[] = [];
+      if (game.date) {
+        labelParts.push(game.date);
       }
-      acc[sport].push(team);
-      return acc;
-    }, {} as Record<string, Team[]>);
-  };
+      if (game.result && game.result !== '?') {
+        labelParts.push(`Result: ${game.result}`);
+      }
+      if (game.opponent) {
+        labelParts.push(`vs ${game.opponent}`);
+      }
+
+      map.set(key, {
+        label: labelParts.join(' • ') || 'Recent action logged',
+        order: total - index,
+      });
+    });
+
+    return map;
+  }, [gamesData]);
+
+  const sortedTeams = useMemo(() => {
+    if (!teamsData?.teams) return [];
+
+    return teamsData.teams
+      .map((team, index) => {
+        const key = teamKey(team.name, team.sport);
+        const activity = activityMap.get(key);
+
+        return {
+          team,
+          activityLabel: activity?.label,
+          order: activity?.order ?? 0,
+          fallbackIndex: index,
+        };
+      })
+      .sort((a, b) => {
+        if (b.order === a.order) {
+          return a.fallbackIndex - b.fallbackIndex;
+        }
+        return b.order - a.order;
+      });
+  }, [teamsData, activityMap]);
 
   if (loading && !depressionData) {
     return (
@@ -96,10 +140,6 @@ function App() {
     );
   }
 
-  const teamsBySport = teamsData ? groupTeamsBySport(teamsData.teams) : {};
-  // Define order - group NCAA sports together
-  const sportOrder = ['NFL', 'NBA', 'MLB', 'NCAA Basketball', 'NCAA Football', 'F1', 'Fantasy'];
-
   return (
     <div className="min-h-screen bg-dark-bg">
       <div className="max-w-7xl mx-auto px-4 py-8">
@@ -113,39 +153,28 @@ function App() {
           <DepressionScoreCard data={depressionData} />
         )}
 
-        {/* Team Performance by Sport */}
-        {teamsData && teamsData.teams.length > 0 && (
-          <div className="mb-8">
-            <h2 className="text-3xl font-bold text-white mb-6">Team Performance by Sport</h2>
-            
-            {/* Render sport sections in defined order */}
-            {sportOrder.map((sport) => {
-              if (teamsBySport[sport] && teamsBySport[sport].length > 0) {
-                return (
-                  <SportSection
-                    key={sport}
-                    sport={sport}
-                    teams={teamsBySport[sport]}
-                  />
-                );
-              }
-              return null;
-            })}
-            
-            {/* Render any other sports not in the order list */}
-            {Object.entries(teamsBySport).map(([sport, teams]) => {
-              if (!sportOrder.includes(sport)) {
-                return (
-                  <SportSection
-                    key={sport}
-                    sport={sport}
-                    teams={teams}
-                  />
-                );
-              }
-              return null;
-            })}
-          </div>
+        {/* Team Grid ordered by recent activity */}
+        {sortedTeams.length > 0 && (
+          <section className="mb-8">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-6">
+              <div>
+                <h2 className="text-3xl font-bold text-white">Team Mood Board</h2>
+                <p className="text-sm text-gray-400">
+                  Most recently active teams float to the top • 3-up grid
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {sortedTeams.map(({ team, activityLabel }) => (
+                <TeamCard
+                  key={`${team.name}-${team.sport}`}
+                  team={team}
+                  activityLabel={activityLabel}
+                />
+              ))}
+            </div>
+          </section>
         )}
 
         {/* Recent Games and Breakdown */}

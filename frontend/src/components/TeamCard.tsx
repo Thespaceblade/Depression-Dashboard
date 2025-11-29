@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import type { Team } from '../types';
 import { getTeamLogo } from '../utils/teamIcons';
+import { getDepressionIcon } from '../utils/icons';
 
 interface Props {
   team: Team;
+  activityLabel?: string;
 }
 
 const getTeamColor = (teamName: string, sport: string): string => {
@@ -24,10 +26,14 @@ const getResultColor = (result: string): string => {
   return 'bg-gray-500';
 };
 
-export default function TeamCard({ team }: Props) {
+export default function TeamCard({ team, activityLabel }: Props) {
   const [expanded, setExpanded] = useState(false);
   const borderColor = getTeamColor(team.name, team.sport);
   const teamLogo = getTeamLogo(team.name, team.sport);
+  const moodIcon = getDepressionIcon('', team.depression_points ?? 0, {
+    size: 48,
+    className: '',
+  });
 
   return (
     <div
@@ -35,7 +41,7 @@ export default function TeamCard({ team }: Props) {
       onClick={() => setExpanded(!expanded)}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           {/* Team Logo */}
           <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
@@ -46,18 +52,18 @@ export default function TeamCard({ team }: Props) {
             <p className="text-sm text-gray-400">{team.sport}</p>
           </div>
         </div>
-        {team.depression_points > 0 && (
-          <div className="text-right">
-            <div className="text-2xl font-bold text-red-400">
-              +{team.depression_points.toFixed(1)}
-            </div>
-            <div className="text-xs text-gray-500">pts</div>
+        <div className="text-right flex flex-col items-end gap-2">
+          <div className="w-12 h-12 flex items-center justify-center">
+            {moodIcon}
           </div>
-        )}
+        </div>
       </div>
 
       {/* Record */}
       <div className="mb-4">
+        {activityLabel && (
+          <p className="text-xs text-gray-500 mb-2">Last activity: {activityLabel}</p>
+        )}
         <div className="text-3xl font-bold text-white mb-1">
           {team.record}
         </div>
@@ -96,6 +102,12 @@ export default function TeamCard({ team }: Props) {
       {expanded && (
         <div className="mt-4 pt-4 border-t border-gray-700 animate-slide-up">
           <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm text-gray-400 pb-2">
+              <span className="text-white font-semibold">Depression Points</span>
+              <span className="text-red-400 font-bold">
+                +{(team.depression_points ?? 0).toFixed(1)} pts
+              </span>
+            </div>
             <div className="text-sm text-gray-400">
               <strong className="text-white">Expected Performance:</strong> {team.expected_performance || 'N/A'}/10
             </div>

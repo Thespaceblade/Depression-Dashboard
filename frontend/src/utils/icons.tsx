@@ -9,7 +9,7 @@ import {
   HiCalendarDays,
   HiExclamationCircle,
 } from 'react-icons/hi2';
-import { 
+import {
   MdSportsFootball,
   MdSportsBasketball,
   MdSportsBaseball,
@@ -17,23 +17,32 @@ import {
   MdSportsEsports,
 } from 'react-icons/md';
 
+interface DepressionIconOptions {
+  size?: number;
+  className?: string;
+}
+
 // Depression level icons
-export const getDepressionIcon = (_level: string, score: number) => {
-  const size = 120;
-  const className = "animate-pulse-slow";
-  
+export const getDepressionIcon = (
+  _level: string,
+  score: number,
+  options?: DepressionIconOptions,
+) => {
+  const size = options?.size ?? 120;
+  const baseClass = options?.className ?? 'animate-pulse-slow';
+
   if (score <= 10) {
-    return <HiFaceSmile className={`${className} text-green-400`} style={{ width: size, height: size }} />;
+    return <HiFaceSmile className={`${baseClass} text-green-400`} style={{ width: size, height: size }} />;
   } else if (score <= 25) {
-    return <HiFaceSmile className={`${className} text-yellow-400`} style={{ width: size, height: size }} />;
+    return <HiFaceSmile className={`${baseClass} text-yellow-400`} style={{ width: size, height: size }} />;
   } else if (score <= 50) {
-    return <HiFaceFrown className={`${className} text-orange-400`} style={{ width: size, height: size }} />;
+    return <HiFaceFrown className={`${baseClass} text-orange-400`} style={{ width: size, height: size }} />;
   } else if (score <= 75) {
-    return <HiFaceFrown className={`${className} text-red-400`} style={{ width: size, height: size }} />;
+    return <HiFaceFrown className={`${baseClass} text-red-400`} style={{ width: size, height: size }} />;
   } else if (score <= 100) {
-    return <HiExclamationTriangle className={`${className} text-red-600`} style={{ width: size, height: size }} />;
+    return <HiExclamationTriangle className={`${baseClass} text-red-600`} style={{ width: size, height: size }} />;
   } else {
-    return <HiXCircle className={`${className} text-gray-400`} style={{ width: size, height: size }} />;
+    return <HiXCircle className={`${baseClass} text-gray-400`} style={{ width: size, height: size }} />;
   }
 };
 
