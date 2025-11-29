@@ -157,8 +157,15 @@ CORS(app)  # Allows all origins
 
 ### Backend (Railway equivalent)
 ```bash
+# Install dependencies first
+pip install -r requirements.txt
+
+# Option 1: Use start script (easiest)
+./scripts/start_backend.sh
+
+# Option 2: Run directly
 cd backend
-python app.py
+python3 app.py
 # Runs on http://localhost:5001
 ```
 
