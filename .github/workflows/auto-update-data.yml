@@ -5,6 +5,14 @@ on:
     # Run every 6 hours
     - cron: '0 */6 * * *'
   workflow_dispatch:  # Allow manual trigger
+  push:
+    # Also run when teams_config.json or fetch script changes
+    paths:
+      - 'scripts/fetch_all_data.py'
+      - 'src/sports_api.py'
+      - '.github/workflows/auto-update-data.yml'
+    branches:
+      - main
 
 jobs:
   update-data:
