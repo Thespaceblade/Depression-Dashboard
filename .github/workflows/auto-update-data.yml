@@ -100,7 +100,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           if [ -f teams_config.json ]; then
-            git add teams_config.json
+            # Force add in case file is in .gitignore (it contains public data, not secrets)
+            git add -f teams_config.json || git add teams_config.json
             if ! git diff --staged --quiet; then
               git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
               git push
