@@ -6,13 +6,13 @@
   "functions": {
     "api/**/*.py": {
       "runtime": "python3.11",
-      "includeFiles": "teams_config.json,depression_calculator.py,sports_api.py"
+      "includeFiles": "teams_config.json,src/"
     }
   },
   "crons": [
     {
       "path": "/api/cron/fetch-data",
-      "schedule": "0 */6 * * *"
+      "schedule": "0 0 * * *"
     }
   ],
   "rewrites": [
