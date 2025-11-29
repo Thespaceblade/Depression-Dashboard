@@ -1,7 +1,7 @@
 # Sports Data APIs
 sportsipy>=0.4.0
 nba_api>=1.2.1
-fastf1>=3.1.0
+# fastf1 removed - using OpenF1 REST API instead (simpler, no dependencies)
 espn-api>=0.23.0
 
 # HTTP & Utilities

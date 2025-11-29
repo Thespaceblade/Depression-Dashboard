@@ -4,15 +4,14 @@ requests>=2.31.0
 python-dateutil>=2.8.2
 pytz>=2023.3
 
-# Note: Flask/gunicorn not needed - API functions use http.server
-# If you need Flask for local development, install separately:
-#   pip install flask flask-cors gunicorn
+# Backend API (required for Railway/Flask deployment)
+flask>=3.0.0
+flask-cors>=4.0.0
+gunicorn>=21.2.0
 
-# Optional sports APIs (excluded from Vercel due to size - 250MB limit)
-# These are imported conditionally in code and will gracefully degrade if missing
-# Install locally if you need them:
-#   pip install sportsipy>=0.4.0 nba_api>=1.2.1 fastf1>=3.1.0 espn-api>=0.23.0
-# sportsipy>=0.4.0
-# nba_api>=1.2.1
-# fastf1>=3.1.0
-# espn-api>=0.23.0
+# Sports APIs (required for full functionality)
+# Note: These may be large but are needed for Railway deployment
+sportsipy>=0.4.0
+nba_api>=1.2.1
+# fastf1 removed - using OpenF1 REST API instead (simpler, no dependencies)
+espn-api>=0.23.0

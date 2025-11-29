@@ -155,9 +155,15 @@ def get_recent_games():
                         detailed_games = fetcher.nfl.get_recent_games_detailed(team.name, 5)
                     elif team.sport == 'NBA':
                         detailed_games = fetcher.nba.get_recent_games_detailed(team.name, 5)
+                    elif team.sport == 'NCAA Basketball':
+                        detailed_games = fetcher.college_bball.get_recent_games_detailed(team.name, 5)
+                    elif team.sport == 'NCAA Football':
+                        detailed_games = fetcher.college_football.get_recent_games_detailed(team.name, 5)
                 except Exception as e:
                     # Fallback to basic data if detailed fetch fails
-                    pass
+                    print(f"Warning: Failed to fetch detailed games for {team.name} ({team.sport}): {e}")
+                    import traceback
+                    traceback.print_exc()
                 
                 # Use detailed data if available, otherwise use basic
                 if detailed_games:
