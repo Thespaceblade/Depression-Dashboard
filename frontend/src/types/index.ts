@@ -40,10 +40,17 @@ export interface TeamsData {
 
 export interface Game {
   date: string;
+  datetime?: string;
   team: string;
   sport: string;
   result: string;
   type: string;
+  opponent?: string;
+  team_score?: number;
+  opponent_score?: number;
+  score_margin?: number;
+  is_home?: boolean;
+  is_overtime?: boolean;
   is_rivalry?: boolean;
 }
 

@@ -6,7 +6,7 @@ import GameTimeline from './components/GameTimeline';
 import DepressionBreakdown from './components/DepressionBreakdown';
 import UpcomingEvents from './components/UpcomingEvents';
 import { fetchDepression, fetchTeams, fetchRecentGames, fetchUpcomingEvents } from './api';
-import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData, Team } from './types';
+import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData } from './types';
 import { LoadingIcon, ErrorIcon } from './utils/icons';
 
 function App() {
