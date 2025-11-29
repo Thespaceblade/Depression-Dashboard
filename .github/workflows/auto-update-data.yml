@@ -62,7 +62,13 @@ jobs:
       
       - name: Fetch latest sports data
         run: |
-          python fetch_all_data.py
+          python scripts/fetch_all_data.py || exit 1
+          # Verify file was created/updated
+          if [ ! -f teams_config.json ]; then
+            echo "❌ ERROR: teams_config.json was not created by fetch_all_data.py"
+            exit 1
+          fi
+          echo "✅ teams_config.json exists after fetch"
       
       - name: Check if teams_config.json exists and was updated
         id: check-file
@@ -98,9 +104,12 @@ jobs:
             if ! git diff --staged --quiet; then
               git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
               git push
+            else
+              echo "No changes to commit"
             fi
           else
-            echo "⚠️ teams_config.json not found - skipping commit"
+            echo "⚠️ ERROR: teams_config.json not found - cannot commit"
+            exit 1
           fi
       
       - name: No changes to commit
