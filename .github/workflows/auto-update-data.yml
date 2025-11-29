@@ -32,14 +32,21 @@ jobs:
         run: |
           python fetch_all_data.py
       
-      - name: Check if teams_config.json was updated
+      - name: Check if teams_config.json exists and was updated
         id: check-file
         run: |
           if [ -f teams_config.json ]; then
             echo "file_exists=true" >> $GITHUB_OUTPUT
-            if git diff --quiet teams_config.json; then
-              echo "file_changed=false" >> $GITHUB_OUTPUT
+            # Check if file is tracked in git
+            if git ls-files --error-unmatch teams_config.json >/dev/null 2>&1; then
+              # File is tracked, check if it changed
+              if git diff --quiet teams_config.json; then
+                echo "file_changed=false" >> $GITHUB_OUTPUT
+              else
+                echo "file_changed=true" >> $GITHUB_OUTPUT
+              fi
             else
+              # File exists but not tracked - needs to be added
               echo "file_changed=true" >> $GITHUB_OUTPUT
             fi
           else
@@ -54,9 +61,11 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add teams_config.json
-          git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
-          git push
+          if [ -f teams_config.json ]; then
+            git add teams_config.json
+            git diff --staged --quiet || git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+            git push
+          fi
       
       - name: No changes to commit
         if: steps.check-file.outputs.file_changed == 'false'

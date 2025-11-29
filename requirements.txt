@@ -1,18 +1,16 @@
-# Core dependencies (required for serverless functions)
-# Optimized for Vercel deployment - minimal dependencies to stay under 250MB limit
+# Sports Data APIs
+sportsipy>=0.4.0
+nba_api>=1.2.1
+fastf1>=3.1.0
+espn-api>=0.23.0
+
+# HTTP & Utilities
 requests>=2.31.0
 python-dateutil>=2.8.2
+
+# Optional: For better date handling
 pytz>=2023.3
 
-# Note: Flask/gunicorn not needed - API functions use http.server
-# If you need Flask for local development, install separately:
-#   pip install flask flask-cors gunicorn
-
-# Optional sports APIs (excluded from Vercel due to size - 250MB limit)
-# These are imported conditionally in code and will gracefully degrade if missing
-# Install locally if you need them:
-#   pip install sportsipy>=0.4.0 nba_api>=1.2.1 fastf1>=3.1.0 espn-api>=0.23.0
-# sportsipy>=0.4.0
-# nba_api>=1.2.1
-# fastf1>=3.1.0
-# espn-api>=0.23.0
+# Backend API
+flask>=3.0.0
+flask-cors>=4.0.0
