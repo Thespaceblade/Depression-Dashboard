@@ -36,6 +36,19 @@ class handler(BaseHTTPRequestHandler):
         except Exception as e:
             import traceback
             error_details = traceback.format_exc()
+            # Log to console for Vercel logs
+            print(f"ERROR in /api/depression: {str(e)}")
+            print(f"Traceback:\n{error_details}")
+            # Include file path info if it's a file error
+            if "FileNotFoundError" in str(type(e)) or "No such file" in str(e):
+                import os
+                print(f"Current working directory: {os.getcwd()}")
+                print(f"__file__ location: {__file__}")
+                try:
+                    parent_dir = os.path.dirname(os.path.dirname(__file__))
+                    print(f"Parent directory contents: {os.listdir(parent_dir) if os.path.exists(parent_dir) else 'DOES NOT EXIST'}")
+                except:
+                    pass
             response = error_response(e, 500, error_details)
             
             self.send_response(response['statusCode'])
