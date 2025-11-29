@@ -3,10 +3,6 @@
   "outputDirectory": "frontend/dist",
   "installCommand": "cd frontend && npm install",
   "framework": null,
-  "functions": {
-    "api/**/*.py": {
-    }
-  },
   "crons": [
     {
       "path": "/api/cron/fetch-data",
