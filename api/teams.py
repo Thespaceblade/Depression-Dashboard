@@ -88,7 +88,10 @@ class handler(BaseHTTPRequestHandler):
             self.wfile.write(response['body'].encode())
             
         except Exception as e:
-            response = error_response(e, 500)
+            import traceback
+            error_details = traceback.format_exc()
+            print(f"Error in get_teams: {error_details}")
+            response = error_response(e, 500, error_details)
             self.send_response(response['statusCode'])
             for key, value in response['headers'].items():
                 self.send_header(key, value)
