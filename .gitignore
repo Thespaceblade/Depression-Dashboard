@@ -43,13 +43,17 @@ Thumbs.db
 *.log
 logs/
 
-# F1 Cache (can be large - exclude entire directory)
+# F1 Cache
 f1_cache/
 backend/f1_cache/
 *.ff1pkl
 *.sqlite
 
-# Config files with sensitive data (cookies, API keys)
-# Note: teams_config.json is tracked - it only contains public sports data, not API keys
-# ESPN API credentials should be in environment variables or a separate .env file
+# Config files with sensitive data
+teams_config.json
 .vercel-deploy-trigger
+
+# Instructional documentation (local only, not for GitHub)
+docs/
+*.md
+!README.md
