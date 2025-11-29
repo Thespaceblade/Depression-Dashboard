@@ -6,10 +6,10 @@ A script that calculates how depressed Jason is based on how his favorite teams 
 
 - **NFL**: Dallas Cowboys
 - **NBA**: Dallas Mavericks, Golden State Warriors  
-- **MLB**: Texas Rangers (low interest: barely watches)
-- **F1**: Max Verstappen (huge fan!)
-- **College Basketball**: North Carolina Tar Heels (big fan!)
-- **College Football**: North Carolina Tar Heels (big fan!)
+- **MLB**: Texas Rangers
+- **F1**: Max Verstappen
+- **College Basketball**: North Carolina Tar Heels
+- **College Football**: North Carolina Tar Heels
 
 ## Features
 
@@ -167,7 +167,7 @@ The calculator considers:
 ### ⏰ Time-Weighted Algorithm
 
 **Recent events have MUCH more impact than older ones:**
-- **Just happened (0 hours)**: 100% weight 💀
+- **Just happened (0 hours)**: 100% weight
 - **6 hours ago**: 83% weight
 - **1 day ago**: 61% weight
 - **2 days ago**: 37% weight
