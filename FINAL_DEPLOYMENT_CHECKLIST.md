@@ -73,35 +73,37 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
   - Port: Auto-set via `$PORT` environment variable
 
 ### 1.3 Add Required Files to Railway
-- [ ] **Verify these files exist in your repo:**
-  - ✅ `backend/nixpacks.toml` (Railway build config)
-  - ✅ `railway.json` (Railway deployment config)
-  - ✅ `requirements.txt` (Python dependencies - in root)
-  - ✅ `backend/requirements.txt` (Backend-specific dependencies)
-  - ✅ `teams_config.json` (Data file - in root)
+- [✅] **Verify these files exist in your repo:**
+  - ✅ `backend/nixpacks.toml` (Railway build config) - **Verified in repo**
+  - ✅ `railway.json` (Railway deployment config) - **Verified in repo**
+  - ✅ `requirements.txt` (Python dependencies - in root) - **Verified in repo**
+  - ✅ `backend/requirements.txt` (Backend-specific dependencies) - **Verified in repo**
+  - ✅ `teams_config.json` (Data file - in root) - **Verified in repo**
 
 ### 1.4 Deploy and Get URL
-- [ ] Click **"Deploy"** (or Railway auto-deploys on push)
-- [ ] Wait for build to complete (2-5 minutes)
-- [ ] **Copy your Railway URL** from the service settings
+- [✅] Click **"Deploy"** (or Railway auto-deploys on push)
+- [✅] Wait for build to complete (2-5 minutes)
+- [✅] **Copy your Railway URL** from the service settings
   - Format: `https://your-app-name.up.railway.app`
   - Example: `https://depression-dashboard-production.up.railway.app`
   - ⚠️ **Save this URL - you'll need it for Vercel!**
+  - ✅ Your URL: `https://depression-dashboard-production.up.railway.app`
 
 ### 1.5 Test Railway Backend
-- [ ] **Test health endpoint:**
+- [✅] **Test health endpoint:**
   ```bash
   curl https://your-railway-url.up.railway.app/api/health
   ```
   - Should return: `{"status": "healthy", "timestamp": "..."}`
+  - ✅ **Verified:** Health endpoint working at `https://depression-dashboard-production.up.railway.app/api/health`
 
-- [ ] **Test depression endpoint:**
+- ✅ **Test depression endpoint:**
   ```bash
   curl https://your-railway-url.up.railway.app/api/depression
   ```
   - Should return JSON with depression score
 
-- [ ] **Check Railway logs** if errors:
+- ✅ **Check Railway logs** if errors:
   - Go to Railway dashboard → Your service → **Logs** tab
   - Look for any error messages
 
@@ -126,41 +128,42 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
 ## 🎨 Step 2: Deploy Frontend to Vercel
 
 ### 2.1 Connect Vercel to GitHub
-- [ ] Go to [vercel.com](https://vercel.com)
-- [ ] Sign up/Login (use GitHub OAuth)
-- [ ] Click **"Add New..."** → **"Project"**
-- [ ] Find and select your **Depression-Dashboard** repository
-- [ ] Click **"Import"**
+- [✅] Go to [vercel.com](https://vercel.com)
+- [✅] Sign up/Login (use GitHub OAuth)
+- [✅] Click **"Add New..."** → **"Project"**
+- [✅] Find and select your **Depression-Dashboard** repository
+- [✅] Click **"Import"**
 
 ### 2.2 Configure Vercel Project
-- [ ] **Framework Preset:** Leave as **"Other"** (or blank)
-- [ ] **Root Directory:** Leave as `.` (root)
-- [ ] **Build Command:** 
+- [✅] **Framework Preset:** Leave as **"Other"** (or blank)
+- [✅] **Root Directory:** Leave as `.` (root)
+- [✅] **Build Command:** 
   ```
   cd frontend && npm install && npm run build
   ```
-- [ ] **Output Directory:** 
+- [✅] **Output Directory:** 
   ```
   frontend/dist
   ```
-- [ ] **Install Command:** 
+- [✅] **Install Command:** 
   ```
   cd frontend && npm install
   ```
 
 ### 2.3 Set Environment Variable (CRITICAL!)
-- [ ] Go to **"Environment Variables"** section
-- [ ] Click **"Add"**
-- [ ] **Key:** `VITE_API_URL`
-- [ ] **Value:** Your Railway backend URL (from Step 1.4)
+- [✅] Go to **"Environment Variables"** section
+- [✅] Click **"Add"**
+- [✅] **Key:** `VITE_API_URL`
+- [✅] **Value:** Your Railway backend URL (from Step 1.4)
   - Example: `https://depression-dashboard-production.up.railway.app`
   - ⚠️ **NO trailing slash!**
   - ⚠️ **Must include `https://`**
-- [ ] **Environments:** Check all three:
+  - ✅ **Verified:** Value set to `https://depression-dashboard-production.up.railway.app`
+- [✅] **Environments:** Check all three:
   - ✅ Production
   - ✅ Preview
   - ✅ Development
-- [ ] Click **"Save"**
+- [✅] Click **"Save"** (after fixing the URL)
 
 ### 2.4 Deploy Frontend
 - [ ] Click **"Deploy"**
