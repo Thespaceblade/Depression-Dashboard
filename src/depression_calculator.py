@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 import math
 
 try:
-    from espn_fantasy import ESPNFantasyClient, get_espn_credentials_instructions
+    from .espn_fantasy import ESPNFantasyClient, get_espn_credentials_instructions
     ESPN_AVAILABLE = True
 except ImportError:
     ESPN_AVAILABLE = False
@@ -1193,7 +1193,7 @@ def main():
     # Fetch data from APIs if requested
     if args.fetch:
         try:
-            from sports_api import SportsDataFetcher
+            from .sports_api import SportsDataFetcher
             print("Fetching latest data from APIs...")
             fetcher = SportsDataFetcher()
             fetcher.update_config_file(args.config)

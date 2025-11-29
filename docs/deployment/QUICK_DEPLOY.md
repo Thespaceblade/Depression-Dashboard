@@ -17,7 +17,7 @@
 1. In Railway dashboard, click **+ New**
 2. Select **Cron Job**
 3. **Schedule**: `0 */6 * * *` (every 6 hours)
-4. **Command**: `python fetch_all_data.py`
+4. **Command**: `python scripts/fetch_all_data.py`
 5. **Deploy**
 
 ### Step 3: Frontend on Vercel (3 minutes)
@@ -77,7 +77,7 @@ curl https://your-backend-url.com/api/health
 
 **Data not updating?**
 - Check cron job logs
-- Verify `fetch_all_data.py` runs successfully
+- Verify `scripts/fetch_all_data.py` runs successfully
 - Check `teams_config.json` is being updated
 
 **Frontend can't reach backend?**
@@ -88,6 +88,8 @@ curl https://your-backend-url.com/api/health
 ---
 
 **That's it!** Your dashboard is now fully autonomous. 🚀
+
+
 
 
 

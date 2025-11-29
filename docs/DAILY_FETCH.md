@@ -11,13 +11,13 @@ Run the setup script:
 ```
 
 This will:
-- Schedule `fetch_all_data.py` to run daily at 6:00 PM
+- Schedule `scripts/fetch_all_data.py` to run daily at 6:00 PM
 - Create logs directory
 - Set up cron job
 
 ## What Gets Fetched
 
-The `fetch_all_data.py` script automatically fetches:
+The `scripts/fetch_all_data.py` script automatically fetches:
 
 ### ✅ Sports Data
 - **NFL**: Dallas Cowboys (record, recent games)
@@ -34,7 +34,7 @@ The `fetch_all_data.py` script automatically fetches:
 To run the fetch script manually:
 
 ```bash
-python3 fetch_all_data.py
+python3 scripts/fetch_all_data.py
 ```
 
 ## Scheduling Options
@@ -73,7 +73,7 @@ After=network.target
 Type=oneshot
 User=your-username
 WorkingDirectory=/path/to/Depression-Dashboard
-ExecStart=/usr/bin/python3 /path/to/Depression-Dashboard/fetch_all_data.py
+ExecStart=/usr/bin/python3 /path/to/Depression-Dashboard/scripts/fetch_all_data.py
 ```
 
 Create `/etc/systemd/system/depression-fetch.timer`:
@@ -105,7 +105,7 @@ sudo systemctl start depression-fetch.timer
 4. Trigger: Daily at 6:00 PM
 5. Action: Start a program
    - Program: `python.exe`
-   - Arguments: `fetch_all_data.py`
+   - Arguments: `scripts/fetch_all_data.py`
    - Start in: `C:\path\to\Depression-Dashboard`
 
 ### Option 4: Cloud Hosting (Heroku, Railway, etc.)
@@ -117,7 +117,7 @@ Use their built-in scheduler:
 
 Add to your scheduler:
 ```bash
-python3 fetch_all_data.py
+python3 scripts/fetch_all_data.py
 ```
 
 ## Logs
@@ -159,7 +159,7 @@ tail -50 logs/cron.log
 
 3. **Test script manually:**
    ```bash
-   python3 fetch_all_data.py
+   python3 scripts/fetch_all_data.py
    ```
 
 ### API Errors
@@ -172,7 +172,7 @@ tail -50 logs/cron.log
 
 Make sure the script is executable:
 ```bash
-chmod +x fetch_all_data.py
+chmod +x scripts/fetch_all_data.py
 ```
 
 ## Environment Variables
@@ -185,7 +185,7 @@ You can set these environment variables:
 Example:
 ```bash
 export CONFIG_PATH="/path/to/custom_config.json"
-python3 fetch_all_data.py
+python3 scripts/fetch_all_data.py
 ```
 
 ## What Happens
@@ -198,6 +198,8 @@ python3 fetch_all_data.py
 6. **Exits with code 0** (success) or 1 (failure)
 
 The config file is always updated, so your dashboard will show the latest data!
+
+
 
 
 

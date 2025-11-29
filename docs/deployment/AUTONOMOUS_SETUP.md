@@ -14,7 +14,7 @@ This document explains how your Depression Dashboard runs completely independent
 │                                                               │
 │  2. Cron Job (Scheduled Task)                                │
 │     └─> Runs every 6 hours                                  │
-│     └─> Executes: python fetch_all_data.py                  │
+│     └─> Executes: python scripts/fetch_all_data.py         │
 │     └─> Updates: teams_config.json                          │
 │                                                               │
 │  3. Frontend (Vercel/Netlify)                                │
@@ -33,7 +33,7 @@ This document explains how your Depression Dashboard runs completely independent
 - `render.yaml` - Render.com deployment config
 
 ### Automation
-- `fetch_all_data.py` - Automated data fetching script
+- `scripts/fetch_all_data.py` - Automated data fetching script
 - `.github/workflows/auto-update-data.yml` - GitHub Actions workflow (optional)
 
 ### Documentation
@@ -86,7 +86,7 @@ This document explains how your Depression Dashboard runs completely independent
 ### How It Works
 
 1. **Cron Job** runs every 6 hours
-2. Executes `fetch_all_data.py`
+2. Executes `scripts/fetch_all_data.py`
 3. Script fetches data from all sports APIs:
    - NFL (Cowboys)
    - NBA (Mavericks, Warriors)
@@ -179,13 +179,13 @@ VITE_API_URL=https://your-backend-url.com
 
 **Check:**
 1. Cron job is running (check logs)
-2. `fetch_all_data.py` executes successfully
+2. `scripts/fetch_all_data.py` executes successfully
 3. `teams_config.json` has write permissions
 4. APIs are accessible (no rate limits)
 
 **Fix:**
 - Check cron job logs
-- Test `fetch_all_data.py` manually
+- Test `scripts/fetch_all_data.py` manually
 - Verify API keys/credentials if needed
 
 ### Backend Not Starting
@@ -261,6 +261,8 @@ It will:
 - Scale automatically
 
 No more manual pushes or updates needed!
+
+
 
 
 

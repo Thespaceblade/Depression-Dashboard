@@ -9,7 +9,7 @@ import json
 from datetime import datetime
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-from sports_api import SportsDataFetcher
+from src.sports_api import SportsDataFetcher
 
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -68,6 +68,8 @@ class handler(BaseHTTPRequestHandler):
                 self.send_header(key, value)
             self.end_headers()
             self.wfile.write(error_response['body'].encode())
+
+
 
 
 

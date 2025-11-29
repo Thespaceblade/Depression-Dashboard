@@ -3,7 +3,13 @@
 Show what the dummy data will produce
 """
 
-from depression_calculator import DepressionCalculator
+import sys
+import os
+
+# Add parent directory to path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.depression_calculator import DepressionCalculator
 
 calc = DepressionCalculator('teams_config.json')
 result = calc.calculate_total_depression()

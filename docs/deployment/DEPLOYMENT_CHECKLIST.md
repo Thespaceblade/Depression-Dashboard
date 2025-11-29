@@ -26,7 +26,7 @@ Use this checklist to ensure your deployment is complete and working.
 
 - [ ] Cron job/service created
 - [ ] Schedule set (recommended: every 6 hours)
-- [ ] Command set: `python fetch_all_data.py`
+- [ ] Command set: `python scripts/fetch_all_data.py`
 - [ ] Cron job has executed at least once
 - [ ] `teams_config.json` is being updated
 - [ ] Logs show successful data fetching
@@ -86,6 +86,8 @@ If something isn't working:
 ---
 
 **Once all items are checked, your deployment is complete!** 🎉
+
+
 
 
 

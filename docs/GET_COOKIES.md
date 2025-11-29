@@ -75,7 +75,7 @@ Developer Tools
 
 Run this command to test:
 ```bash
-python3 depression_calculator.py --refresh-fantasy
+python3 -m src.depression_calculator --refresh-fantasy
 ```
 
 If it works, you'll see:

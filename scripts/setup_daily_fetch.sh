@@ -3,7 +3,7 @@
 # This will run fetch_all_data.py every day at 6:00 PM
 
 SCRIPT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-FETCH_SCRIPT="$SCRIPT_DIR/fetch_all_data.py"
+FETCH_SCRIPT="$SCRIPT_DIR/scripts/fetch_all_data.py"
 PYTHON_PATH=$(which python3)
 
 echo "Setting up daily data fetching..."

@@ -14,7 +14,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         """Handle GET request"""
         try:
-            from sports_api import SportsDataFetcher
+            from src.sports_api import SportsDataFetcher
             fetcher = SportsDataFetcher()
             upcoming_events = []
             
@@ -184,6 +184,8 @@ class handler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
+
+
 
 
 
