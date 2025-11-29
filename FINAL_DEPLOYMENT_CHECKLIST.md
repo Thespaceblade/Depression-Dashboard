@@ -7,7 +7,7 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
 ## 📋 Pre-Deployment Checklist
 
 ### ✅ Verify Local Setup
-- [ ] **Code is committed to GitHub**
+- [✅] **Code is committed to GitHub**
   ```bash
   git status  # Check for uncommitted changes
   git add .
@@ -15,18 +15,29 @@ This is your complete step-by-step guide to get your Depression Dashboard fully 
   git push origin main
   ```
 
-- [ ] **Verify `teams_config.json` exists** (should be in root directory)
+- [✅] **Verify `teams_config.json` exists** (should be in root directory)
   ```bash
   ls teams_config.json  # Should exist
   ```
 
 - [ ] **Test backend locally** (optional but recommended)
   ```bash
+  # First, install Python dependencies
+  pip install -r requirements.txt
+  
+  # Option 1: Use the start script (easiest)
+  ./scripts/start_backend.sh
+  
+  # Option 2: Run directly
   cd backend
-  python app.py
+  python3 app.py
+  
+  # Backend will run on http://localhost:5001
   # Visit http://localhost:5001/api/health
   # Should return: {"status": "healthy", ...}
   ```
+  
+  **Note:** The backend is a Python Flask app, NOT Node.js. Use `python3` or `pip`, not `npm`.
 
 - [ ] **Test frontend locally** (optional but recommended)
   ```bash
