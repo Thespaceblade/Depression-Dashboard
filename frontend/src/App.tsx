@@ -113,7 +113,7 @@ function App() {
           <div className="mb-4 flex justify-center">
             <LoadingIcon size={64} />
           </div>
-          <div className="text-2xl text-white font-semibold">Loading depression data...</div>
+          <div className="text-2xl text-white font-semibold">Loading Jason team data...</div>
           <div className="text-gray-400 mt-2">This might take a moment</div>
         </div>
       </div>
