@@ -5,10 +5,7 @@
   "framework": null,
   "functions": {
     "api/**/*.py": {
-      "includeFiles": [
-        "teams_config.json",
-        "src/**/*.py"
-      ]
+      "includeFiles": "teams_config.json,src/**/*.py"
     }
   },
   "rewrites": [
