@@ -16,23 +16,31 @@ class handler(BaseHTTPRequestHandler):
             calc = get_calculator()
             games = []
             
-            # Try to fetch enhanced game data from APIs
-            from src.sports_api import SportsDataFetcher
-            fetcher = SportsDataFetcher()
+            # Try to fetch enhanced game data from APIs (optional - may not be available)
+            fetcher = None
+            try:
+                from src.sports_api import SportsDataFetcher
+                fetcher = SportsDataFetcher()
+            except Exception as import_error:
+                # Sports API not available - use fallback data only
+                print(f"⚠️ Sports API not available: {import_error}")
+                fetcher = None
             
             # Process team games with enhanced data
             for team in calc.teams:
                 if team.recent_streak:
                     # Try to get detailed game data
                     detailed_games = []
-                    try:
-                        if team.sport == 'NFL':
-                            detailed_games = fetcher.nfl.get_recent_games_detailed(team.name, 5)
-                        elif team.sport == 'NBA':
-                            detailed_games = fetcher.nba.get_recent_games_detailed(team.name, 5)
-                    except Exception as e:
-                        # Fallback to basic data if detailed fetch fails
-                        pass
+                    if fetcher:
+                        try:
+                            if team.sport == 'NFL':
+                                detailed_games = fetcher.nfl.get_recent_games_detailed(team.name, 5)
+                            elif team.sport == 'NBA':
+                                detailed_games = fetcher.nba.get_recent_games_detailed(team.name, 5)
+                        except Exception as e:
+                            # Fallback to basic data if detailed fetch fails
+                            print(f"⚠️ Failed to fetch detailed games for {team.name}: {e}")
+                            detailed_games = []
                     
                     # Use detailed data if available, otherwise use basic
                     if detailed_games:
