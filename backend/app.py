@@ -37,11 +37,12 @@ def get_depression():
     try:
         calc = get_calculator()
         result = calc.calculate_total_depression()
-        emoji, level = calc.get_depression_level(result["total_score"])
+        # Use raw_score for level calculation to show negative scores properly
+        emoji, level = calc.get_depression_level(result["raw_score"])
         
         return jsonify({
             "success": True,
-            "score": round(result["total_score"], 1),
+            "score": round(result["raw_score"], 1),  # Show raw score (can be negative)
             "level": level,
             "emoji": emoji,
             "breakdown": result["breakdown"],

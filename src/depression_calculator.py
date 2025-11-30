@@ -1158,14 +1158,22 @@ class DepressionCalculator:
                 }
         
         return {
-            "total_score": max(0, total_score),  # Can't go negative
+            "total_score": max(0, total_score),  # Clamp to 0 for display (negative = feeling great!)
             "breakdown": breakdown,
-            "raw_score": total_score  # Keep raw score for reference
+            "raw_score": total_score  # Keep raw score for reference (can be negative)
         }
     
     def get_depression_level(self, score: float) -> tuple:
         """Get emoji and description for depression level"""
-        if score <= 10:
+        # Handle negative scores (feeling great - wins are reducing depression!)
+        if score < 0:
+            if score <= -20:
+                return ("🎉", "Absolutely Ecstatic!")
+            elif score <= -10:
+                return ("😄", "Feeling Amazing!")
+            else:
+                return ("😊", "Feeling Great!")
+        elif score <= 10:
             return ("😊", "Feeling Great!")
         elif score <= 25:
             return ("😐", "Mildly Disappointed")
