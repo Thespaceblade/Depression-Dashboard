@@ -699,6 +699,9 @@ class CollegeBasketballAPI(SportsAPI):
                     stats = items[0].get('stats', [])
                     wins = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
                     losses = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
+                    # Convert to int (ESPN API returns floats)
+                    wins = int(wins) if wins else 0
+                    losses = int(losses) if losses else 0
                     return {
                         'wins': wins,
                         'losses': losses,
@@ -846,6 +849,9 @@ class CollegeFootballAPI(SportsAPI):
                     stats = items[0].get('stats', [])
                     wins = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
                     losses = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
+                    # Convert to int (ESPN API returns floats)
+                    wins = int(wins) if wins else 0
+                    losses = int(losses) if losses else 0
                     return {
                         'wins': wins,
                         'losses': losses,
@@ -1103,11 +1109,11 @@ class SportsDataFetcher:
                     # Ensure record structure exists
                     if 'record' not in team:
                         team['record'] = {}
-                    team['record']['wins'] = data['cowboys'].get('wins', team['record'].get('wins', 0))
-                    team['record']['losses'] = data['cowboys'].get('losses', team['record'].get('losses', 0))
+                    team['record']['wins'] = int(data['cowboys'].get('wins', team['record'].get('wins', 0)))
+                    team['record']['losses'] = int(data['cowboys'].get('losses', team['record'].get('losses', 0)))
                     # Preserve ties if not in API data
                     if 'ties' in data['cowboys']:
-                        team['record']['ties'] = data['cowboys']['ties']
+                        team['record']['ties'] = int(data['cowboys']['ties'])
                     elif 'ties' not in team['record']:
                         team['record']['ties'] = 0
                     if 'recent_games' in data['cowboys']:
@@ -1120,9 +1126,9 @@ class SportsDataFetcher:
                     if 'record' not in team:
                         team['record'] = {}
                     if 'wins' in data['mavericks']:
-                        team['record']['wins'] = data['mavericks']['wins']
+                        team['record']['wins'] = int(data['mavericks']['wins'])
                     if 'losses' in data['mavericks']:
-                        team['record']['losses'] = data['mavericks']['losses']
+                        team['record']['losses'] = int(data['mavericks']['losses'])
                     if 'recent_games' in data['mavericks'] and data['mavericks']['recent_games']:
                         team['recent_streak'] = data['mavericks']['recent_games']
         
@@ -1133,9 +1139,9 @@ class SportsDataFetcher:
                     if 'record' not in team:
                         team['record'] = {}
                     if 'wins' in data['warriors']:
-                        team['record']['wins'] = data['warriors']['wins']
+                        team['record']['wins'] = int(data['warriors']['wins'])
                     if 'losses' in data['warriors']:
-                        team['record']['losses'] = data['warriors']['losses']
+                        team['record']['losses'] = int(data['warriors']['losses'])
                     if 'recent_games' in data['warriors'] and data['warriors']['recent_games']:
                         team['recent_streak'] = data['warriors']['recent_games']
         
@@ -1146,9 +1152,9 @@ class SportsDataFetcher:
                     if 'record' not in team:
                         team['record'] = {}
                     if 'wins' in data['rangers']:
-                        team['record']['wins'] = data['rangers']['wins']
+                        team['record']['wins'] = int(data['rangers']['wins'])
                     if 'losses' in data['rangers']:
-                        team['record']['losses'] = data['rangers']['losses']
+                        team['record']['losses'] = int(data['rangers']['losses'])
         
         # Update UNC Basketball
         if data['unc_basketball']:
@@ -1157,9 +1163,9 @@ class SportsDataFetcher:
                     if 'record' not in team:
                         team['record'] = {}
                     if 'wins' in data['unc_basketball']:
-                        team['record']['wins'] = data['unc_basketball']['wins']
+                        team['record']['wins'] = int(data['unc_basketball']['wins'])
                     if 'losses' in data['unc_basketball']:
-                        team['record']['losses'] = data['unc_basketball']['losses']
+                        team['record']['losses'] = int(data['unc_basketball']['losses'])
                     if 'recent_games' in data['unc_basketball'] and data['unc_basketball']['recent_games']:
                         team['recent_streak'] = data['unc_basketball']['recent_games']
         
@@ -1170,9 +1176,9 @@ class SportsDataFetcher:
                     if 'record' not in team:
                         team['record'] = {}
                     if 'wins' in data['unc_football']:
-                        team['record']['wins'] = data['unc_football']['wins']
+                        team['record']['wins'] = int(data['unc_football']['wins'])
                     if 'losses' in data['unc_football']:
-                        team['record']['losses'] = data['unc_football']['losses']
+                        team['record']['losses'] = int(data['unc_football']['losses'])
                     if 'recent_games' in data['unc_football'] and data['unc_football']['recent_games']:
                         team['recent_streak'] = data['unc_football']['recent_games']
         
@@ -1205,8 +1211,8 @@ class SportsDataFetcher:
                     if 'record' not in config['fantasy_team']:
                         config['fantasy_team']['record'] = {}
                     
-                    config['fantasy_team']['record']['wins'] = fantasy_api_data.get('wins', config['fantasy_team']['record'].get('wins', 0))
-                    config['fantasy_team']['record']['losses'] = fantasy_api_data.get('losses', config['fantasy_team']['record'].get('losses', 0))
+                    config['fantasy_team']['record']['wins'] = int(fantasy_api_data.get('wins', config['fantasy_team']['record'].get('wins', 0)))
+                    config['fantasy_team']['record']['losses'] = int(fantasy_api_data.get('losses', config['fantasy_team']['record'].get('losses', 0)))
                     
                     # Update recent streak
                     if 'recent_streak' in fantasy_api_data:
