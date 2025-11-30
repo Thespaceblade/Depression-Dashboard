@@ -128,8 +128,8 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "L",
-        "L",
         "W",
+        "L",
         "L",
         "L"
       ],
@@ -327,14 +327,21 @@
     }
   ],
   "fantasy_team": {
-    "name": "Jason's Fantasy Squad",
+    "name": "Jason's Supreme Team",
     "record": {
-      "wins": 0,
-      "losses": 0
+      "wins": 9,
+      "losses": 3
     },
     "expected_performance": 7,
     "jasons_expectations": 8,
-    "recent_streak": []
+    "recent_streak": [],
+    "espn": {
+      "league_id": 925989669,
+      "year": 2025,
+      "team_id": 2,
+      "espn_s2": "AECPezCnAMg2S5i3Nq0jFz9mD2a6jZEl3uznTCW5DvMIYqEGKRbQdDi6R4rEmQQBxO91qEUvwHIfwt5et42J8mOG3TcE4oVmyDgBjriNYx/hC0b0N3DFRmRQ1+u3bAkku7AoSGXhUld76OdToK2N56PDB1J4eKT1oCAxUeo9C3PQ7ExZ1kKjV2BC78nGTOYNVS4vZfj8+DXOM0UmIcZ8Q684JWbceezM5cRAqfnnd6ljRc7vmGkgnPPrg/DNLsKKTfJg0KsBydeRMVuN0rut4xQveamV028cpG4lt/w6sL8upNsYk9IBXtdaTScfNRlnZI4=",
+      "swid": "{53A7E4A5-D9B8-4A68-ABF2-278B28332C2B}"
+    }
   },
   "f1_driver": {
     "name": "Max Verstappen",
