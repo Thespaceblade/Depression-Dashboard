@@ -1,41 +1,35 @@
 #!/usr/bin/env python3
 """
-Fetch all sports data and update teams_config.json
-This script is used by:
-- GitHub Actions (runs every 6 hours, commits updates to repo)
-- Render cron jobs (runs every 6 hours)
-- Backend /api/refresh endpoint (manual trigger)
-- Local cron jobs (manual setup)
+Automated data fetching script
+Runs on schedule to update teams_config.json with latest sports data
 """
+
 import sys
 import os
+from datetime import datetime
 
-# Add project root to path
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
+# Add parent directory to path
+parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parent_dir)
 
 from src.sports_api import SportsDataFetcher
 
 def main():
-    """Fetch data and update config"""
-    config_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        "teams_config.json"
-    )
+    """Fetch all sports data and update config file"""
+    config_path = os.path.join(parent_dir, "teams_config.json")
     
-    print(f"Fetching sports data and updating {config_path}...")
+    print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] Starting data fetch...")
     
     try:
         fetcher = SportsDataFetcher()
         fetcher.update_config_file(config_path)
-        print("✓ Data fetched and config updated successfully!")
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ✅ Data fetch complete!")
         return 0
     except Exception as e:
-        print(f"✗ Error fetching data: {e}")
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ❌ Error fetching data: {e}")
         import traceback
         traceback.print_exc()
         return 1
 
 if __name__ == "__main__":
     sys.exit(main())
-
