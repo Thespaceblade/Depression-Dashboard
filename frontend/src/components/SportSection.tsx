@@ -15,7 +15,7 @@ export default function SportSection({ sport, teams }: Props) {
   if (teams.length === 0) return null;
   
   // Calculate total depression points for this sport
-  const totalDepression = teams.reduce((sum, team) => sum + team.depression_points, 0);
+  const totalDepression = teams.reduce((sum, team) => sum + (team.depression_points ?? 0), 0);
   
   return (
     <div className="mb-6">
@@ -34,9 +34,9 @@ export default function SportSection({ sport, teams }: Props) {
             <h3 className="text-2xl font-bold text-white">{sport}</h3>
             <p className="text-sm text-gray-400">
               {teams.length} team{teams.length !== 1 ? 's' : ''}
-              {totalDepression > 0 && (
-                <span className="ml-2 text-red-400">
-                  • {totalDepression.toFixed(1)} pts
+              {totalDepression !== 0 && (
+                <span className={`ml-2 ${totalDepression >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                  • {totalDepression >= 0 ? '+' : ''}{totalDepression.toFixed(1)} pts
                 </span>
               )}
             </p>
@@ -44,10 +44,10 @@ export default function SportSection({ sport, teams }: Props) {
         </div>
         
         <div className="flex items-center gap-2">
-          {totalDepression > 0 && (
+          {totalDepression !== 0 && (
             <div className="text-right mr-4">
-              <div className="text-xl font-bold text-red-400">
-                +{totalDepression.toFixed(1)}
+              <div className={`text-xl font-bold ${totalDepression >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                {totalDepression >= 0 ? '+' : ''}{totalDepression.toFixed(1)}
               </div>
               <div className="text-xs text-gray-500">total pts</div>
             </div>
