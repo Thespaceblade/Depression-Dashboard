@@ -1,5 +1,137 @@
 {
-  "teams": [],
+  "teams": [
+    {
+      "name": "Dallas Cowboys",
+      "sport": "NFL",
+      "record": {
+        "wins": 6,
+        "losses": 5,
+        "ties": 1
+      },
+      "expected_performance": 8,
+      "jasons_expectations": 9,
+      "rivals": [
+        "Philadelphia Eagles",
+        "New York Giants",
+        "Washington Commanders"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [
+        "W",
+        "W",
+        "W",
+        "L",
+        "L"
+      ],
+      "notes": "America's Team - always high expectations"
+    },
+    {
+      "name": "Dallas Mavericks",
+      "sport": "NBA",
+      "record": {
+        "wins": 5,
+        "losses": 15
+      },
+      "expected_performance": 7,
+      "jasons_expectations": 8,
+      "rivals": [
+        "San Antonio Spurs",
+        "Houston Rockets",
+        "Phoenix Suns"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [
+        "L",
+        "L",
+        "L",
+        "W",
+        "L"
+      ],
+      "notes": "Luka magic"
+    },
+    {
+      "name": "Golden State Warriors",
+      "sport": "NBA",
+      "record": {
+        "wins": 10,
+        "losses": 10
+      },
+      "expected_performance": 6,
+      "jasons_expectations": 7,
+      "rivals": [
+        "Los Angeles Lakers",
+        "Boston Celtics",
+        "Cleveland Cavaliers"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
+      "notes": "Dynasty team"
+    },
+    {
+      "name": "Texas Rangers",
+      "sport": "MLB",
+      "record": {
+        "wins": 81,
+        "losses": 81
+      },
+      "expected_performance": 5,
+      "jasons_expectations": 4,
+      "rivals": [
+        "Houston Astros",
+        "Los Angeles Angels"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "Not that big - barely watches",
+      "interest_level": 0.3
+    },
+    {
+      "name": "North Carolina Tar Heels",
+      "sport": "NCAA Basketball",
+      "record": {
+        "wins": 0,
+        "losses": 0
+      },
+      "expected_performance": 8,
+      "jasons_expectations": 9,
+      "rivals": [
+        "Duke",
+        "NC State",
+        "Wake Forest",
+        "Virginia"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "College basketball - high expectations",
+      "interest_level": 1.0
+    },
+    {
+      "name": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "record": {
+        "wins": 0,
+        "losses": 0
+      },
+      "expected_performance": 8,
+      "jasons_expectations": 9,
+      "rivals": [
+        "Duke",
+        "NC State",
+        "Wake Forest",
+        "Virginia"
+      ],
+      "recent_rivalry_losses": [],
+      "recent_streak": [],
+      "notes": "College football - high expectations",
+      "interest_level": 1.0
+    }
+  ],
   "f1_driver": {
     "name": "Max Verstappen",
     "sport": "F1",
