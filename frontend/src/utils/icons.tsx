@@ -38,23 +38,26 @@ const EMOTIONAL_STATE_IMAGES: Record<number, string[]> = {
 };
 
 // Map depression score to folder number (1-10)
-// Folder 1 = worst (high positive scores), Folder 10 = best (negative scores)
-// Negative scores (good performance) should map to higher folders (8-10)
+// Score is now 0-100 scale where 0 = best, 100 = worst
+// Folder 1 = worst (high scores 80-100), Folder 10 = best (low scores 0-20)
 const getFolderNumberFromScore = (score: number): number => {
-  // High positive scores (bad) → lower folders (1-5)
-  // Low/zero scores (neutral) → middle folders (5-7)
-  // Negative scores (good) → higher folders (8-10)
+  // High scores (bad) → lower folders (1-5)
+  // Medium scores (neutral) → middle folders (5-7)
+  // Low scores (good) → higher folders (8-10)
   
-  if (score >= 50) return 1;      // Very high depression (worst)
-  if (score >= 40) return 2;
-  if (score >= 30) return 3;
-  if (score >= 20) return 4;
-  if (score >= 10) return 5;
-  if (score >= 0) return 6;       // Neutral
-  if (score >= -10) return 7;     // Slightly good
-  if (score >= -20) return 8;     // Good performance
-  if (score >= -30) return 9;     // Very good performance
-  return 10;                       // Excellent performance (best)
+  // Clamp score to 0-100 range
+  const clampedScore = Math.max(0, Math.min(100, score));
+  
+  if (clampedScore >= 80) return 1;      // Very high depression (worst) - 80-100
+  if (clampedScore >= 70) return 2;     // High depression - 70-79
+  if (clampedScore >= 60) return 3;      // Pretty depressed - 60-69
+  if (clampedScore >= 50) return 4;      // Moderately depressed - 50-59
+  if (clampedScore >= 40) return 5;      // Somewhat depressed - 40-49
+  if (clampedScore >= 30) return 6;      // Mildly disappointed - 30-39
+  if (clampedScore >= 20) return 7;      // Slightly disappointed - 20-29
+  if (clampedScore >= 10) return 8;      // Doing okay - 10-19
+  if (clampedScore > 0) return 9;        // Feeling good - 1-9
+  return 10;                              // Feeling great! (best) - 0
 };
 
 // Simple hash function to create a seed from a string
@@ -107,18 +110,18 @@ const EmotionalStateImage = ({
   // Fallback to icon if image fails or folder is empty
   if (!selectedImage || imageError) {
     const baseClass = className || 'animate-pulse-slow';
-    if (score <= 10) {
+    // Score is 0-100 where 0 = best, 100 = worst
+    const clampedScore = Math.max(0, Math.min(100, score));
+    if (clampedScore <= 10) {
       return <HiFaceSmile className={`${baseClass} text-green-400`} style={{ width: size, height: size }} />;
-    } else if (score <= 25) {
+    } else if (clampedScore <= 25) {
       return <HiFaceSmile className={`${baseClass} text-yellow-400`} style={{ width: size, height: size }} />;
-    } else if (score <= 50) {
+    } else if (clampedScore <= 50) {
       return <HiFaceFrown className={`${baseClass} text-orange-400`} style={{ width: size, height: size }} />;
-    } else if (score <= 75) {
+    } else if (clampedScore <= 75) {
       return <HiFaceFrown className={`${baseClass} text-red-400`} style={{ width: size, height: size }} />;
-    } else if (score <= 100) {
-      return <HiExclamationTriangle className={`${baseClass} text-red-600`} style={{ width: size, height: size }} />;
     } else {
-      return <HiXCircle className={`${baseClass} text-gray-400`} style={{ width: size, height: size }} />;
+      return <HiExclamationTriangle className={`${baseClass} text-red-600`} style={{ width: size, height: size }} />;
     }
   }
 
