@@ -2,22 +2,12 @@ import { useState } from 'react';
 import type { Team } from '../types';
 import { getTeamLogo } from '../utils/teamIcons';
 import { getDepressionIcon } from '../utils/icons';
+import { pointsToBorderColor } from '../utils/colors';
 
 interface Props {
   team: Team;
   activityLabel?: string;
 }
-
-const getTeamColor = (teamName: string, sport: string): string => {
-  const name = teamName.toLowerCase();
-  if (name.includes('cowboys')) return 'border-cowboys-blue';
-  if (name.includes('mavericks')) return 'border-mavericks-blue';
-  if (name.includes('warriors')) return 'border-warriors-blue';
-  if (name.includes('rangers')) return 'border-rangers-blue';
-  if (name.includes('verstappen') || sport === 'F1') return 'border-f1-red';
-  if (sport === 'Fantasy') return 'border-fantasy-purple';
-  return 'border-gray-600';
-};
 
 const getResultColor = (result: string): string => {
   if (result === 'W' || result === 'P1') return 'bg-green-500';
@@ -28,17 +18,20 @@ const getResultColor = (result: string): string => {
 
 export default function TeamCard({ team, activityLabel }: Props) {
   const [expanded, setExpanded] = useState(false);
-  const borderColor = getTeamColor(team.name, team.sport);
   const teamLogo = getTeamLogo(team.name, team.sport);
   const moodIcon = getDepressionIcon('', team.depression_points ?? 0, {
     size: 48,
     className: '',
     uniqueKey: team.name, // Use team name as unique key for consistent image selection
   });
+  
+  // Get dynamic border color based on depression points (red for bad impact, green for good impact)
+  const dynamicBorderColor = pointsToBorderColor(team.depression_points ?? 0);
 
   return (
     <div
-      className={`bg-card-bg rounded-2xl p-6 border-2 ${borderColor} shadow-xl card-hover cursor-pointer transition-all duration-300`}
+      className="bg-card-bg rounded-2xl p-6 border-2 shadow-xl card-hover cursor-pointer transition-all duration-300"
+      style={{ borderColor: dynamicBorderColor }}
       onClick={() => setExpanded(!expanded)}
     >
       {/* Header */}
