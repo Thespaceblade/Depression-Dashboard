@@ -697,11 +697,12 @@ class CollegeBasketballAPI(SportsAPI):
                 items = record.get('items', [])
                 if items:
                     stats = items[0].get('stats', [])
-                    wins = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
-                    losses = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
-                    # Convert to int (ESPN API returns floats)
-                    wins = int(wins) if wins else 0
-                    losses = int(losses) if losses else 0
+                    wins_raw = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
+                    losses_raw = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
+                    # Convert to int (ESPN API returns floats like 6.0, 1.0)
+                    # Use float() first to handle both int and float, then int() to ensure integer
+                    wins = int(float(wins_raw)) if wins_raw is not None else 0
+                    losses = int(float(losses_raw)) if losses_raw is not None else 0
                     return {
                         'wins': wins,
                         'losses': losses,
@@ -847,11 +848,12 @@ class CollegeFootballAPI(SportsAPI):
                 items = record.get('items', [])
                 if items:
                     stats = items[0].get('stats', [])
-                    wins = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
-                    losses = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
-                    # Convert to int (ESPN API returns floats)
-                    wins = int(wins) if wins else 0
-                    losses = int(losses) if losses else 0
+                    wins_raw = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
+                    losses_raw = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
+                    # Convert to int (ESPN API returns floats like 6.0, 1.0)
+                    # Use float() first to handle both int and float, then int() to ensure integer
+                    wins = int(float(wins_raw)) if wins_raw is not None else 0
+                    losses = int(float(losses_raw)) if losses_raw is not None else 0
                     return {
                         'wins': wins,
                         'losses': losses,
