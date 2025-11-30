@@ -16,8 +16,7 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
-      "notes": "America's Team - always high expectations"
+      "recent_streak": []
     },
     {
       "name": "Dallas Mavericks",
@@ -34,26 +33,7 @@
         "Phoenix Suns"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
-      "notes": "Luka magic"
-    },
-    {
-      "name": "Golden State Warriors",
-      "sport": "NBA",
-      "record": {
-        "wins": 0,
-        "losses": 0
-      },
-      "expected_performance": 6,
-      "jasons_expectations": 7,
-      "rivals": [
-        "Los Angeles Lakers",
-        "Boston Celtics",
-        "Cleveland Cavaliers"
-      ],
-      "recent_rivalry_losses": [],
-      "recent_streak": [],
-      "notes": "Dynasty team"
+      "recent_streak": []
     },
     {
       "name": "Texas Rangers",
@@ -70,7 +50,6 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [],
-      "notes": "Not that big - barely watches",
       "interest_level": 0.3
     }
   ],
@@ -86,8 +65,7 @@
       "Lewis Hamilton",
       "Charles Leclerc",
       "Lando Norris"
-    ],
-    "notes": "Huge fan - Red Bull dominance"
+    ]
   },
   "fantasy_team": {
     "name": "Your Fantasy Team Name",
@@ -107,6 +85,8 @@
     }
   }
 }
+
+
 
 
 
