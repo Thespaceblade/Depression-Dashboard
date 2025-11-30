@@ -30,35 +30,35 @@ export default function TeamCard({ team, activityLabel }: Props) {
 
   return (
     <div
-      className="bg-card-bg rounded-2xl p-6 border-2 shadow-xl card-hover cursor-pointer transition-all duration-300"
+      className="bg-card-bg rounded-xl sm:rounded-2xl p-4 sm:p-6 border-2 shadow-xl card-hover cursor-pointer transition-all duration-300"
       style={{ borderColor: dynamicBorderColor }}
       onClick={() => setExpanded(!expanded)}
     >
       {/* Header */}
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
+      <div className="flex items-start justify-between mb-3 sm:mb-4">
+        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
           {/* Team Logo */}
-          <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0">
             {teamLogo}
           </div>
-          <div>
-            <h3 className="text-xl font-bold text-white">{team.name}</h3>
-            <p className="text-sm text-gray-400">{team.sport}</p>
+          <div className="min-w-0 flex-1">
+            <h3 className="text-lg sm:text-xl font-bold text-white truncate">{team.name}</h3>
+            <p className="text-xs sm:text-sm text-gray-400">{team.sport}</p>
           </div>
         </div>
-        <div className="text-right flex flex-col items-end gap-2">
-          <div className="w-12 h-12 flex items-center justify-center">
+        <div className="text-right flex flex-col items-end gap-2 flex-shrink-0 ml-2">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
             {moodIcon}
           </div>
         </div>
       </div>
 
       {/* Record */}
-      <div className="mb-4">
+      <div className="mb-3 sm:mb-4">
         {activityLabel && (
-          <p className="text-xs text-gray-500 mb-2">Last activity: {activityLabel}</p>
+          <p className="text-xs text-gray-500 mb-2 line-clamp-2">{activityLabel}</p>
         )}
-        <div className="text-3xl font-bold text-white mb-1">
+        <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
           {team.record}
         </div>
         <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function TeamCard({ team, activityLabel }: Props) {
               style={{ width: `${team.win_percentage}%` }}
             />
           </div>
-          <span className="text-sm text-gray-400 min-w-[50px] text-right">
+          <span className="text-xs sm:text-sm text-gray-400 min-w-[45px] sm:min-w-[50px] text-right">
             {team.win_percentage.toFixed(1)}%
           </span>
         </div>
@@ -76,13 +76,13 @@ export default function TeamCard({ team, activityLabel }: Props) {
 
       {/* Recent Streak */}
       {team.recent_streak && team.recent_streak.length > 0 && (
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           <p className="text-xs text-gray-500 mb-2">Recent Form</p>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5 sm:gap-2">
             {team.recent_streak.slice(0, 5).map((result, idx) => (
               <div
                 key={idx}
-                className={`w-8 h-8 rounded-full ${getResultColor(result)} flex items-center justify-center text-white text-xs font-bold`}
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${getResultColor(result)} flex items-center justify-center text-white text-xs font-bold`}
                 title={result}
               >
                 {result === 'W' ? 'W' : result === 'L' ? 'L' : result === 'DNF' ? 'DNF' : result}
@@ -94,39 +94,39 @@ export default function TeamCard({ team, activityLabel }: Props) {
 
       {/* Expandable Details */}
       {expanded && (
-        <div className="mt-4 pt-4 border-t border-gray-700 animate-slide-up">
+        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-700 animate-slide-up">
           <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm text-gray-400 pb-2">
+            <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 pb-2">
               <span className="text-white font-semibold">Depression Points</span>
               <span className={`font-bold ${(team.depression_points ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                 {(team.depression_points ?? 0) >= 0 ? '+' : ''}{(team.depression_points ?? 0).toFixed(1)} pts
               </span>
             </div>
-            <div className="text-sm text-gray-400">
+            <div className="text-xs sm:text-sm text-gray-400">
               <strong className="text-white">Expected Performance:</strong> {team.expected_performance || 'N/A'}/10
             </div>
             {team.jasons_expectations && (
-              <div className="text-sm text-gray-400">
+              <div className="text-xs sm:text-sm text-gray-400">
                 <strong className="text-white">Jason's Expectations:</strong> {team.jasons_expectations}/10
               </div>
             )}
             {team.championship_position && (
-              <div className="text-sm text-gray-400">
+              <div className="text-xs sm:text-sm text-gray-400">
                 <strong className="text-white">Championship Position:</strong> P{team.championship_position}
               </div>
             )}
             {team.recent_dnfs !== undefined && team.recent_dnfs > 0 && (
-              <div className="text-sm text-red-400">
+              <div className="text-xs sm:text-sm text-red-400">
                 <strong>Recent DNFs:</strong> {team.recent_dnfs}
               </div>
             )}
             {Object.keys(team.breakdown).length > 0 && (
-              <div className="mt-3">
+              <div className="mt-2 sm:mt-3">
                 <p className="text-xs text-gray-500 mb-2">Breakdown:</p>
                 {Object.entries(team.breakdown).map(([key, value]) => (
                   <div key={key} className="flex justify-between text-xs text-gray-400 mb-1">
-                    <span>{key}:</span>
-                    <span className={value >= 0 ? 'text-red-400' : 'text-green-400'}>
+                    <span className="truncate mr-2">{key}:</span>
+                    <span className={`flex-shrink-0 ${value >= 0 ? 'text-red-400' : 'text-green-400'}`}>
                       {value >= 0 ? '+' : ''}{value.toFixed(1)}
                     </span>
                   </div>
@@ -142,7 +142,7 @@ export default function TeamCard({ team, activityLabel }: Props) {
 
       {/* Click hint */}
       <div className="text-xs text-gray-600 text-center mt-2">
-        {expanded ? 'Click to collapse' : 'Click for details'}
+        {expanded ? 'Tap to collapse' : 'Tap for details'}
       </div>
     </div>
   );
