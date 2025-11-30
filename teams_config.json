@@ -95,8 +95,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 0,
-        "losses": 0
+        "wins": 6.0,
+        "losses": 1.0
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
@@ -107,7 +107,13 @@
         "Virginia"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
+      "recent_streak": [
+        "L",
+        "W",
+        "W",
+        "W",
+        "W"
+      ],
       "notes": "College basketball - high expectations",
       "interest_level": 1.0
     },
@@ -115,8 +121,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "record": {
-        "wins": 0,
-        "losses": 0
+        "wins": 4.0,
+        "losses": 7.0
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
@@ -127,7 +133,13 @@
         "Virginia"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
+      "recent_streak": [
+        "L",
+        "L",
+        "W",
+        "W",
+        "L"
+      ],
       "notes": "College football - high expectations",
       "interest_level": 1.0
     }
