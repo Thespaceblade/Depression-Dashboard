@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """
 Fetch all sports data and update teams_config.json
-This script is used by Render cron jobs to keep data fresh
+This script is used by:
+- GitHub Actions (runs every 6 hours, commits updates to repo)
+- Render cron jobs (runs every 6 hours)
+- Backend /api/refresh endpoint (manual trigger)
+- Local cron jobs (manual setup)
 """
 import sys
 import os
