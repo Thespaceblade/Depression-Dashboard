@@ -55,5 +55,6 @@ teams_config.json
 
 # Instructional documentation (local only, not for GitHub)
 docs/
+docs/_setup/
 *.md
 !README.md
