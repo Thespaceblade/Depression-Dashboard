@@ -207,16 +207,18 @@ class Team:
         win_pct = self.wins / total_games
         
         # Context-aware weighting: if team is doing well, losses hurt less
-        # BUT: if team has high expectations, losses to good teams still hurt a lot
-        # If win% > 0.6, losses are 50% less impactful (unless high expectations + good opponent)
-        # If win% > 0.5, losses are 30% less impactful
+        # BUT: if team has high expectations, losses still hurt a lot even when doing well
+        # For high-expectation teams, losses should have more impact (positive depression points)
         has_high_expectations = (self.jasons_expectations >= 8 or self.expected_performance >= 8)
         
         if win_pct > 0.6:
-            # Team is doing great, but if expectations are high, losses still hurt more
-            context_multiplier = 0.6 if has_high_expectations else 0.5  # Slightly less reduction for high-expectation teams
+            # Team is doing great, but if expectations are high, losses still hurt significantly
+            # High-expectation teams: losses have 80% impact (reduced from 60%)
+            # Low-expectation teams: losses have 50% impact
+            context_multiplier = 0.8 if has_high_expectations else 0.5
         elif win_pct > 0.5:
-            context_multiplier = 0.8 if has_high_expectations else 0.7  # Less reduction for high-expectation teams
+            # Team doing okay, but high expectations mean losses still hurt
+            context_multiplier = 0.9 if has_high_expectations else 0.7
         else:
             context_multiplier = 1.0  # Team struggling, losses hurt full
         
