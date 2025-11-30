@@ -25,10 +25,10 @@ calculator = None
 def get_calculator():
     """Get or create calculator instance"""
     global calculator
-    if calculator is None:
-        # Get path to config file in parent directory
-        config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
-        calculator = DepressionCalculator(config_path)
+    # Always reload from config file to ensure fresh data
+    # Get path to config file in parent directory
+    config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
+    calculator = DepressionCalculator(config_path)
     return calculator
 
 @app.route('/api/depression', methods=['GET'])
