@@ -38,18 +38,23 @@ const EMOTIONAL_STATE_IMAGES: Record<number, string[]> = {
 };
 
 // Map depression score to folder number (1-10)
-// Folder 1 = 0-10, Folder 2 = 10-20, Folder 3 = 20-30, etc.
+// Folder 1 = worst (high positive scores), Folder 10 = best (negative scores)
+// Negative scores (good performance) should map to higher folders (8-10)
 const getFolderNumberFromScore = (score: number): number => {
-  if (score <= 10) return 1;
-  if (score <= 20) return 2;
-  if (score <= 30) return 3;
-  if (score <= 40) return 4;
-  if (score <= 50) return 5;
-  if (score <= 60) return 6;
-  if (score <= 70) return 7;
-  if (score <= 80) return 8;
-  if (score <= 90) return 9;
-  return 10; // 90+
+  // High positive scores (bad) → lower folders (1-5)
+  // Low/zero scores (neutral) → middle folders (5-7)
+  // Negative scores (good) → higher folders (8-10)
+  
+  if (score >= 50) return 1;      // Very high depression (worst)
+  if (score >= 40) return 2;
+  if (score >= 30) return 3;
+  if (score >= 20) return 4;
+  if (score >= 10) return 5;
+  if (score >= 0) return 6;       // Neutral
+  if (score >= -10) return 7;     // Slightly good
+  if (score >= -20) return 8;     // Good performance
+  if (score >= -30) return 9;     // Very good performance
+  return 10;                       // Excellent performance (best)
 };
 
 // Simple hash function to create a seed from a string
@@ -144,16 +149,18 @@ const EmotionalStateImage = ({
 export const getDepressionIcon = (
   _level: string,
   score: number,
-  options?: DepressionIconOptions,
+  options?: DepressionIconOptions & { uniqueKey?: string },
 ) => {
   const size = options?.size ?? 120;
   const baseClass = options?.className ?? '';
+  const uniqueKey = options?.uniqueKey ?? '';
 
   return (
     <EmotionalStateImage 
       score={score} 
       size={size} 
       className={baseClass}
+      uniqueKey={uniqueKey}
     />
   );
 };
