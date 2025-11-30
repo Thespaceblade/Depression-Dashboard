@@ -37,27 +37,40 @@ const EMOTIONAL_STATE_IMAGES: Record<number, string[]> = {
   10: ['10.JPG', 'IMG_0892.jpg', 'IMG_9397.JPG'],
 };
 
+// Emotional state titles for each 10-point range (0-100 scale)
+// 0 = least depressed, 100 = most depressed
+export const EMOTIONAL_STATE_TITLES: Record<number, string> = {
+  1: "Elated",           // 0-10 (least depressed)
+  2: "Thrilled",         // 10-20
+  3: "Happy",            // 20-30
+  4: "Content",          // 30-40
+  5: "Neutral",          // 40-50
+  6: "Disappointed",     // 50-60
+  7: "Sad",              // 60-70
+  8: "Depressed",        // 70-80
+  9: "Miserable",        // 80-90
+  10: "Devastated",      // 90-100 (most depressed)
+};
+
+// Get emotional state title for a given score
+export const getEmotionalStateTitle = (score: number): string => {
+  const folderNum = getFolderNumberFromScore(score);
+  return EMOTIONAL_STATE_TITLES[folderNum] || "Neutral";
+};
+
 // Map depression score to folder number (1-10)
-// Score is now 0-100 scale where 0 = best, 100 = worst
-// Folder 1 = worst (high scores 80-100), Folder 10 = best (low scores 0-20)
+// Score is 0-100 scale where 0 = least depressed, 100 = most depressed
+// Each folder covers exactly 10 points: Folder 1 = 0-10, Folder 10 = 90-100
 const getFolderNumberFromScore = (score: number): number => {
-  // High scores (bad) → lower folders (1-5)
-  // Medium scores (neutral) → middle folders (5-7)
-  // Low scores (good) → higher folders (8-10)
-  
   // Clamp score to 0-100 range
   const clampedScore = Math.max(0, Math.min(100, score));
   
-  if (clampedScore >= 80) return 1;      // Very high depression (worst) - 80-100
-  if (clampedScore >= 70) return 2;     // High depression - 70-79
-  if (clampedScore >= 60) return 3;      // Pretty depressed - 60-69
-  if (clampedScore >= 50) return 4;      // Moderately depressed - 50-59
-  if (clampedScore >= 40) return 5;      // Somewhat depressed - 40-49
-  if (clampedScore >= 30) return 6;      // Mildly disappointed - 30-39
-  if (clampedScore >= 20) return 7;      // Slightly disappointed - 20-29
-  if (clampedScore >= 10) return 8;      // Doing okay - 10-19
-  if (clampedScore > 0) return 9;        // Feeling good - 1-9
-  return 10;                              // Feeling great! (best) - 0
+  // Calculate folder number: divide score by 10 and add 1, but handle edge cases
+  // Score 0-9.99... → folder 1 (0/10 = 0, +1 = 1)
+  // Score 10-19.99... → folder 2 (10/10 = 1, +1 = 2)
+  // Score 90-100 → folder 10 (100/10 = 10, but we cap at 10)
+  if (clampedScore >= 100) return 10;     // Edge case: exactly 100
+  return Math.floor(clampedScore / 10) + 1;
 };
 
 // Simple hash function to create a seed from a string
@@ -110,18 +123,28 @@ const EmotionalStateImage = ({
   // Fallback to icon if image fails or folder is empty
   if (!selectedImage || imageError) {
     const baseClass = className || 'animate-pulse-slow';
-    // Score is 0-100 where 0 = best, 100 = worst
+    // Score is 0-100 where 0 = least depressed, 100 = most depressed
     const clampedScore = Math.max(0, Math.min(100, score));
-    if (clampedScore <= 10) {
+    if (clampedScore < 10) {
       return <HiFaceSmile className={`${baseClass} text-green-400`} style={{ width: size, height: size }} />;
-    } else if (clampedScore <= 25) {
+    } else if (clampedScore < 20) {
+      return <HiFaceSmile className={`${baseClass} text-green-300`} style={{ width: size, height: size }} />;
+    } else if (clampedScore < 30) {
       return <HiFaceSmile className={`${baseClass} text-yellow-400`} style={{ width: size, height: size }} />;
-    } else if (clampedScore <= 50) {
+    } else if (clampedScore < 40) {
+      return <HiFaceSmile className={`${baseClass} text-yellow-300`} style={{ width: size, height: size }} />;
+    } else if (clampedScore < 50) {
+      return <HiFaceFrown className={`${baseClass} text-gray-400`} style={{ width: size, height: size }} />;
+    } else if (clampedScore < 60) {
       return <HiFaceFrown className={`${baseClass} text-orange-400`} style={{ width: size, height: size }} />;
-    } else if (clampedScore <= 75) {
+    } else if (clampedScore < 70) {
+      return <HiFaceFrown className={`${baseClass} text-orange-500`} style={{ width: size, height: size }} />;
+    } else if (clampedScore < 80) {
       return <HiFaceFrown className={`${baseClass} text-red-400`} style={{ width: size, height: size }} />;
+    } else if (clampedScore < 90) {
+      return <HiFaceFrown className={`${baseClass} text-red-600`} style={{ width: size, height: size }} />;
     } else {
-      return <HiExclamationTriangle className={`${baseClass} text-red-600`} style={{ width: size, height: size }} />;
+      return <HiExclamationTriangle className={`${baseClass} text-red-800`} style={{ width: size, height: size }} />;
     }
   }
 

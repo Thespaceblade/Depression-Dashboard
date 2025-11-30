@@ -1321,20 +1321,34 @@ class DepressionCalculator:
     
     def get_depression_level(self, score: float) -> tuple:
         """Get emoji and description for depression level
-        Score is now on a 0-100 scale (0 = best, 100 = worst)
+        Score is on a 0-100 scale (0 = least depressed, 100 = most depressed)
+        Each 10-point range has its own title, matching frontend folder mapping.
         """
-        if score <= 10:
-            return ("😊", "Feeling Great!")
-        elif score <= 25:
-            return ("😐", "Mildly Disappointed")
-        elif score <= 50:
-            return ("😔", "Pretty Depressed")
-        elif score <= 75:
-            return ("😢", "Very Depressed")
-        elif score <= 100:
-            return ("😭", "Rock Bottom")
+        # Clamp score to 0-100 range
+        clamped_score = max(0, min(100, score))
+        
+        # Calculate folder number using same logic as frontend
+        # Folder 1 = 0-10 (Elated), Folder 10 = 90-100 (Devastated)
+        if clamped_score >= 100:
+            folder_num = 10
         else:
-            return ("💀", "Call for Help")
+            folder_num = int(clamped_score // 10) + 1
+        
+        # Map folder number to title and emoji (matches frontend EMOTIONAL_STATE_TITLES)
+        level_map = {
+            1: ("🤩", "Elated"),           # 0-9.99...
+            2: ("😄", "Thrilled"),         # 10-19.99...
+            3: ("😊", "Happy"),            # 20-29.99...
+            4: ("🙂", "Content"),          # 30-39.99...
+            5: ("😑", "Neutral"),          # 40-49.99...
+            6: ("😐", "Disappointed"),     # 50-59.99...
+            7: ("😞", "Sad"),              # 60-69.99...
+            8: ("😔", "Depressed"),        # 70-79.99...
+            9: ("😢", "Miserable"),        # 80-89.99...
+            10: ("😭", "Devastated"),      # 90-100
+        }
+        
+        return level_map.get(folder_num, ("😑", "Neutral"))
     
     def generate_report(self) -> str:
         """Generate a formatted report"""
