@@ -33,6 +33,7 @@ export default function TeamCard({ team, activityLabel }: Props) {
   const moodIcon = getDepressionIcon('', team.depression_points ?? 0, {
     size: 48,
     className: '',
+    uniqueKey: team.name, // Use team name as unique key for consistent image selection
   });
 
   return (
@@ -104,8 +105,8 @@ export default function TeamCard({ team, activityLabel }: Props) {
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm text-gray-400 pb-2">
               <span className="text-white font-semibold">Depression Points</span>
-              <span className="text-red-400 font-bold">
-                +{(team.depression_points ?? 0).toFixed(1)} pts
+              <span className={`font-bold ${(team.depression_points ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
+                {(team.depression_points ?? 0) >= 0 ? '+' : ''}{(team.depression_points ?? 0).toFixed(1)} pts
               </span>
             </div>
             <div className="text-sm text-gray-400">
@@ -132,7 +133,9 @@ export default function TeamCard({ team, activityLabel }: Props) {
                 {Object.entries(team.breakdown).map(([key, value]) => (
                   <div key={key} className="flex justify-between text-xs text-gray-400 mb-1">
                     <span>{key}:</span>
-                    <span className="text-red-400">+{value.toFixed(1)}</span>
+                    <span className={value >= 0 ? 'text-red-400' : 'text-green-400'}>
+                      {value >= 0 ? '+' : ''}{value.toFixed(1)}
+                    </span>
                   </div>
                 ))}
               </div>
