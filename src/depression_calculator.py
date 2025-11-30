@@ -19,23 +19,26 @@ except ImportError:
     print("Warning: ESPN Fantasy integration not available. Install espn-api library.")
 
 
-def calculate_time_weight(days_ago: float, hours_ago: float = None, decay_rate: float = 0.5) -> float:
+def calculate_time_weight(days_ago: float, hours_ago: float = None, decay_rate: float = 0.3, sport: str = None) -> float:
     """
     Calculate time-based weight using exponential decay.
-    Recent events have MUCH more impact than older ones.
+    Recent events have more impact than older ones, but the difference is more balanced.
+    F1 and NFL have more aggressive recency weighting (fewer events = each matters more).
     
     Args:
         days_ago: Number of days since the event
         hours_ago: Optional hours since event (for very recent events)
-        decay_rate: Decay rate (higher = faster decay). Default 0.5 gives:
+        decay_rate: Decay rate (higher = faster decay). Default 0.3 gives:
             - 0 hours (just happened): 1.0 (100%)
-            - 6 hours: 0.78 (78%)
-            - 12 hours: 0.61 (61%)
-            - 1 day: 0.61 (61%)
-            - 2 days: 0.37 (37%)
-            - 3 days: 0.22 (22%)
-            - 4 days: 0.14 (14%)
-            - 5+ days: < 0.08 (< 8%)
+            - 6 hours: 0.87 (87%)
+            - 12 hours: 0.76 (76%)
+            - 1 day: 0.74 (74%)
+            - 2 days: 0.55 (55%)
+            - 3 days: 0.41 (41%)
+            - 4 days: 0.30 (30%)
+            - 5 days: 0.22 (22%)
+            - 7 days: 0.12 (12%)
+        sport: Sport type - F1 and NFL get more aggressive recency weighting
     
     Returns:
         Weight multiplier (0.0 to 1.0)
@@ -43,15 +46,24 @@ def calculate_time_weight(days_ago: float, hours_ago: float = None, decay_rate: 
     if days_ago < 0:
         days_ago = 0
     
+    # F1 and NFL: More aggressive recency (fewer events = each recent event matters WAY more)
+    if sport in ["F1", "NFL"]:
+        # Use higher decay rate for these sports - recent events dominate
+        effective_decay_rate = decay_rate * 1.5  # 0.3 * 1.5 = 0.45 for F1/NFL
+    else:
+        effective_decay_rate = decay_rate
+    
     # If hours_ago is provided and less than 1 day, use more granular calculation
     if hours_ago is not None and hours_ago < 24:
         # Convert to days for calculation, but use more aggressive decay
         effective_days = hours_ago / 24.0
         # More aggressive decay for very recent events
-        return math.exp(-effective_days * decay_rate * 1.5)
+        # F1/NFL get even more aggressive: 1.5x multiplier instead of 1.2x
+        multiplier = 1.5 if sport in ["F1", "NFL"] else 1.2
+        return math.exp(-effective_days * effective_decay_rate * multiplier)
     
     # Standard exponential decay
-    return math.exp(-days_ago * decay_rate)
+    return math.exp(-days_ago * effective_decay_rate)
 
 
 def get_event_timestamps(events: List[str], days_back: int = 5) -> List[Tuple[str, float]]:
@@ -192,8 +204,10 @@ class Team:
         else:
             context_multiplier = 1.0  # Team struggling, losses hurt full
         
-        # Base loss penalty (reduced from 5.0 to 3.0, scaled by interest and context)
-        base_loss_points = 3.0 * self.interest_level * context_multiplier
+        # Base loss penalty - reduced to reflect feeling better overall
+        # NFL gets slightly higher base (fewer games = each loss matters more)
+        base_loss = 2.5 if self.sport == "NFL" else 2.0
+        base_loss_points = base_loss * self.interest_level * context_multiplier
         
         # POSITIVE: Recent wins reduce depression
         win_points = 0.0
@@ -204,7 +218,8 @@ class Team:
             events_with_time = get_event_timestamps(self.recent_streak)
             
             for i, (event, days_ago) in enumerate(events_with_time):
-                weight = calculate_time_weight(days_ago)
+                # NFL gets more aggressive recency weighting
+                weight = calculate_time_weight(days_ago, sport=self.sport)
                 opponent_multiplier = 1.0  # Default multiplier
                 game_context_multiplier = 1.0  # Game-specific context
                 emotional_multiplier = 1.0  # Emotional context
@@ -240,7 +255,10 @@ class Team:
                     # Game importance can be inferred from season context
                     # (late season games, playoff implications, etc.)
                     
-                    win_points -= 2.0 * self.interest_level * weight * opponent_multiplier * game_context_multiplier * emotional_multiplier
+                    # Wins reduce depression significantly
+                    # NFL wins matter more (fewer games) - base 6.0 vs 5.0 for other sports
+                    win_base = 6.0 if self.sport == "NFL" else 5.0
+                    win_points -= win_base * self.interest_level * weight * opponent_multiplier * game_context_multiplier * emotional_multiplier
                     
                 elif event == "L":
                     # Losses add depression - context matters!
@@ -321,25 +339,25 @@ class Team:
             # No recent streak data, use standard calculation with time decay
             # Assume losses are spread over season, so average age is ~half season
             avg_days_ago = 30  # Rough estimate
-            weight = calculate_time_weight(avg_days_ago)
+            weight = calculate_time_weight(avg_days_ago, sport=self.sport)
             loss_points = self.losses * base_loss_points * weight
         
         # Season context penalties/bonuses
         season_context_penalty = 0.0
         
-        # Playoff implications
+        # Playoff implications (reduced penalties to lower overall scores)
         if self.playoff_eliminated:
-            season_context_penalty += 10.0 * self.interest_level  # Eliminated = major depression
-            breakdown["Playoff Eliminated"] = 10.0 * self.interest_level
+            season_context_penalty += 7.0 * self.interest_level  # Reduced from 10.0
+            breakdown["Playoff Eliminated"] = 7.0 * self.interest_level
         elif self.games_back and self.games_back > 3:
-            season_context_penalty += 5.0 * self.interest_level  # Far from playoffs
-            breakdown["Far from Playoffs"] = 5.0 * self.interest_level
+            season_context_penalty += 3.5 * self.interest_level  # Reduced from 5.0
+            breakdown["Far from Playoffs"] = 3.5 * self.interest_level
         elif self.playoff_clinched:
-            season_context_penalty -= 8.0 * self.interest_level  # Clinched = reduces depression
-            breakdown["Playoff Clinched (reduces depression)"] = -8.0 * self.interest_level
+            season_context_penalty -= 10.0 * self.interest_level  # Increased from 8.0 - clinched feels great!
+            breakdown["Playoff Clinched (reduces depression)"] = -10.0 * self.interest_level
         elif self.division_leader or self.conference_leader:
-            season_context_penalty -= 3.0 * self.interest_level  # Leading = good
-            breakdown["Division/Conference Leader (reduces depression)"] = -3.0 * self.interest_level
+            season_context_penalty -= 4.0 * self.interest_level  # Increased from 3.0 - leading feels good!
+            breakdown["Division/Conference Leader (reduces depression)"] = -4.0 * self.interest_level
         
         # Late season losses hurt more
         if self.season_progress > 0.75:  # Last quarter of season
@@ -355,6 +373,7 @@ class Team:
         
         # Historical context
         historical_penalty = 0.0
+        team_context_penalty = 0.0  # Initialize team context penalty
         
         # Championship drought (can be calculated from historical data)
         if self.championship_drought_years > 20:
@@ -373,25 +392,26 @@ class Team:
         score += win_points  # Negative value reduces depression
         score += season_context_penalty
         score += historical_penalty
+        score += team_context_penalty
         
         if loss_points > 0:
             breakdown["Losses (time-weighted, context-adjusted)"] = loss_points
         if win_points < 0:
             breakdown["Recent Wins (reduces depression)"] = win_points
         
-        # Expectation gap penalty (reduced weights)
+        # Expectation gap penalty (further reduced to lower overall scores)
         expected_win_pct = self.expected_performance / 10.0
         actual_win_pct = win_pct
         gap = expected_win_pct - actual_win_pct
         
         if gap > 0:  # Underperforming
-            # Reduced multipliers: 30->15, 20->10, 10->5
+            # Further reduced multipliers: 15->12, 10->8, 5->4
             if self.expected_performance >= 8:
-                gap_penalty = gap * 15 * self.interest_level
+                gap_penalty = gap * 12 * self.interest_level
             elif self.expected_performance >= 5:
-                gap_penalty = gap * 10 * self.interest_level
+                gap_penalty = gap * 8 * self.interest_level
             else:
-                gap_penalty = gap * 5 * self.interest_level
+                gap_penalty = gap * 4 * self.interest_level
             
             # Multiply by expectations multiplier
             expectations_mult = self.jasons_expectations / 10.0
@@ -424,7 +444,7 @@ class Team:
                         try:
                             loss_date = datetime.fromisoformat(self.recent_rivalry_loss_timestamps[i])
                             days_ago = (datetime.now() - loss_date.replace(tzinfo=None)).days
-                            weight = calculate_time_weight(days_ago)
+                            weight = calculate_time_weight(days_ago, sport=self.sport)
                             rivalry_penalty += rivalry_base * weight
                         except (ValueError, TypeError):
                             # Fallback: assume recent (0 days ago)
@@ -435,7 +455,7 @@ class Team:
             else:
                 # No timestamps: weight by position (most recent = highest weight)
                 for i, loss in enumerate(self.recent_rivalry_losses):
-                    weight = calculate_time_weight(i)  # i=0 is most recent
+                    weight = calculate_time_weight(i, sport=self.sport)  # i=0 is most recent
                     rivalry_penalty += rivalry_base * weight
             
             score += rivalry_penalty
@@ -457,18 +477,22 @@ class Team:
                 if event == "L":
                     consecutive_losses += 1
                     # Very recent losses in a streak are extra painful
-                    weight = calculate_time_weight(days_ago, decay_rate=0.5)
+                    weight = calculate_time_weight(days_ago, sport=self.sport)
                     if days_ago == 0:  # Just lost
                         weight = 1.0  # Full pain
                     elif days_ago == 1:  # Lost yesterday
-                        weight = 0.61  # Still hurts
+                        # NFL/F1 have faster decay, so adjust weight accordingly
+                        if self.sport in ["NFL", "F1"]:
+                            weight = 0.65  # Faster decay for NFL/F1
+                        else:
+                            weight = 0.74  # Standard decay
                     
                     # Recent losses in a streak get extra multiplier (reduced from 1.3x to 1.2x)
                     if consecutive_losses <= 2 and days_ago <= 1:
                         weight *= 1.2  # 20% extra pain for recent streak
                     
-                    # Reduced from 3 to 2 points per loss in streak
-                    streak_penalty += 2 * self.interest_level * context_multiplier * weight
+                    # Reduced penalty for losing streaks
+                    streak_penalty += 1.5 * self.interest_level * context_multiplier * weight
                 else:
                     break  # Streak broken
             
@@ -476,6 +500,45 @@ class Team:
                 score += streak_penalty
                 if streak_penalty > 0:
                     breakdown[f"Losing Streak ({consecutive_losses} games, time-weighted)"] = streak_penalty
+        
+        # Consecutive wins (time-weighted) - WIN STREAK BONUS!
+        # Recent winning streaks are amazing and reduce depression significantly
+        if self.recent_streak:
+            events_with_time = get_event_timestamps(self.recent_streak)
+            
+            # Calculate time-weighted winning streak
+            streak_bonus = 0.0
+            consecutive_wins = 0
+            
+            # Process from most recent backwards
+            for event, days_ago in events_with_time:
+                if event == "W":
+                    consecutive_wins += 1
+                    # Very recent wins in a streak feel amazing
+                    weight = calculate_time_weight(days_ago, sport=self.sport)
+                    if days_ago == 0:  # Just won
+                        weight = 1.0  # Full joy
+                    elif days_ago == 1:  # Won yesterday
+                        # NFL/F1 have faster decay, so adjust weight accordingly
+                        if self.sport in ["NFL", "F1"]:
+                            weight = 0.65  # Faster decay for NFL/F1
+                        else:
+                            weight = 0.74  # Standard decay
+                    
+                    # Recent wins in a streak get extra multiplier
+                    if consecutive_wins <= 3 and days_ago <= 2:
+                        weight *= 1.3  # 30% extra joy for recent streak
+                    
+                    # Win streak bonus: Higher for NFL (fewer games = streaks matter more)
+                    streak_base = 5.0 if self.sport == "NFL" else 4.0
+                    streak_bonus -= streak_base * self.interest_level * weight  # Negative = reduces depression
+                else:
+                    break  # Streak broken
+            
+            if consecutive_wins > 1:
+                score += streak_bonus
+                if streak_bonus < 0:
+                    breakdown[f"Winning Streak ({consecutive_wins} games, time-weighted)"] = streak_bonus
         
         # Apply offseason multiplier to final score
         final_score = score * offseason_multiplier
@@ -513,13 +576,13 @@ class F1Driver:
         
         # Position penalty (reduced, and Max is #1 so this should be 0)
         if self.championship_position > 1:
-            position_penalty = (self.championship_position - 1) * 2  # Reduced from 3 to 2
+            position_penalty = (self.championship_position - 1) * 1.5  # Reduced from 2 to 1.5
             score += position_penalty
             breakdown["Championship Position"] = position_penalty
         elif self.championship_position == 1:
-            # POSITIVE: Being #1 reduces depression!
-            score -= 5.0  # Negative = reduces depression
-            breakdown["Championship Leader (reduces depression)"] = -5.0
+            # POSITIVE: Being #1 reduces depression significantly!
+            score -= 8.0  # Increased from 5.0 to 8.0 - negative = reduces depression
+            breakdown["Championship Leader (reduces depression)"] = -8.0
         
         # Expectation gap (reduced weights)
         if self.expected_performance >= 9 and self.championship_position > 1:
@@ -531,30 +594,34 @@ class F1Driver:
                 breakdown["Expectation Gap (Should be #1)"] = gap_penalty
         
         # POSITIVE: Recent wins reduce depression significantly
+        # Max wins are weighted high because each race is important
         if self.recent_races:
             events_with_time = get_event_timestamps(self.recent_races)
             win_bonus = 0.0
             
             for event, days_ago in events_with_time:
-                weight = calculate_time_weight(days_ago)
+                # F1 gets aggressive recency weighting - recent races matter WAY more
+                weight = calculate_time_weight(days_ago, sport="F1")
                 if event == "W":
-                    # Wins reduce depression (recent wins help more)
-                    win_bonus -= 4.0 * weight  # Negative = reduces depression
+                    # Wins reduce depression significantly (recent wins help more)
+                    # Max wins are weighted VERY high - each race win is a huge deal
+                    # Recent F1 wins (just happened) get massive impact
+                    win_bonus -= 12.0 * weight  # Increased from 8.0 to 12.0 - negative = reduces depression
                 elif event == "P2":
                     # Podium finishes also help
-                    win_bonus -= 2.0 * weight
+                    win_bonus -= 4.0 * weight  # Increased from 3.0 to 4.0
                 elif event == "P3":
-                    win_bonus -= 1.0 * weight
+                    win_bonus -= 2.0 * weight  # Increased from 1.5 to 2.0
             
             score += win_bonus
             if win_bonus < 0:
                 breakdown["Recent Wins/Podiums (reduces depression)"] = win_bonus
         
-        # DNF penalty (reduced from 12 to 8, time-weighted)
+        # DNF penalty (reduced - recent DNFs still hurt but overall scores lower)
         # A DNF that JUST happened is devastating, but gets less painful over time
         if self.recent_dnfs > 0:
             dnf_penalty = 0.0
-            base_dnf_penalty = 8.0  # Reduced from 12 to 8
+            base_dnf_penalty = 6.0  # Reduced from 8.0 to 6.0
             
             if self.recent_dnf_timestamps:
                 # Use timestamps if available - check hours for very recent DNFs
@@ -571,13 +638,14 @@ class F1Driver:
                         days_ago = time_diff.days
                         
                         # Very recent DNFs (within 24 hours) get extra weight
+                        # F1 DNFs are devastating when recent
                         if hours_ago < 24:
-                            weight = calculate_time_weight(days_ago, hours_ago=hours_ago, decay_rate=0.6)
+                            weight = calculate_time_weight(days_ago, hours_ago=hours_ago, decay_rate=0.4, sport="F1")
                             # Boost for very recent (just happened = devastating)
                             if hours_ago < 6:
                                 weight = min(1.0, weight * 1.2)  # 20% boost for very recent
                         else:
-                            weight = calculate_time_weight(days_ago, decay_rate=0.5)
+                            weight = calculate_time_weight(days_ago, sport="F1")  # F1 gets aggressive recency
                         
                         dnf_penalty += base_dnf_penalty * weight
                     except (ValueError, TypeError):
@@ -591,8 +659,8 @@ class F1Driver:
                     events_with_time = get_event_timestamps(self.recent_races)
                     for event, days_ago in events_with_time:
                         if event == "DNF" and dnf_found < self.recent_dnfs:
-                            # Very recent DNFs hurt WAY more
-                            weight = calculate_time_weight(days_ago, decay_rate=0.6)
+                            # Very recent DNFs hurt WAY more - F1 gets aggressive recency
+                            weight = calculate_time_weight(days_ago, decay_rate=0.4, sport="F1")
                             if days_ago == 0:  # Just happened
                                 weight = 1.0  # Full devastation
                             dnf_penalty += base_dnf_penalty * weight
@@ -601,8 +669,8 @@ class F1Driver:
                 # If we still have DNFs not accounted for, assume they're older
                 remaining_dnfs = self.recent_dnfs - dnf_found
                 if remaining_dnfs > 0:
-                    # Older DNFs get less weight (assume 7+ days ago)
-                    weight = calculate_time_weight(7, decay_rate=0.5)
+                    # Older DNFs get less weight (assume 7+ days ago) - but F1 still weights recent more
+                    weight = calculate_time_weight(7, sport="F1")
                     dnf_penalty += remaining_dnfs * base_dnf_penalty * weight
             
             score += dnf_penalty
@@ -617,13 +685,13 @@ class F1Driver:
             
             for event, days_ago in events_with_time:
                 if event not in ["W", "P2", "P3"]:  # Poor result
-                    # Very recent poor results are devastating
-                    weight = calculate_time_weight(days_ago, decay_rate=0.5)
+                    # Very recent poor results are devastating - F1 gets aggressive recency
+                    weight = calculate_time_weight(days_ago, sport="F1")
                     if days_ago == 0:  # Just happened
                         weight = 1.0  # Full impact
                     elif days_ago == 1:  # Yesterday
-                        weight = 0.61  # Still hurts a lot
-                    race_penalty += 3 * weight  # Reduced from 5 to 3
+                        weight = 0.65  # Still hurts a lot (F1 has faster decay for older events)
+                    race_penalty += 2.5 * weight  # Reduced from 3 to 2.5
             
             if race_penalty > 0:
                 score += race_penalty
@@ -667,7 +735,7 @@ class FantasyTeam:
         else:
             context_multiplier = 1.0  # Team struggling, losses hurt full
         
-        # Fantasy losses (reduced from 8 to 5, context-aware)
+        # Fantasy losses (further reduced to lower overall scores)
         loss_points = 0.0
         win_points = 0.0
         
@@ -675,24 +743,24 @@ class FantasyTeam:
             events_with_time = get_event_timestamps(self.recent_streak)
             
             for event, days_ago in events_with_time:
-                weight = calculate_time_weight(days_ago, decay_rate=0.5)
+                weight = calculate_time_weight(days_ago)  # Fantasy uses standard decay
                 if event == "W":
                     # Wins reduce depression (recent wins help more)
-                    win_points -= 3.0 * weight  # Negative = reduces depression
+                    win_points -= 4.0 * weight  # Increased from 3.0 to 4.0 - wins feel good!
                 elif event == "L":
                     if days_ago == 0:  # Just lost
                         weight = 1.0  # Full devastation
-                    loss_points += 5 * context_multiplier * weight  # Reduced from 8 to 5
+                    loss_points += 4 * context_multiplier * weight  # Reduced from 5 to 4
             
             # Add remaining losses with lower weight
             total_recent_losses = sum(1 for e in self.recent_streak if e == "L")
             remaining_losses = max(0, self.losses - total_recent_losses)
             if remaining_losses > 0:
-                loss_points += remaining_losses * 5 * context_multiplier * 0.2  # Older losses less painful
+                loss_points += remaining_losses * 4 * context_multiplier * 0.2  # Older losses less painful
         else:
             # No recent data, assume average age
-            weight = calculate_time_weight(30, decay_rate=0.5)
-            loss_points = self.losses * 5 * context_multiplier * weight
+            weight = calculate_time_weight(30)  # Uses default decay_rate=0.3
+            loss_points = self.losses * 4 * context_multiplier * weight
         
         score += loss_points
         score += win_points  # Negative value reduces depression
@@ -708,7 +776,7 @@ class FantasyTeam:
         gap = expected_win_pct - win_pct
         
         if gap > 0:
-            gap_penalty = gap * 25
+            gap_penalty = gap * 20  # Reduced from 25 to 20
             expectations_mult = self.jasons_expectations / 10.0
             gap_penalty *= expectations_mult
             score += gap_penalty

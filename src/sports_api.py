@@ -983,6 +983,48 @@ class SportsDataFetcher:
         self.college_bball = CollegeBasketballAPI()
         self.college_football = CollegeFootballAPI()
     
+    def fetch_fantasy_data(self, espn_config: dict) -> Optional[Dict]:
+        """Fetch fantasy team data from ESPN API"""
+        try:
+            # Try relative import first (when used as module)
+            try:
+                from .espn_fantasy import ESPNFantasyClient
+            except ImportError:
+                # Fall back to absolute import (when used as script)
+                from src.espn_fantasy import ESPNFantasyClient
+        except ImportError:
+            print("Warning: ESPN Fantasy integration not available. Install espn-api library.")
+            return None
+        
+        try:
+            league_id = espn_config.get("league_id")
+            year = espn_config.get("year")
+            if not league_id or not year:
+                return None
+            
+            team_id = espn_config.get("team_id")
+            team_name = espn_config.get("team_name")
+            espn_s2 = espn_config.get("espn_s2")
+            swid = espn_config.get("swid")
+            
+            # Initialize ESPN client
+            client = ESPNFantasyClient(
+                league_id=league_id,
+                year=year,
+                team_id=team_id,
+                espn_s2=espn_s2,
+                swid=swid
+            )
+            
+            # Fetch team data
+            team_data = client.get_my_team(team_name)
+            return team_data
+        except Exception as e:
+            print(f"Error fetching fantasy data from ESPN: {e}")
+            import traceback
+            traceback.print_exc()
+            return None
+    
     def get_opponent_record(self, opponent_name: str, sport: str) -> Optional[Dict]:
         """Get record for an opponent team (used for context)"""
         try:
@@ -1144,6 +1186,43 @@ class SportsDataFetcher:
                 # Count DNFs
                 dnf_count = sum(1 for r in data['verstappen'].get('recent_races', []) if r == 'DNF')
                 config['f1_driver']['recent_dnfs'] = dnf_count
+        
+        # Update Fantasy Team (if ESPN credentials are configured)
+        if 'fantasy_team' in config:
+            fantasy_data = config.get('fantasy_team', {})
+            espn_config = fantasy_data.get('espn', {})
+            
+            if espn_config.get('league_id') and espn_config.get('year'):
+                print("Fetching fantasy data from ESPN API...")
+                fantasy_api_data = self.fetch_fantasy_data(espn_config)
+                
+                if fantasy_api_data:
+                    # Ensure fantasy_team section exists
+                    if 'fantasy_team' not in config:
+                        config['fantasy_team'] = {}
+                    
+                    # Update record
+                    if 'record' not in config['fantasy_team']:
+                        config['fantasy_team']['record'] = {}
+                    
+                    config['fantasy_team']['record']['wins'] = fantasy_api_data.get('wins', config['fantasy_team']['record'].get('wins', 0))
+                    config['fantasy_team']['record']['losses'] = fantasy_api_data.get('losses', config['fantasy_team']['record'].get('losses', 0))
+                    
+                    # Update recent streak
+                    if 'recent_streak' in fantasy_api_data:
+                        config['fantasy_team']['recent_streak'] = fantasy_api_data['recent_streak']
+                    
+                    # Update name if it changed
+                    if 'name' in fantasy_api_data:
+                        config['fantasy_team']['name'] = fantasy_api_data['name']
+                    
+                    print(f"✅ Updated fantasy team '{fantasy_api_data.get('name', 'Fantasy Team')}' from ESPN")
+                    print(f"   Record: {fantasy_api_data.get('wins', 0)}-{fantasy_api_data.get('losses', 0)}")
+                else:
+                    print("⚠️  Could not fetch fantasy data from ESPN. Check your credentials or network connection.")
+            else:
+                print("ℹ️  Fantasy team ESPN credentials not configured. Skipping fantasy update.")
+                print("   To enable automatic fantasy updates, add an 'espn' section to fantasy_team in config.")
         
         # Save updated config with error handling
         try:
