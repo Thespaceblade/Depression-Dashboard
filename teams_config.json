@@ -1,0 +1,28 @@
+{
+  "teams": [],
+  "f1_driver": {
+    "name": "Max Verstappen",
+    "sport": "F1",
+    "championship_position": 1,
+    "expected_performance": 10,
+    "jasons_expectations": 10,
+    "recent_races": [],
+    "recent_dnfs": 0,
+    "rivals": [
+      "Lewis Hamilton",
+      "Charles Leclerc",
+      "Lando Norris"
+    ],
+    "notes": "Huge fan - Red Bull dominance"
+  },
+  "fantasy_team": {
+    "name": "Jason's Fantasy Squad",
+    "record": {
+      "wins": 0,
+      "losses": 0
+    },
+    "expected_performance": 7,
+    "jasons_expectations": 8,
+    "recent_streak": []
+  }
+}
