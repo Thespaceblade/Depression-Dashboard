@@ -53,7 +53,7 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
         />
       );
     }
-    if (name.includes('warriors')) {
+    if (name.includes('warriors') || name.includes('golden state')) {
       return (
         <TeamLogoImage 
           src="https://a.espncdn.com/i/teamlogos/nba/500/gs.png" 
@@ -66,7 +66,7 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
   
   // MLB Teams
   if (sport === 'MLB') {
-    if (name.includes('rangers')) {
+    if (name.includes('rangers') && name.includes('texas')) {
       return (
         <TeamLogoImage 
           src="https://a.espncdn.com/i/teamlogos/mlb/500/tex.png" 
