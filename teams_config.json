@@ -95,8 +95,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 6.0,
-        "losses": 1.0
+        "wins": 6,
+        "losses": 1
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
@@ -121,8 +121,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "record": {
-        "wins": 4.0,
-        "losses": 7.0
+        "wins": 4,
+        "losses": 7
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
