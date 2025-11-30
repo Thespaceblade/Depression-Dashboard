@@ -19,6 +19,8 @@ class handler(BaseHTTPRequestHandler):
             # Get team data
             for team in calc.teams:
                 team_result = team.calculate_depression()
+                total_games = team.wins + team.losses + getattr(team, 'ties', 0)
+                win_percentage = round((team.wins / total_games * 100), 1) if total_games > 0 else 0
                 teams_data.append({
                     "name": team.name,
                     "sport": team.sport,
@@ -26,7 +28,7 @@ class handler(BaseHTTPRequestHandler):
                     "losses": team.losses,
                     "ties": getattr(team, 'ties', 0),
                     "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else ""),
-                    "win_percentage": round(team_result.get("win_pct", 0) * 100, 1),
+                    "win_percentage": win_percentage,
                     "recent_streak": team.recent_streak,
                     "depression_points": round(team_result["score"], 1),
                     "breakdown": team_result["breakdown"],

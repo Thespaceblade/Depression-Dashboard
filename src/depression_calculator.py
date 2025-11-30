@@ -1215,66 +1215,115 @@ class DepressionCalculator:
             self._load_fantasy_from_espn(espn_config, fantasy_data)
     
     def calculate_total_depression(self) -> Dict:
-        """Calculate total depression score and breakdown"""
-        total_score = 0.0
+        """Calculate total depression score and breakdown using weighted averaging.
+        Each team/entity contributes a score from 0-100, then they're averaged together
+        proportionally based on interest_level. This ensures all teams work together
+        and the final score is always 0-100."""
         breakdown = {}
+        scaled_scores = []  # List of (scaled_score, weight) tuples
+        total_weight = 0.0
         
-        # Team contributions
+        # Range for scaling individual team scores to 0-100
+        # Based on realistic per-team contribution ranges
+        MIN_RAW_SCORE = -50.0  # Best possible for a single team
+        MAX_RAW_SCORE = 100.0  # Worst possible for a single team
+        
+        # Team contributions - scale each to 0-100 first
         for team in self.teams:
             result = team.calculate_depression()
-            team_score = result["score"]
-            total_score += team_score
-            # Show all teams, even if reducing depression
-            if team_score != 0:
+            team_raw_score = result["score"]
+            
+            # Scale this team's raw score to 0-100
+            team_scaled = ((team_raw_score - MIN_RAW_SCORE) / (MAX_RAW_SCORE - MIN_RAW_SCORE)) * 100.0
+            team_scaled = max(0.0, min(100.0, team_scaled))  # Clamp to [0, 100]
+            
+            # Weight by interest_level (teams you care more about have more impact)
+            weight = team.interest_level
+            scaled_scores.append((team_scaled, weight))
+            total_weight += weight
+            
+            # Store in breakdown (show scaled score for consistency)
+            if team_raw_score != 0:
                 breakdown[team.name] = {
-                    "score": team_score,
+                    "score": team_scaled,  # Show scaled score in breakdown
+                    "raw_score": team_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
                     "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else "")
                 }
         
-        # F1 contribution
+        # F1 contribution - scale to 0-100
         if self.f1_driver:
             result = self.f1_driver.calculate_depression()
-            f1_score = result["score"]
-            total_score += f1_score
-            # Show F1 even if negative (reducing depression is good!)
-            if f1_score != 0:
+            f1_raw_score = result["score"]
+            
+            # Scale F1 score to 0-100
+            f1_scaled = ((f1_raw_score - MIN_RAW_SCORE) / (MAX_RAW_SCORE - MIN_RAW_SCORE)) * 100.0
+            f1_scaled = max(0.0, min(100.0, f1_scaled))  # Clamp to [0, 100]
+            
+            # F1 gets full weight (interest_level = 1.0)
+            weight = 1.0
+            scaled_scores.append((f1_scaled, weight))
+            total_weight += weight
+            
+            if f1_raw_score != 0:
                 breakdown[self.f1_driver.name] = {
-                    "score": f1_score,
+                    "score": f1_scaled,  # Show scaled score
+                    "raw_score": f1_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
                     "position": f"P{self.f1_driver.championship_position}"
                 }
         
-        # Fantasy contribution
+        # Fantasy contribution - scale to 0-100
         if self.fantasy_team:
             result = self.fantasy_team.calculate_depression()
-            fantasy_score = result["score"]
-            total_score += fantasy_score
-            # Show fantasy even if negative (reducing depression is good!)
-            if fantasy_score != 0:
+            fantasy_raw_score = result["score"]
+            
+            # Scale fantasy score to 0-100
+            fantasy_scaled = ((fantasy_raw_score - MIN_RAW_SCORE) / (MAX_RAW_SCORE - MIN_RAW_SCORE)) * 100.0
+            fantasy_scaled = max(0.0, min(100.0, fantasy_scaled))  # Clamp to [0, 100]
+            
+            # Fantasy gets full weight
+            weight = 1.0
+            scaled_scores.append((fantasy_scaled, weight))
+            total_weight += weight
+            
+            if fantasy_raw_score != 0:
                 breakdown[self.fantasy_team.name] = {
-                    "score": fantasy_score,
+                    "score": fantasy_scaled,  # Show scaled score
+                    "raw_score": fantasy_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
                     "record": f"{self.fantasy_team.wins}-{self.fantasy_team.losses}"
                 }
         
+        # Calculate weighted average of all scaled scores
+        if total_weight > 0 and len(scaled_scores) > 0:
+            weighted_sum = sum(score * weight for score, weight in scaled_scores)
+            final_score = weighted_sum / total_weight
+        else:
+            # No teams/entities, default to neutral
+            final_score = 50.0
+        
+        # Ensure final score is in [0, 100] range
+        final_score = max(0.0, min(100.0, final_score))
+        
+        # Calculate raw score sum for reference (backwards compatibility)
+        raw_score_sum = sum(
+            breakdown[item]["raw_score"] 
+            for item in breakdown 
+            if "raw_score" in breakdown[item]
+        )
+        
         return {
-            "total_score": max(0, total_score),  # Clamp to 0 for display (negative = feeling great!)
+            "total_score": final_score,  # Weighted average of scaled scores (0-100)
             "breakdown": breakdown,
-            "raw_score": total_score  # Keep raw score for reference (can be negative)
+            "raw_score": raw_score_sum  # Sum of raw scores for reference
         }
     
     def get_depression_level(self, score: float) -> tuple:
-        """Get emoji and description for depression level"""
-        # Handle negative scores (feeling great - wins are reducing depression!)
-        if score < 0:
-            if score <= -20:
-                return ("🎉", "Absolutely Ecstatic!")
-            elif score <= -10:
-                return ("😄", "Feeling Amazing!")
-            else:
-                return ("😊", "Feeling Great!")
-        elif score <= 10:
+        """Get emoji and description for depression level
+        Score is now on a 0-100 scale (0 = best, 100 = worst)
+        """
+        if score <= 10:
             return ("😊", "Feeling Great!")
         elif score <= 25:
             return ("😐", "Mildly Disappointed")

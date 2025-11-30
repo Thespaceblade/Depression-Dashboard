@@ -22,13 +22,21 @@ CORS(app)  # Enable CORS for frontend
 # Global calculator instance
 calculator = None
 
-def get_calculator():
+def get_calculator(force_reload=False):
     """Get or create calculator instance"""
     global calculator
     # Always reload from config file to ensure fresh data
     # Get path to config file in parent directory
     config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
-    calculator = DepressionCalculator(config_path)
+    
+    if force_reload or calculator is None:
+        calculator = None  # Clear cache first
+        calculator = DepressionCalculator(config_path, use_espn_api=True)
+        # Log fantasy team status
+        if calculator.fantasy_team:
+            print(f"✅ Calculator loaded. Fantasy team: {calculator.fantasy_team.name} ({calculator.fantasy_team.wins}-{calculator.fantasy_team.losses})")
+        else:
+            print("⚠️  Calculator loaded but no fantasy team found")
     return calculator
 
 @app.route('/api/depression', methods=['GET'])
@@ -37,12 +45,12 @@ def get_depression():
     try:
         calc = get_calculator()
         result = calc.calculate_total_depression()
-        # Use raw_score for level calculation to show negative scores properly
-        emoji, level = calc.get_depression_level(result["raw_score"])
+        # Use total_score (0-100) for level calculation
+        emoji, level = calc.get_depression_level(result["total_score"])
         
         return jsonify({
             "success": True,
-            "score": round(result["raw_score"], 1),  # Show raw score (can be negative)
+            "score": round(result["total_score"], 1),  # Scaled score (0-100)
             "level": level,
             "emoji": emoji,
             "breakdown": result["breakdown"],
@@ -68,6 +76,8 @@ def get_teams():
         # Get team data
         for team in calc.teams:
             team_result = team.calculate_depression()
+            total_games = team.wins + team.losses + getattr(team, 'ties', 0)
+            win_percentage = round((team.wins / total_games * 100), 1) if total_games > 0 else 0
             teams_data.append({
                 "name": team.name,
                 "sport": team.sport,
@@ -75,7 +85,7 @@ def get_teams():
                 "losses": team.losses,
                 "ties": getattr(team, 'ties', 0),
                 "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else ""),
-                "win_percentage": round(team_result.get("win_pct", 0) * 100, 1),
+                "win_percentage": win_percentage,
                 "recent_streak": team.recent_streak,
                 "depression_points": round(team_result["score"], 1),
                 "breakdown": team_result["breakdown"],
@@ -123,6 +133,24 @@ def get_teams():
                 "expected_performance": calc.fantasy_team.expected_performance,
                 "jasons_expectations": calc.fantasy_team.jasons_expectations
             })
+        else:
+            # Debug: log why fantasy team is missing
+            print("⚠️  Fantasy team is None in /api/teams endpoint")
+            import json
+            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
+            try:
+                with open(config_path, 'r') as f:
+                    config = json.load(f)
+                    fantasy_config = config.get('fantasy_team', {})
+                    print(f"   Config has fantasy_team: {bool(fantasy_config)}")
+                    print(f"   Config fantasy_team keys: {list(fantasy_config.keys())}")
+                    espn_config = fantasy_config.get('espn', {})
+                    print(f"   ESPN config present: {bool(espn_config)}")
+                    if espn_config:
+                        print(f"   ESPN league_id: {espn_config.get('league_id')}")
+                        print(f"   ESPN year: {espn_config.get('year')}")
+            except Exception as e:
+                print(f"   Error reading config: {e}")
         
         return jsonify({
             "success": True,
@@ -518,6 +546,34 @@ def refresh_data():
             return jsonify({
                 "success": False,
                 "error": f"Refresh failed: {str(e)}"
+        }), 500
+
+@app.route('/api/reload', methods=['POST'])
+def reload_calculator():
+    """Force reload the calculator from config file (doesn't fetch from APIs)"""
+    global calculator
+    try:
+        calculator = None  # Clear cache
+        calc = get_calculator(force_reload=True)
+        
+        fantasy_info = "None"
+        if calc.fantasy_team:
+            fantasy_info = f"{calc.fantasy_team.name} ({calc.fantasy_team.wins}-{calc.fantasy_team.losses})"
+        
+        return jsonify({
+            "success": True,
+            "message": "Calculator reloaded from config file",
+            "fantasy_team": fantasy_info,
+            "timestamp": datetime.now().isoformat()
+        })
+    except Exception as e:
+        import traceback
+        error_details = traceback.format_exc()
+        print(f"Error in reload_calculator: {error_details}")
+        return jsonify({
+            "success": False,
+            "error": str(e),
+            "details": error_details
         }), 500
 
 @app.route('/', methods=['GET'])

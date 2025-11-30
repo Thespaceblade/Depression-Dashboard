@@ -93,9 +93,15 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
   // F1
   if (sport === 'F1' || name.includes('verstappen')) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-red-600 rounded-full">
-        <span className="text-white font-bold text-xs">MV</span>
-      </div>
+      <TeamLogoImage 
+        src="/maxverstappen.jpeg" 
+        alt="Max Verstappen"
+        fallback={
+          <div className="w-full h-full flex items-center justify-center bg-red-600 rounded-full">
+            <span className="text-white font-bold text-xs">MV</span>
+          </div>
+        }
+      />
     );
   }
   
