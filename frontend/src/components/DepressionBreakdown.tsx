@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -15,16 +16,30 @@ interface Props {
 }
 
 export default function DepressionBreakdown({ data }: Props) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const breakdownEntries = Object.entries(data.breakdown);
   
   if (breakdownEntries.length === 0) {
     return (
-      <div className="bg-card-bg rounded-2xl p-6 border-2 border-gray-700">
+      <div className="bg-card-bg rounded-xl sm:rounded-2xl p-4 sm:p-6 border-2 border-gray-700">
         <div className="flex items-center gap-2 mb-4">
-          <ChartIcon size={28} />
-          <h2 className="text-2xl font-bold text-white">Depression Breakdown</h2>
+          <div className="w-6 h-6 sm:w-7 sm:h-7">
+            <ChartIcon size={24} />
+          </div>
+          <h2 className="text-xl sm:text-2xl font-bold text-white">Depression Breakdown</h2>
         </div>
-        <p className="text-gray-400">No breakdown data available</p>
+        <p className="text-gray-400 text-sm sm:text-base">No breakdown data available</p>
       </div>
     );
   }
@@ -57,17 +72,21 @@ export default function DepressionBreakdown({ data }: Props) {
     ],
   };
 
+  const legendPosition: 'bottom' | 'right' = isMobile ? 'bottom' : 'right';
+  
   const options = {
     responsive: true,
     maintainAspectRatio: true,
     plugins: {
       legend: {
-        position: 'right' as const,
+        position: legendPosition,
         labels: {
           color: '#e0e0e0',
           font: {
-            size: 12,
+            size: isMobile ? 10 : 12,
           },
+          boxWidth: isMobile ? 12 : 15,
+          padding: isMobile ? 8 : 12,
         },
       },
       tooltip: {
@@ -75,7 +94,7 @@ export default function DepressionBreakdown({ data }: Props) {
           label: (context: any) => {
             const label = context.label || '';
             const value = context.parsed || 0;
-            const percentage = ((value / total) * 100).toFixed(1);
+            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
             return `${label}: ${value.toFixed(1)} pts (${percentage}%)`;
           },
         },
@@ -88,34 +107,36 @@ export default function DepressionBreakdown({ data }: Props) {
     .map(([name, data]) => ({
       name,
       score: data.score || 0,
-      percentage: ((data.score || 0) / total) * 100,
+      percentage: total > 0 ? ((data.score || 0) / total) * 100 : 0,
     }))
     .sort((a, b) => b.score - a.score);
 
   return (
-    <div className="bg-card-bg rounded-2xl p-6 border-2 border-gray-700">
-      <div className="flex items-center gap-2 mb-6">
-        <ChartIcon size={28} />
-        <h2 className="text-2xl font-bold text-white">Depression Breakdown</h2>
+    <div className="bg-card-bg rounded-xl sm:rounded-2xl p-4 sm:p-6 border-2 border-gray-700">
+      <div className="flex items-center gap-2 mb-4 sm:mb-6">
+        <div className="w-6 h-6 sm:w-7 sm:h-7">
+          <ChartIcon size={24} />
+        </div>
+        <h2 className="text-xl sm:text-2xl font-bold text-white">Depression Breakdown</h2>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
         {/* Chart */}
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-xs">
+          <div className="w-full max-w-[250px] sm:max-w-xs">
             <Doughnut data={chartData} options={options} />
           </div>
         </div>
 
         {/* Top Contributors List */}
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">Top Contributors</h3>
-          <div className="space-y-3">
+          <h3 className="text-base sm:text-lg font-semibold text-white mb-3 sm:mb-4">Top Contributors</h3>
+          <div className="space-y-2 sm:space-y-3">
             {sortedContributors.map((contributor, idx) => (
               <div key={idx} className="space-y-1">
-                <div className="flex justify-between items-center">
-                  <span className="text-white font-medium">{contributor.name}</span>
-                  <span className="text-red-400 font-bold">
+                <div className="flex justify-between items-center gap-2">
+                  <span className="text-white font-medium text-sm sm:text-base truncate">{contributor.name}</span>
+                  <span className="text-red-400 font-bold text-sm sm:text-base flex-shrink-0">
                     {contributor.score.toFixed(1)} pts
                   </span>
                 </div>

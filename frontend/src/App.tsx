@@ -109,13 +109,15 @@ function App() {
 
   if (loading && !depressionData) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center">
+      <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4">
         <div className="text-center">
           <div className="mb-4 flex justify-center">
-            <LoadingIcon size={64} />
+            <div className="w-12 h-12 sm:w-16 sm:h-16">
+              <LoadingIcon size={48} />
+            </div>
           </div>
-          <div className="text-2xl text-white font-semibold">Loading Jason team data...</div>
-          <div className="text-gray-400 mt-2">This might take a moment</div>
+          <div className="text-xl sm:text-2xl text-white font-semibold">Loading Jason team data...</div>
+          <div className="text-gray-400 mt-2 text-sm sm:text-base">This might take a moment</div>
         </div>
       </div>
     );
@@ -124,15 +126,17 @@ function App() {
   if (error && !depressionData) {
     return (
       <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
+        <div className="text-center max-w-md w-full">
           <div className="mb-4 flex justify-center">
-            <ErrorIcon size={64} />
+            <div className="w-12 h-12 sm:w-16 sm:h-16">
+              <ErrorIcon size={48} />
+            </div>
           </div>
-          <div className="text-2xl text-white font-semibold mb-2">Error Loading Data</div>
-          <div className="text-red-400 mb-4">{error}</div>
+          <div className="text-xl sm:text-2xl text-white font-semibold mb-2">Error Loading Data</div>
+          <div className="text-red-400 mb-4 text-sm sm:text-base">{error}</div>
           <button
             onClick={loadData}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition-colors"
+            className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:text-base font-semibold transition-colors"
           >
             Try Again
           </button>
@@ -143,7 +147,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-dark-bg">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
         <Header
           lastUpdated={depressionData?.timestamp || null}
           onRefresh={loadData}
@@ -156,17 +160,17 @@ function App() {
 
         {/* Team Grid ordered by recent activity */}
         {sortedTeams.length > 0 && (
-          <section className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-6">
+          <section className="mb-6 sm:mb-8">
+            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-4 sm:mb-6">
               <div>
-                <h2 className="text-3xl font-bold text-white">Team Mood Board</h2>
-                <p className="text-sm text-gray-400">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white">Team Mood Board</h2>
+                <p className="text-xs sm:text-sm text-gray-400">
                   Most recently active teams float to the top • 3-up grid
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
               {sortedTeams.map(({ team, activityLabel }) => (
                 <TeamCard
                   key={`${team.name}-${team.sport}`}
@@ -179,7 +183,7 @@ function App() {
         )}
 
         {/* Recent Games and Breakdown */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {gamesData && (
             <GameTimeline games={gamesData.games} />
           )}
@@ -191,13 +195,13 @@ function App() {
 
         {/* Upcoming Events */}
         {upcomingEventsData && upcomingEventsData.events.length > 0 && (
-          <div className="mb-8">
+          <div className="mb-6 sm:mb-8">
             <UpcomingEvents events={upcomingEventsData.events} />
           </div>
         )}
 
         {/* Footer */}
-        <footer className="text-center text-gray-500 text-sm mt-12 pb-8">
+        <footer className="text-center text-gray-500 text-xs sm:text-sm mt-8 sm:mt-12 pb-6 sm:pb-8">
           <p>Depression Dashboard</p>
           <p className="mt-2">
             {depressionData && `Current Score: ${depressionData.score.toFixed(1)} - ${depressionData.level}`}
