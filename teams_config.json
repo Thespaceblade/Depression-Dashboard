@@ -59,7 +59,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 5,
+        "wins": 7,
         "losses": 15,
         "ties": 0
       },
@@ -72,10 +72,10 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
-        "L",
-        "L",
         "W",
+        "W",
+        "L",
+        "L",
         "L"
       ],
       "recent_opponents": [],
@@ -114,7 +114,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 10,
+        "wins": 11,
         "losses": 10,
         "ties": 0
       },
@@ -127,9 +127,9 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
         "W",
         "L",
+        "W",
         "L",
         "L"
       ],
@@ -274,7 +274,7 @@
       "sport": "NCAA Football",
       "record": {
         "wins": 4,
-        "losses": 7,
+        "losses": 8,
         "ties": 0
       },
       "expected_performance": 8,
@@ -330,7 +330,7 @@
     "name": "Jason's Supreme Team",
     "record": {
       "wins": 9,
-      "losses": 3
+      "losses": 4
     },
     "expected_performance": 7,
     "jasons_expectations": 8,
