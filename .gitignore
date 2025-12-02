@@ -53,6 +53,9 @@ backend/f1_cache/
 teams_config.json
 .vercel-deploy-trigger
 
+# iOS app (moved to separate repo)
+Depression-Dashboard-iOs/
+
 # Instructional documentation (local only, not for GitHub)
 docs/
 docs/_setup/
