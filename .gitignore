@@ -56,9 +56,6 @@ teams_config.json
 # iOS app (moved to separate repo)
 Depression-Dashboard-iOs/
 Depression-Dashboard-iOS/
-*.swift
-*.xcodeproj
-*.xcworkspace
 
 # Instructional documentation (local only, not for GitHub)
 docs/
