@@ -217,7 +217,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 8,
+        "wins": 9,
         "losses": 1,
         "ties": 0
       },
@@ -233,8 +233,8 @@
       "recent_streak": [
         "W",
         "W",
-        "L",
         "W",
+        "L",
         "W"
       ],
       "recent_opponents": [],
