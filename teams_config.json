@@ -59,7 +59,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 10,
+        "wins": 11,
         "losses": 17,
         "ties": 0
       },
@@ -72,11 +72,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "W",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -115,7 +115,7 @@
       "sport": "NBA",
       "record": {
         "wins": 13,
-        "losses": 14,
+        "losses": 15,
         "ties": 0
       },
       "expected_performance": 6,
@@ -129,9 +129,9 @@
       "recent_streak": [
         "L",
         "L",
+        "L",
         "W",
-        "W",
-        "L"
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
