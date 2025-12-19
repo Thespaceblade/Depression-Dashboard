@@ -40,3 +40,5 @@ export function getResultDot(result: string, size: number = 10) {
 }
 
 
+
+
