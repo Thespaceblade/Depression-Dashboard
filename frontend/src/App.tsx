@@ -6,9 +6,10 @@ import TeamCard from './components/TeamCard';
 import GameTimeline from './components/GameTimeline';
 import DepressionBreakdown from './components/DepressionBreakdown';
 import UpcomingEvents from './components/UpcomingEvents';
+import ErrorFallback from './components/ErrorFallback';
 import { fetchDepression, fetchTeams, fetchRecentGames, fetchUpcomingEvents } from './api';
 import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData } from './types';
-import { LoadingIcon, ErrorIcon } from './utils/icons';
+import { LoadingIcon } from './utils/icons';
 
 function App() {
   const [depressionData, setDepressionData] = useState<DepressionData | null>(null);
@@ -124,25 +125,7 @@ function App() {
   }
 
   if (error && !depressionData) {
-    return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4">
-        <div className="text-center max-w-md w-full">
-          <div className="mb-4 flex justify-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16">
-              <ErrorIcon size={48} />
-            </div>
-          </div>
-          <div className="text-xl sm:text-2xl text-white font-semibold mb-2">Error Loading Data</div>
-          <div className="text-red-400 mb-4 text-sm sm:text-base">{error}</div>
-          <button
-            onClick={loadData}
-            className="px-4 sm:px-6 py-2 sm:py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm sm:text-base font-semibold transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
+    return <ErrorFallback error={error} onRetry={loadData} />;
   }
 
   return (
