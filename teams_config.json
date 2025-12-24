@@ -59,7 +59,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 11,
+        "wins": 12,
         "losses": 19,
         "ties": 0
       },
@@ -72,11 +72,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "L",
         "W",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
