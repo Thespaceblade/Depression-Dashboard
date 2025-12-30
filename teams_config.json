@@ -60,7 +60,7 @@
       "sport": "NBA",
       "record": {
         "wins": 12,
-        "losses": 21,
+        "losses": 22,
         "ties": 0
       },
       "expected_performance": 7,
@@ -74,8 +74,8 @@
       "recent_streak": [
         "L",
         "L",
-        "W",
         "L",
+        "W",
         "L"
       ],
       "recent_opponents": [],
@@ -114,7 +114,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 16,
+        "wins": 17,
         "losses": 16,
         "ties": 0
       },
@@ -127,11 +127,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "W",
-        "W",
-        "L"
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
