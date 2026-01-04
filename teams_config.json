@@ -218,7 +218,7 @@
       "sport": "NCAA Basketball",
       "record": {
         "wins": 13,
-        "losses": 1,
+        "losses": 2,
         "ties": 0
       },
       "expected_performance": 8,
@@ -231,7 +231,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "W",
+        "L",
         "W",
         "W",
         "W",
