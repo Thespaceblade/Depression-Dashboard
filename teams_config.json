@@ -59,7 +59,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 12,
+        "wins": 13,
         "losses": 23,
         "ties": 0
       },
@@ -72,11 +72,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "L",
         "L",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -114,7 +114,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 18,
+        "wins": 19,
         "losses": 17,
         "ties": 0
       },
@@ -127,11 +127,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "W",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
