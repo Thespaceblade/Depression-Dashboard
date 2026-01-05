@@ -5,7 +5,7 @@
       "sport": "NFL",
       "record": {
         "wins": 7,
-        "losses": 8,
+        "losses": 9,
         "ties": 1
       },
       "expected_performance": 8,
@@ -17,11 +17,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "L",
         "W",
         "L",
         "L",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
