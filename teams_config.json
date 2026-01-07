@@ -16,13 +16,7 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
+      "recent_streak": [],
       "recent_opponents": [],
       "recent_opponent_records": [],
       "recent_game_locations": [],
@@ -59,7 +53,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 13,
+        "wins": 14,
         "losses": 23,
         "ties": 0
       },
@@ -73,7 +67,7 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "W",
-        "L",
+        "W",
         "L",
         "L",
         "L"
