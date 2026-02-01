@@ -54,7 +54,7 @@
       "sport": "NBA",
       "record": {
         "wins": 19,
-        "losses": 29,
+        "losses": 30,
         "ties": 0
       },
       "expected_performance": 7,
@@ -70,7 +70,7 @@
         "L",
         "L",
         "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
