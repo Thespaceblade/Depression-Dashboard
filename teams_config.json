@@ -54,7 +54,7 @@
       "sport": "NBA",
       "record": {
         "wins": 19,
-        "losses": 32,
+        "losses": 33,
         "ties": 0
       },
       "expected_performance": 7,
@@ -211,7 +211,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 18,
+        "wins": 19,
         "losses": 4,
         "ties": 0
       },
@@ -229,7 +229,7 @@
         "W",
         "W",
         "W",
-        "L"
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
