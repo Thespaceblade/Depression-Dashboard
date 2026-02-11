@@ -54,7 +54,7 @@
       "sport": "NBA",
       "record": {
         "wins": 19,
-        "losses": 33,
+        "losses": 34,
         "ties": 0
       },
       "expected_performance": 7,
@@ -212,7 +212,7 @@
       "sport": "NCAA Basketball",
       "record": {
         "wins": 19,
-        "losses": 4,
+        "losses": 5,
         "ties": 0
       },
       "expected_performance": 8,
@@ -225,7 +225,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "W",
+        "L",
         "W",
         "W",
         "W",
