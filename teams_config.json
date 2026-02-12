@@ -16,7 +16,13 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
+      "recent_streak": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "L"
+      ],
       "recent_opponents": [],
       "recent_opponent_records": [],
       "recent_game_locations": [],
