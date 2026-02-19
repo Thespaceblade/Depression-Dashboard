@@ -169,8 +169,8 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 81,
-        "losses": 81,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
       "expected_performance": 5,
