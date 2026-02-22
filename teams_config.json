@@ -169,7 +169,7 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 0,
+        "wins": 1,
         "losses": 1,
         "ties": 0
       },
@@ -217,7 +217,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 20,
+        "wins": 21,
         "losses": 6,
         "ties": 0
       },
@@ -231,10 +231,10 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
         "W",
         "L",
         "W",
+        "L",
         "W"
       ],
       "recent_opponents": [],
