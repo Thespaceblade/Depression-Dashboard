@@ -115,7 +115,7 @@
       "sport": "NBA",
       "record": {
         "wins": 31,
-        "losses": 28,
+        "losses": 29,
         "ties": 0
       },
       "expected_performance": 6,
@@ -127,10 +127,10 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "W",
         "L",
         "W",
         "L",
+        "W",
         "L"
       ],
       "recent_opponents": [],
@@ -217,7 +217,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 22,
+        "wins": 23,
         "losses": 6,
         "ties": 0
       },
@@ -233,9 +233,9 @@
       "recent_streak": [
         "W",
         "W",
-        "L",
         "W",
-        "L"
+        "L",
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
