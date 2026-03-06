@@ -60,7 +60,7 @@
       "sport": "NBA",
       "record": {
         "wins": 21,
-        "losses": 40,
+        "losses": 41,
         "ties": 0
       },
       "expected_performance": 7,
@@ -76,7 +76,7 @@
         "L",
         "L",
         "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -114,7 +114,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 31,
+        "wins": 32,
         "losses": 30,
         "ties": 0
       },
@@ -127,11 +127,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "L",
         "W",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -169,7 +169,7 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 7,
+        "wins": 8,
         "losses": 5,
         "ties": 0
       },
