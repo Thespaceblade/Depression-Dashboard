@@ -60,7 +60,7 @@
       "sport": "NBA",
       "record": {
         "wins": 21,
-        "losses": 42,
+        "losses": 43,
         "ties": 0
       },
       "expected_performance": 7,
@@ -170,7 +170,7 @@
       "sport": "MLB",
       "record": {
         "wins": 8,
-        "losses": 7,
+        "losses": 8,
         "ties": 0
       },
       "expected_performance": 5,
