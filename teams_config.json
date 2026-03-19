@@ -60,7 +60,7 @@
       "sport": "NBA",
       "record": {
         "wins": 23,
-        "losses": 46,
+        "losses": 47,
         "ties": 0
       },
       "expected_performance": 7,
@@ -73,10 +73,10 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "L",
-        "W",
         "L",
         "W",
-        "L"
+        "L",
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -115,7 +115,7 @@
       "sport": "NBA",
       "record": {
         "wins": 33,
-        "losses": 35,
+        "losses": 36,
         "ties": 0
       },
       "expected_performance": 6,
@@ -169,7 +169,7 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 14,
+        "wins": 15,
         "losses": 10,
         "ties": 0
       },
