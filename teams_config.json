@@ -129,8 +129,8 @@
       "recent_streak": [
         "L",
         "L",
-        "W",
         "L",
+        "W",
         "L"
       ],
       "recent_opponents": [],
@@ -170,7 +170,7 @@
       "sport": "MLB",
       "record": {
         "wins": 16,
-        "losses": 11,
+        "losses": 12,
         "ties": 0
       },
       "expected_performance": 5,
