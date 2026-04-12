@@ -170,7 +170,7 @@
       "sport": "MLB",
       "record": {
         "wins": 7,
-        "losses": 6,
+        "losses": 7,
         "ties": 0
       },
       "expected_performance": 5,
