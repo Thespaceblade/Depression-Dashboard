@@ -127,6 +127,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "L",
         "W"
       ],
       "recent_opponents": [],
@@ -165,7 +166,7 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 10,
+        "wins": 11,
         "losses": 9,
         "ties": 0
       },
