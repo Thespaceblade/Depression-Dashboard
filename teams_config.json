@@ -4,9 +4,9 @@
       "name": "Dallas Cowboys",
       "sport": "NFL",
       "record": {
-        "wins": 7,
-        "losses": 9,
-        "ties": 1
+        "wins": 0,
+        "losses": 0,
+        "ties": 0
       },
       "expected_performance": 8,
       "jasons_expectations": 9,
@@ -16,13 +16,7 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [
-        "L",
-        "W",
-        "L",
-        "L",
-        "L"
-      ],
+      "recent_streak": [],
       "recent_opponents": [],
       "recent_opponent_records": [],
       "recent_game_locations": [],
