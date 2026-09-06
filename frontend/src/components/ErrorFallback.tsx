@@ -93,7 +93,7 @@ export default function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
                 to provide a humorous and data-driven perspective on how team performance affects my mood.
               </p>
               <p className="text-gray-400 text-xs sm:text-sm italic">
-                Built with React, TypeScript, Python Flask, and deployed on Railway & Vercel.
+                Built with React, TypeScript, Python, and deployed on Vercel.
               </p>
             </div>
           </div>
