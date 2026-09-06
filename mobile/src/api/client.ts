@@ -5,12 +5,11 @@ import type {
   UpcomingEventsData,
 } from './types';
 
-// Base URL for the existing backend.
-// For development you can point to your local server, and for production
-// you can point to your deployed Railway/Render/Vercel backend.
+// Base URL for the Vercel serverless API.
+// Override with EXPO_PUBLIC_API_BASE_URL for local/dev backends.
 const API_BASE =
   process.env.EXPO_PUBLIC_API_BASE_URL ??
-  'https://depression-dashboard-production.up.railway.app';
+  'https://depression-dashboard.vercel.app';
 
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {

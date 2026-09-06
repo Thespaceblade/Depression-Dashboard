@@ -7,7 +7,8 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL || 'http://localhost:5001',
+        // Local Flask backend. Production uses same-origin Vercel /api routes.
+        target: process.env.VITE_DEV_API_PROXY || 'http://localhost:5001',
         changeOrigin: true
       }
     }
