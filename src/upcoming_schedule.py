@@ -10,7 +10,7 @@ from __future__ import annotations
 import json
 import os
 from datetime import datetime, timezone
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import requests
 
@@ -121,12 +121,13 @@ def _parse_event(event: dict, team_name: str, sport: str, team_id: str) -> Optio
     }
 
 
-def _fetch_team_schedule(session: requests.Session, team: dict) -> List[dict]:
+def _fetch_team_schedule(session: requests.Session, team: dict) -> Tuple[List[dict], Optional[str]]:
     path = f"/apis/site/v2/sports/{team['path']}/teams/{team['team_id']}/schedule"
     payload = espn_get_json(path, session=session, timeout=8)
     if not payload:
+        msg = f"{team['name']}: schedule fetch failed ({path})"
         print(f"Upcoming schedule empty/failed for {team['name']}: {path}")
-        return []
+        return [], msg
 
     events = payload.get("events") or []
     parsed: List[dict] = []
@@ -134,7 +135,7 @@ def _fetch_team_schedule(session: requests.Session, team: dict) -> List[dict]:
         item = _parse_event(event, team["name"], team["sport"], team["team_id"])
         if item:
             parsed.append(item)
-    return parsed
+    return parsed, None
 
 
 # Bundled with Vercel via includeFiles src/** — used when live ESPN is blocked.
@@ -239,27 +240,32 @@ def save_upcoming_snapshot(events: List[dict], source: str = "espn") -> str:
     return _SNAPSHOT_PATH
 
 
-def fetch_upcoming_events(limit: int = 10, *, allow_snapshot: bool = True) -> List[dict]:
+def fetch_upcoming_events_result(limit: int = 10, *, allow_snapshot: bool = True) -> dict:
     """
-    Return the next upcoming games across tracked teams.
+    Fetch upcoming events with source/error metadata for API consumers.
 
-    Prefer live ESPN. If ESPN fails/empty (common on Vercel), fall back to the
-    committed snapshot under src/data/upcoming_events.json.
+    success is False only when the response would be empty after live failure
+    (and no usable snapshot). Snapshot fallback is success=True with partial=True.
     """
     session = _session()
     upcoming: List[dict] = []
     errors: List[str] = []
+    live_ok_teams = 0
 
     for team in ESPN_TEAMS:
         try:
-            upcoming.extend(_fetch_team_schedule(session, team))
+            rows, err = _fetch_team_schedule(session, team)
+            if err:
+                errors.append(err)
+            else:
+                live_ok_teams += 1
+                upcoming.extend(rows)
         except Exception as exc:  # noqa: BLE001 - keep endpoint resilient
             msg = f"{team['name']}: {exc}"
             errors.append(msg)
             print(f"Error fetching upcoming for {msg}")
 
     upcoming.sort(key=lambda item: item.get("date") or "")
-    # Raw schedule rows use ISO in "date"; normalize for formatter.
     raw = [
         {
             "date": event["date"],
@@ -275,7 +281,16 @@ def fetch_upcoming_events(limit: int = 10, *, allow_snapshot: bool = True) -> Li
     formatted = _format_events(raw, limit)
 
     if formatted:
-        return formatted
+        return {
+            "events": formatted,
+            "source": "live",
+            "errors": errors,
+            "partial": bool(errors),
+            "success": True,
+            "warning": (
+                f"Partial ESPN failure for {len(errors)} team(s)" if errors else None
+            ),
+        }
 
     if errors:
         print(f"Upcoming events empty after errors: {errors}")
@@ -284,6 +299,32 @@ def fetch_upcoming_events(limit: int = 10, *, allow_snapshot: bool = True) -> Li
         snapshot = load_upcoming_snapshot(limit=limit)
         if snapshot:
             print(f"Using upcoming snapshot ({len(snapshot)} events)")
-            return snapshot
+            return {
+                "events": snapshot,
+                "source": "snapshot",
+                "errors": errors,
+                "partial": True,
+                "success": True,
+                "warning": "Live ESPN unavailable; serving committed snapshot",
+            }
 
-    return []
+    live_failed = live_ok_teams == 0 and bool(errors)
+    warning = None
+    if live_failed:
+        warning = "All live ESPN upcoming fetches failed and no snapshot was available"
+    elif not formatted:
+        warning = "No upcoming games found"
+
+    return {
+        "events": [],
+        "source": "none",
+        "errors": errors,
+        "partial": False,
+        "success": not live_failed,
+        "warning": warning,
+    }
+
+
+def fetch_upcoming_events(limit: int = 10, *, allow_snapshot: bool = True) -> List[dict]:
+    """Return the next upcoming games across tracked teams (list-only helper)."""
+    return fetch_upcoming_events_result(limit=limit, allow_snapshot=allow_snapshot)["events"]

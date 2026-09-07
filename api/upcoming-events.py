@@ -19,18 +19,23 @@ class handler(BaseHTTPRequestHandler):
             if project_root not in sys.path:
                 sys.path.insert(0, project_root)
 
-            from src.upcoming_schedule import fetch_upcoming_events
+            from src.upcoming_schedule import fetch_upcoming_events_result
 
-            # Live ESPN first; falls back to src/data/upcoming_events.json on Vercel blocks.
-            formatted_events = fetch_upcoming_events(limit=10, allow_snapshot=True)
-            response = json_response(
-                {
-                    "success": True,
-                    "events": formatted_events,
-                    "count": len(formatted_events),
-                    "timestamp": datetime.now().isoformat(),
-                }
-            )
+            result = fetch_upcoming_events_result(limit=10, allow_snapshot=True)
+            payload = {
+                "success": bool(result.get("success", True)),
+                "events": result.get("events") or [],
+                "count": len(result.get("events") or []),
+                "source": result.get("source") or "none",
+                "partial": bool(result.get("partial")),
+                "timestamp": datetime.now().isoformat(),
+            }
+            if result.get("warning"):
+                payload["warning"] = result["warning"]
+            if result.get("errors"):
+                payload["errors"] = result["errors"]
+
+            response = json_response(payload)
 
             self.send_response(response["statusCode"])
             for key, value in response["headers"].items():

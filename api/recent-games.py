@@ -19,18 +19,23 @@ class handler(BaseHTTPRequestHandler):
             if project_root not in sys.path:
                 sys.path.insert(0, project_root)
 
-            from src.recent_games import fetch_recent_games
+            from src.recent_games import fetch_recent_games_result
 
-            # Live ESPN first (MLB + prior-season); falls back to snapshot on Vercel blocks.
-            games = fetch_recent_games(limit=20, per_team=5, allow_snapshot=True)
-            response = json_response(
-                {
-                    "success": True,
-                    "games": games,
-                    "count": len(games),
-                    "timestamp": datetime.now().isoformat(),
-                }
-            )
+            result = fetch_recent_games_result(limit=20, per_team=5, allow_snapshot=True)
+            payload = {
+                "success": bool(result.get("success", True)),
+                "games": result.get("games") or [],
+                "count": len(result.get("games") or []),
+                "source": result.get("source") or "none",
+                "partial": bool(result.get("partial")),
+                "timestamp": datetime.now().isoformat(),
+            }
+            if result.get("warning"):
+                payload["warning"] = result["warning"]
+            if result.get("errors"):
+                payload["errors"] = result["errors"]
+
+            response = json_response(payload)
 
             self.send_response(response["statusCode"])
             for key, value in response["headers"].items():

@@ -167,15 +167,22 @@ def get_teams():
 def get_recent_games():
     """Get recent games timeline with enhanced data"""
     try:
-        from src.recent_games import fetch_recent_games
+        from src.recent_games import fetch_recent_games_result
 
-        games = fetch_recent_games(limit=20, per_team=5, allow_snapshot=True)
-        return jsonify({
-            "success": True,
-            "games": games,
-            "count": len(games),
-            "timestamp": datetime.now().isoformat()
-        })
+        result = fetch_recent_games_result(limit=20, per_team=5, allow_snapshot=True)
+        payload = {
+            "success": bool(result.get("success", True)),
+            "games": result.get("games") or [],
+            "count": len(result.get("games") or []),
+            "source": result.get("source") or "none",
+            "partial": bool(result.get("partial")),
+            "timestamp": datetime.now().isoformat(),
+        }
+        if result.get("warning"):
+            payload["warning"] = result["warning"]
+        if result.get("errors"):
+            payload["errors"] = result["errors"]
+        return jsonify(payload)
     except Exception as e:
         import traceback
         return jsonify({
@@ -188,14 +195,22 @@ def get_recent_games():
 def get_upcoming_events():
     """Get upcoming games, races, and events"""
     try:
-        from src.upcoming_schedule import fetch_upcoming_events
+        from src.upcoming_schedule import fetch_upcoming_events_result
 
-        formatted_events = fetch_upcoming_events(limit=10)
-        return jsonify({
-            "success": True,
-            "events": formatted_events,
-            "timestamp": datetime.now().isoformat()
-        })
+        result = fetch_upcoming_events_result(limit=10, allow_snapshot=True)
+        payload = {
+            "success": bool(result.get("success", True)),
+            "events": result.get("events") or [],
+            "count": len(result.get("events") or []),
+            "source": result.get("source") or "none",
+            "partial": bool(result.get("partial")),
+            "timestamp": datetime.now().isoformat(),
+        }
+        if result.get("warning"):
+            payload["warning"] = result["warning"]
+        if result.get("errors"):
+            payload["errors"] = result["errors"]
+        return jsonify(payload)
     except Exception as e:
         import traceback
         return jsonify({

@@ -177,7 +177,8 @@ def _parse_completed_event(event: dict, team: dict) -> Optional[dict]:
 
 def _fetch_schedule_events(
     session: requests.Session, team: dict, season: Optional[int] = None
-) -> List[dict]:
+) -> Tuple[List[dict], bool]:
+    """Return (parsed_games, fetch_ok). fetch_ok False means HTTP/JSON failure."""
     path = f"/apis/site/v2/sports/{team['path']}/teams/{team['team_id']}/schedule"
     params = {"season": season} if season is not None else None
     payload = espn_get_json(path, session=session, params=params, timeout=10)
@@ -186,7 +187,7 @@ def _fetch_schedule_events(
             f"Recent schedule empty/failed for {team['name']}"
             f"{f' season={season}' if season else ''}: {path}"
         )
-        return []
+        return [], False
 
     events = payload.get("events") or []
     parsed: List[dict] = []
@@ -194,7 +195,7 @@ def _fetch_schedule_events(
         item = _parse_completed_event(event, team)
         if item:
             parsed.append(item)
-    return parsed
+    return parsed, True
 
 
 def _season_candidates(team: dict) -> List[Optional[int]]:
@@ -216,17 +217,22 @@ def _season_candidates(team: dict) -> List[Optional[int]]:
 
 def _fetch_team_recent(
     session: requests.Session, team: dict, num_games: int
-) -> List[dict]:
+) -> Tuple[List[dict], Optional[str]]:
+    any_ok = False
     for season in _season_candidates(team):
         try:
-            games = _fetch_schedule_events(session, team, season=season)
+            games, ok = _fetch_schedule_events(session, team, season=season)
         except Exception as exc:  # noqa: BLE001
             print(f"Error fetching recent for {team['name']} season={season}: {exc}")
             continue
+        if ok:
+            any_ok = True
         if games:
             games.sort(key=lambda g: g.get("date") or "", reverse=True)
-            return games[:num_games]
-    return []
+            return games[:num_games], None
+    if not any_ok:
+        return [], f"{team['name']} ({team['sport']}): schedule fetch failed"
+    return [], None
 
 
 def _load_rivals_map() -> Dict[Tuple[str, str], List[str]]:
@@ -418,23 +424,27 @@ def save_recent_snapshot(games: List[dict], source: str = "espn") -> str:
     return _SNAPSHOT_PATH
 
 
-def fetch_recent_games(
+def fetch_recent_games_result(
     limit: int = 20, per_team: int = 5, *, allow_snapshot: bool = True
-) -> List[dict]:
+) -> dict:
     """
-    Return recent completed games across tracked teams.
+    Fetch recent games with source/error metadata for API consumers.
 
-    Prefer live ESPN (with prior-season fallback when the current schedule has
-    no completed games). If ESPN fails/empty (common on Vercel), fall back to
-    the committed snapshot under src/data/recent_games.json.
+    success is False only when empty after total live failure with no snapshot.
     """
     session = _session()
     collected: List[dict] = []
     errors: List[str] = []
+    live_ok_teams = 0
 
     for team in ESPN_TEAMS:
         try:
-            collected.extend(_fetch_team_recent(session, team, per_team))
+            rows, err = _fetch_team_recent(session, team, per_team)
+            if err:
+                errors.append(err)
+            else:
+                live_ok_teams += 1
+                collected.extend(rows)
         except Exception as exc:  # noqa: BLE001
             msg = f"{team['name']} ({team['sport']}): {exc}"
             errors.append(msg)
@@ -444,7 +454,16 @@ def fetch_recent_games(
     formatted = _format_games(collected, limit)
 
     if formatted:
-        return formatted
+        return {
+            "games": formatted,
+            "source": "live",
+            "errors": errors,
+            "partial": bool(errors),
+            "success": True,
+            "warning": (
+                f"Partial ESPN failure for {len(errors)} team(s)" if errors else None
+            ),
+        }
 
     if errors:
         print(f"Recent games empty after errors: {errors}")
@@ -453,6 +472,36 @@ def fetch_recent_games(
         snapshot = load_recent_snapshot(limit=limit)
         if snapshot:
             print(f"Using recent snapshot ({len(snapshot)} games)")
-            return snapshot
+            return {
+                "games": snapshot,
+                "source": "snapshot",
+                "errors": errors,
+                "partial": True,
+                "success": True,
+                "warning": "Live ESPN unavailable; serving committed snapshot",
+            }
 
-    return []
+    live_failed = live_ok_teams == 0 and bool(errors)
+    warning = None
+    if live_failed:
+        warning = "All live ESPN recent fetches failed and no snapshot was available"
+    elif not formatted:
+        warning = "No recent games found"
+
+    return {
+        "games": [],
+        "source": "none",
+        "errors": errors,
+        "partial": False,
+        "success": not live_failed,
+        "warning": warning,
+    }
+
+
+def fetch_recent_games(
+    limit: int = 20, per_team: int = 5, *, allow_snapshot: bool = True
+) -> List[dict]:
+    """Return recent completed games across tracked teams (list-only helper)."""
+    return fetch_recent_games_result(
+        limit=limit, per_team=per_team, allow_snapshot=allow_snapshot
+    )["games"]

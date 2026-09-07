@@ -58,6 +58,11 @@ export interface RecentGamesData {
   success: boolean;
   games: Game[];
   timestamp: string;
+  count?: number;
+  source?: string;
+  partial?: boolean;
+  warning?: string;
+  errors?: string[];
 }
 
 export interface UpcomingEvent {
@@ -74,5 +79,10 @@ export interface UpcomingEventsData {
   success: boolean;
   events: UpcomingEvent[];
   timestamp: string;
+  count?: number;
+  source?: string;
+  partial?: boolean;
+  warning?: string;
+  errors?: string[];
 }
 
