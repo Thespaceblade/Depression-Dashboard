@@ -1,8 +1,24 @@
 import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData } from './types';
 
-// Same-origin Vercel serverless APIs by default (`/api/*`).
-// Override with VITE_API_URL only if you need a different backend host.
-const API_BASE = import.meta.env.VITE_API_URL ?? '';
+/**
+ * Prefer same-origin Vercel `/api/*`.
+ * Ignore stale VITE_API_URL values that still point at the dead Railway host.
+ */
+function resolveApiBase(): string {
+  const raw = String(import.meta.env.VITE_API_URL ?? '')
+    .trim()
+    .replace(/\/$/, '');
+  if (!raw) return '';
+  if (/railway\.app/i.test(raw)) {
+    console.warn(
+      'Ignoring VITE_API_URL pointing at Railway; using same-origin Vercel APIs.',
+    );
+    return '';
+  }
+  return raw;
+}
+
+const API_BASE = resolveApiBase();
 
 async function handleApiError(response: Response, action: string): Promise<never> {
   let errorMessage = `Failed to ${action} (${response.status})`;
