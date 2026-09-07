@@ -53,8 +53,8 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 26,
-        "losses": 56,
+        "wins": 39,
+        "losses": 43,
         "ties": 0
       },
       "expected_performance": 7,
@@ -66,11 +66,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "L",
+        "L",
+        "L",
         "W",
-        "L",
-        "L",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -108,8 +108,8 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 37,
-        "losses": 45,
+        "wins": 48,
+        "losses": 34,
         "ties": 0
       },
       "expected_performance": 6,
@@ -122,7 +122,10 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "L",
-        "W"
+        "W",
+        "L",
+        "W",
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -160,8 +163,8 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 55,
-        "losses": 58,
+        "wins": 71,
+        "losses": 73,
         "ties": 0
       },
       "expected_performance": 5,
@@ -208,8 +211,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 24,
-        "losses": 9,
+        "wins": 22,
+        "losses": 13,
         "ties": 0
       },
       "expected_performance": 8,
@@ -222,11 +225,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
+        "W",
         "L",
         "W",
         "W",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -264,8 +267,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "record": {
-        "wins": 4,
-        "losses": 8,
+        "wins": 1,
+        "losses": 0,
         "ties": 0
       },
       "expected_performance": 8,
@@ -278,10 +281,6 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
-        "L",
-        "L",
-        "W",
         "W"
       ],
       "recent_opponents": [],
@@ -336,7 +335,7 @@
   },
   "f1_driver": {
     "name": "Max Verstappen",
-    "championship_position": 1,
+    "championship_position": 6,
     "expected_performance": 10,
     "jasons_expectations": 10,
     "recent_races": [],

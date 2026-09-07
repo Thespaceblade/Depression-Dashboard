@@ -88,16 +88,18 @@ jobs:
         run: |
           if [ -f teams_config.json ]; then
             echo "file_exists=true" >> $GITHUB_OUTPUT
-            # Check if file is tracked in git
+            # Ensure git actually inspects the working tree copy
+            git update-index --no-assume-unchanged teams_config.json 2>/dev/null || true
+            git update-index --no-skip-worktree teams_config.json 2>/dev/null || true
+            echo "---- teams_config.json diff (first 80 lines) ----"
+            git --no-pager diff -- teams_config.json | head -80 || true
             if git ls-files --error-unmatch teams_config.json >/dev/null 2>&1; then
-              # File is tracked, check if it changed
-              if git diff --quiet teams_config.json; then
+              if git diff --quiet -- teams_config.json; then
                 echo "file_changed=false" >> $GITHUB_OUTPUT
               else
                 echo "file_changed=true" >> $GITHUB_OUTPUT
               fi
             else
-              # File exists but not tracked - needs to be added
               echo "file_changed=true" >> $GITHUB_OUTPUT
             fi
           else

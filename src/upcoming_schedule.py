@@ -41,7 +41,7 @@ ESPN_TEAMS = [
         "name": "Texas Rangers",
         "sport": "MLB",
         "path": "baseball/mlb",
-        "team_id": "140",
+        "team_id": "13",
     },
     {
         "name": "North Carolina Tar Heels",
