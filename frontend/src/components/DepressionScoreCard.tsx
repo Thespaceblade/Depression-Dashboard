@@ -20,8 +20,8 @@ export default function DepressionScoreCard({ data }: Props) {
             className="absolute inset-0 h-full w-full object-cover"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-field via-field/80 to-field/35" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(12,16,14,0.55)_100%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-field via-field/55 to-field/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-field/70 via-transparent to-field/40" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 min-h-[88vh] sm:min-h-[92vh] flex flex-col justify-end pb-12 sm:pb-16 pt-24">
           <p className="label-caps text-led mb-3">Live emotional scoreboard</p>
