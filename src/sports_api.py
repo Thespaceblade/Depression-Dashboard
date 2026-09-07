@@ -603,7 +603,7 @@ class MLBAPI(SportsAPI):
                     "team_id": "13",
                     "allow_prior_season": True,
                 }
-            return _fetch_team_recent(_session(), team, num_games)
+            return _fetch_team_recent(_session(), team, num_games)[0]
         except Exception as e:
             print(f"Error fetching MLB recent games: {e}")
             return []
