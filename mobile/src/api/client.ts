@@ -41,9 +41,22 @@ export async function fetchUpcomingEvents(): Promise<UpcomingEventsData> {
   return handleResponse<UpcomingEventsData>(res);
 }
 
-export async function refreshData(): Promise<void> {
+export type RefreshResult = {
+  success: boolean;
+  refreshed: boolean;
+  mode?: string;
+  message?: string;
+};
+
+export async function refreshData(): Promise<RefreshResult> {
   const res = await fetch(`${API_BASE}/api/refresh`, { method: 'POST' });
-  await handleResponse<unknown>(res);
+  const data = await handleResponse<RefreshResult & Record<string, unknown>>(res);
+  return {
+    success: Boolean(data.success),
+    refreshed: Boolean(data.refreshed),
+    mode: typeof data.mode === 'string' ? data.mode : undefined,
+    message: typeof data.message === 'string' ? data.message : undefined,
+  };
 }
 
 

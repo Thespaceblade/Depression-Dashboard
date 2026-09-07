@@ -53,9 +53,27 @@ export async function fetchUpcomingEvents(): Promise<UpcomingEventsData> {
   return response.json();
 }
 
-export async function refreshData(): Promise<void> {
+export type RefreshResult = {
+  success: boolean;
+  refreshed: boolean;
+  mode?: 'cron_only' | 'live' | string;
+  message?: string;
+  note?: string;
+  timestamp?: string;
+};
+
+export async function refreshData(): Promise<RefreshResult> {
   const response = await fetch(`${API_BASE}/api/refresh`, { method: 'POST' });
   if (!response.ok) {
     await handleApiError(response, 'refresh data');
   }
+  const data = await response.json();
+  return {
+    success: Boolean(data.success),
+    refreshed: Boolean(data.refreshed),
+    mode: data.mode,
+    message: data.message,
+    note: data.note,
+    timestamp: data.timestamp,
+  };
 }
