@@ -194,9 +194,16 @@ See `.github/workflows/auto-update-data.yml` for configuration.
 
 Frontend and API serverless functions are deployed on Vercel. See `vercel.json` for configuration.
 
+**Do not set `VITE_API_URL` to Railway.** Production should call same-origin `/api/*`.
+
+1. In the Vercel project → **Settings → Environment Variables**, delete or blank `VITE_API_URL` if it still points at `*.railway.app`.
+2. Redeploy Production so the frontend bundle no longer embeds that host.
+3. Keep the ignore-Railway guards in `frontend/src/api.ts` and `frontend/vite.config.ts` as defense in depth.
+
 ### Railway
 
 Backend can be deployed on Railway. See `railway.json` and `nixpacks.toml` for configuration.
+The public dashboard should not use Railway as `VITE_API_URL` anymore.
 
 ## Development
 
