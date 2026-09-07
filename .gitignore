@@ -50,7 +50,9 @@ backend/f1_cache/
 *.sqlite
 
 # Config files with sensitive data
-teams_config.json
+# Root runtime config (force-added by auto-update); mirror under src/data is tracked for Vercel.
+/teams_config.json
+!src/data/teams_config.json
 .vercel-deploy-trigger
 
 # iOS app (moved to separate repo)
