@@ -154,7 +154,7 @@ function App() {
           </p>
           {depressionData && (
             <p className="font-mono text-xs text-muted mt-2">
-              {depressionData.score.toFixed(1)} — {depressionData.level}
+              {depressionData.score.toFixed(1)} · {depressionData.level}
             </p>
           )}
         </footer>

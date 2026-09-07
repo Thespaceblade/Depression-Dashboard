@@ -43,7 +43,7 @@ export default function DepressionScoreCard({ data }: Props) {
                 {data.level}
               </p>
               <p className="mt-2 max-w-md text-sm sm:text-base text-muted leading-relaxed">
-                How bad it is for Jason&apos;s teams — wins, losses, and expectation gaps, scored in real time.
+                How bad it is for Jason&apos;s teams: wins, losses, and expectation gaps, scored in real time.
               </p>
               <button
                 type="button"
@@ -86,7 +86,7 @@ export default function DepressionScoreCard({ data }: Props) {
                 <p className="label-caps text-led mb-2">What it means</p>
                 <p>
                   The depression score measures how Jason&apos;s teams&apos; recent performance is affecting his mood.
-                  Lower (0–10) is elated; higher scores mean more sports-related disappointment, up to 100 (devastated).
+                  Lower (0-10) is elated; higher scores mean more sports-related disappointment, up to 100 (devastated).
                   Each 10-point band is a different emotional state.
                 </p>
               </div>
@@ -94,7 +94,7 @@ export default function DepressionScoreCard({ data }: Props) {
                 <p className="label-caps text-led mb-2">How it works</p>
                 <p>
                   Recent games, losses, rivalries, blowouts, and expectation gaps across Jason&apos;s teams feed the score.
-                  Newer results weigh more. Wins can pull it down — especially unexpected ones.
+                  Newer results weigh more. Wins can pull it down, especially unexpected ones.
                 </p>
               </div>
             </div>
