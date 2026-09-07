@@ -2,5 +2,13 @@
   "buildCommand": "cd frontend && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "installCommand": "cd frontend && npm install",
-  "framework": null
+  "framework": null,
+  "functions": {
+    "api/**/*.py": {
+      "includeFiles": "{src/**,teams_config.json,requirements.txt}"
+    },
+    "api/cron/**/*.py": {
+      "includeFiles": "{src/**,teams_config.json,requirements.txt}"
+    }
+  }
 }
