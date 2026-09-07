@@ -581,6 +581,38 @@ class MLBAPI(SportsAPI):
                 print(f"Fallback method also failed: {e2}")
         return None
 
+    def get_recent_games(self, team_name: str, num_games: int = 5) -> List[str]:
+        """Get recent Rangers results (W/L) from ESPN schedule."""
+        game_data = self.get_recent_games_detailed(team_name, num_games)
+        return [game["result"] for game in game_data]
+
+    def get_recent_games_detailed(self, team_name: str, num_games: int = 5) -> List[Dict]:
+        """Get recent Rangers games with scores/opponents from ESPN."""
+        try:
+            from src.recent_games import ESPN_TEAMS, _fetch_team_recent, _session
+
+            team = next(
+                (
+                    t
+                    for t in ESPN_TEAMS
+                    if t["sport"] == "MLB"
+                    and "rangers" in team_name.lower()
+                ),
+                None,
+            )
+            if not team:
+                team = {
+                    "name": "Texas Rangers",
+                    "sport": "MLB",
+                    "path": "baseball/mlb",
+                    "team_id": "13",
+                    "allow_prior_season": True,
+                }
+            return _fetch_team_recent(_session(), team, num_games)
+        except Exception as e:
+            print(f"Error fetching MLB recent games: {e}")
+            return []
+
 
 class F1API(SportsAPI):
     """F1 standings via Jolpica Ergast API (OpenF1 fallback)"""

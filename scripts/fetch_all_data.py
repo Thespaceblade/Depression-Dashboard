@@ -14,6 +14,7 @@ sys.path.insert(0, parent_dir)
 
 from src.sports_api import SportsDataFetcher
 from src.upcoming_schedule import fetch_upcoming_events, save_upcoming_snapshot
+from src.recent_games import fetch_recent_games, save_recent_snapshot
 
 
 def main():
@@ -45,6 +46,26 @@ def main():
             print(
                 f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
                 f"⚠️  Upcoming snapshot refresh failed: {upcoming_err}"
+            )
+
+        # Refresh recent-games snapshot for Vercel (same ESPN IP-block problem).
+        try:
+            games = fetch_recent_games(limit=20, per_team=5, allow_snapshot=False)
+            if games:
+                path = save_recent_snapshot(games, source="espn")
+                print(
+                    f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+                    f"✅ Recent snapshot ({len(games)} games) -> {path}"
+                )
+            else:
+                print(
+                    f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+                    "⚠️  Live recent fetch empty; leaving existing snapshot unchanged"
+                )
+        except Exception as recent_err:  # noqa: BLE001
+            print(
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+                f"⚠️  Recent snapshot refresh failed: {recent_err}"
             )
 
         return 0
