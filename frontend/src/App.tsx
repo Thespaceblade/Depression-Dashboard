@@ -9,7 +9,6 @@ import UpcomingEvents from './components/UpcomingEvents';
 import ErrorFallback from './components/ErrorFallback';
 import { fetchDepression, fetchTeams, fetchRecentGames, fetchUpcomingEvents } from './api';
 import type { DepressionData, TeamsData, RecentGamesData, UpcomingEventsData } from './types';
-import { LoadingIcon } from './utils/icons';
 
 function App() {
   const [depressionData, setDepressionData] = useState<DepressionData | null>(null);
@@ -23,14 +22,14 @@ function App() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const [depression, teams, games, upcoming] = await Promise.all([
         fetchDepression(),
         fetchTeams(),
         fetchRecentGames(),
         fetchUpcomingEvents(),
       ]);
-      
+
       setDepressionData(depression);
       setTeamsData(teams);
       setGamesData(games);
@@ -45,10 +44,7 @@ function App() {
 
   useEffect(() => {
     loadData();
-    
-    // Auto-refresh every 60 seconds
     const interval = setInterval(loadData, 60000);
-    
     return () => clearInterval(interval);
   }, []);
 
@@ -66,15 +62,9 @@ function App() {
       if (map.has(key)) return;
 
       const labelParts: string[] = [];
-      if (game.date) {
-        labelParts.push(game.date);
-      }
-      if (game.result && game.result !== '?') {
-        labelParts.push(`Result: ${game.result}`);
-      }
-      if (game.opponent) {
-        labelParts.push(`vs ${game.opponent}`);
-      }
+      if (game.date) labelParts.push(game.date);
+      if (game.result && game.result !== '?') labelParts.push(`Result: ${game.result}`);
+      if (game.opponent) labelParts.push(`vs ${game.opponent}`);
 
       map.set(key, {
         label: labelParts.join(' • ') || 'Recent action logged',
@@ -101,24 +91,19 @@ function App() {
         };
       })
       .sort((a, b) => {
-        if (b.order === a.order) {
-          return a.fallbackIndex - b.fallbackIndex;
-        }
+        if (b.order === a.order) return a.fallbackIndex - b.fallbackIndex;
         return b.order - a.order;
       });
   }, [teamsData, activityMap]);
 
   if (loading && !depressionData) {
     return (
-      <div className="min-h-screen bg-dark-bg flex items-center justify-center p-4">
+      <div className="min-h-screen bg-field flex items-center justify-center p-6 animate-flood-in">
         <div className="text-center">
-          <div className="mb-4 flex justify-center">
-            <div className="w-12 h-12 sm:w-16 sm:h-16">
-              <LoadingIcon size={48} />
-            </div>
-          </div>
-          <div className="text-xl sm:text-2xl text-white font-semibold">Loading Jason team data...</div>
-          <div className="text-gray-400 mt-2 text-sm sm:text-base">This might take a moment</div>
+          <p className="font-display text-3xl sm:text-4xl uppercase text-ink tracking-wide mb-3">
+            Depression Dashboard
+          </p>
+          <p className="label-caps text-led">Loading board…</p>
         </div>
       </div>
     );
@@ -129,31 +114,20 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-bg">
-      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-8">
-        <Header
-          lastUpdated={depressionData?.timestamp || null}
-          onRefresh={loadData}
-        />
+    <div className="min-h-screen bg-field text-ink">
+      <Header
+        lastUpdated={depressionData?.timestamp || null}
+        onRefresh={loadData}
+      />
 
-        {/* Hero Depression Score Card */}
-        {depressionData && (
-          <DepressionScoreCard data={depressionData} />
-        )}
+      {depressionData && <DepressionScoreCard data={depressionData} />}
 
-        {/* Team Grid ordered by recent activity */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16 space-y-16 sm:space-y-20">
         {sortedTeams.length > 0 && (
-          <section className="mb-6 sm:mb-8">
-            <div className="flex flex-col md:flex-row md:items-baseline md:justify-between gap-2 mb-4 sm:mb-6">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-white">Team Mood Board</h2>
-                <p className="text-xs sm:text-sm text-gray-400">
-                  Most recently active teams float to the top • 3-up grid
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+          <section>
+            <h2 className="section-title mb-1">Teams</h2>
+            <p className="label-caps mb-6">Most recent activity first</p>
+            <div className="border-b border-line">
               {sortedTeams.map(({ team, activityLabel }) => (
                 <TeamCard
                   key={`${team.name}-${team.sport}`}
@@ -165,30 +139,24 @@ function App() {
           </section>
         )}
 
-        {/* Recent Games and Breakdown */}
-        <div className="grid lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          {gamesData && (
-            <GameTimeline games={gamesData.games} />
-          )}
-          
-          {depressionData && (
-            <DepressionBreakdown data={depressionData} />
-          )}
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+          {gamesData && <GameTimeline games={gamesData.games} />}
+          {depressionData && <DepressionBreakdown data={depressionData} />}
         </div>
 
-        {/* Upcoming Events */}
         {upcomingEventsData && upcomingEventsData.events.length > 0 && (
-          <div className="mb-6 sm:mb-8">
-            <UpcomingEvents events={upcomingEventsData.events} />
-          </div>
+          <UpcomingEvents events={upcomingEventsData.events} />
         )}
 
-        {/* Footer */}
-        <footer className="text-center text-gray-500 text-xs sm:text-sm mt-8 sm:mt-12 pb-6 sm:pb-8">
-          <p>Depression Dashboard</p>
-          <p className="mt-2">
-            {depressionData && `Current Score: ${depressionData.score.toFixed(1)} - ${depressionData.level}`}
+        <footer className="section-rule pt-8 pb-4 text-center">
+          <p className="font-display text-sm uppercase tracking-widest text-muted">
+            Depression Dashboard
           </p>
+          {depressionData && (
+            <p className="font-mono text-xs text-muted mt-2">
+              {depressionData.score.toFixed(1)} — {depressionData.level}
+            </p>
+          )}
         </footer>
       </div>
       <Analytics />
