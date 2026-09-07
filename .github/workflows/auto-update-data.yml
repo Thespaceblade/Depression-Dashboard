@@ -83,54 +83,42 @@ jobs:
           fi
           echo "✅ teams_config.json exists after fetch"
       
-      - name: Check if teams_config.json exists and was updated
+      - name: Check if data files were updated
         id: check-file
         run: |
-          if [ -f teams_config.json ]; then
-            echo "file_exists=true" >> $GITHUB_OUTPUT
-            # Ensure git actually inspects the working tree copy
-            git update-index --no-assume-unchanged teams_config.json 2>/dev/null || true
-            git update-index --no-skip-worktree teams_config.json 2>/dev/null || true
-            echo "---- teams_config.json diff (first 80 lines) ----"
-            git --no-pager diff -- teams_config.json | head -80 || true
-            if git ls-files --error-unmatch teams_config.json >/dev/null 2>&1; then
-              if git diff --quiet -- teams_config.json; then
-                echo "file_changed=false" >> $GITHUB_OUTPUT
-              else
-                echo "file_changed=true" >> $GITHUB_OUTPUT
-              fi
-            else
-              echo "file_changed=true" >> $GITHUB_OUTPUT
-            fi
-          else
+          git update-index --no-assume-unchanged teams_config.json 2>/dev/null || true
+          git update-index --no-skip-worktree teams_config.json 2>/dev/null || true
+          if [ ! -f teams_config.json ]; then
             echo "file_exists=false" >> $GITHUB_OUTPUT
             echo "file_changed=false" >> $GITHUB_OUTPUT
             echo "❌ teams_config.json not found after fetch!"
             exit 1
           fi
+          echo "file_exists=true" >> $GITHUB_OUTPUT
+          echo "---- teams_config.json / upcoming snapshot diff (first 80 lines) ----"
+          git --no-pager diff -- teams_config.json src/data/upcoming_events.json | head -80 || true
+          if git diff --quiet -- teams_config.json src/data/upcoming_events.json; then
+            echo "file_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "file_changed=true" >> $GITHUB_OUTPUT
+          fi
       
       - name: Commit changes
         if: steps.check-file.outputs.file_changed == 'true'
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          if [ -f teams_config.json ]; then
-            # Force add in case file is in .gitignore (it contains public data, not secrets)
-            git add -f teams_config.json || git add teams_config.json
-            if ! git diff --staged --quiet; then
-              # Pull latest changes first to avoid conflicts
-              git pull --rebase origin main || git pull origin main || true
-              git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
-              git push origin main
-            else
-              echo "No changes to commit"
-            fi
+          git config --local user.email "Jason.charwin360@gmail.com"
+          git config --local user.name "Jason Charwin"
+          git add -f teams_config.json
+          git add src/data/upcoming_events.json || true
+          if ! git diff --staged --quiet; then
+            git pull --rebase origin main || git pull origin main || true
+            git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
+            git push origin main
           else
-            echo "⚠️ ERROR: teams_config.json not found - cannot commit"
-            exit 1
+            echo "No changes to commit"
           fi
       
       - name: No changes to commit
         if: steps.check-file.outputs.file_changed == 'false'
         run: |
-          echo "✅ teams_config.json is up to date - no changes to commit"
+          echo "✅ Sports data files are up to date - no changes to commit"

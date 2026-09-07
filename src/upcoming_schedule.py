@@ -7,6 +7,8 @@ without importing the heavier SportsDataFetcher stack.
 
 from __future__ import annotations
 
+import json
+import os
 from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
@@ -144,8 +146,115 @@ def _fetch_team_schedule(session: requests.Session, team: dict) -> List[dict]:
     return parsed
 
 
-def fetch_upcoming_events(limit: int = 10) -> List[dict]:
-    """Return the next upcoming games across tracked teams."""
+# Bundled with Vercel via includeFiles src/** — used when live ESPN is blocked.
+_SNAPSHOT_PATH = os.path.join(os.path.dirname(__file__), "data", "upcoming_events.json")
+
+
+def _format_events(raw_events: List[dict], limit: int) -> List[dict]:
+    """Turn raw ISO-dated events into API rows with relative labels."""
+    if date_parser is None:
+        formatted = []
+        for event in raw_events[:limit]:
+            iso = event.get("datetime") or event.get("date") or ""
+            formatted.append(
+                {
+                    "date": iso,
+                    "datetime": iso,
+                    "team": event["team"],
+                    "sport": event["sport"],
+                    "opponent": event["opponent"],
+                    "type": event.get("type", "game"),
+                    "is_home": event["is_home"],
+                }
+            )
+        return formatted
+
+    now = datetime.now(timezone.utc)
+    formatted: List[dict] = []
+    for event in raw_events:
+        try:
+            iso = event.get("datetime") or event.get("date") or ""
+            event_dt = date_parser.parse(iso)
+            if event_dt.tzinfo is None:
+                event_dt = event_dt.replace(tzinfo=timezone.utc)
+            now_cmp = now.astimezone(event_dt.tzinfo)
+            label = _relative_date_label(event_dt, now_cmp)
+            if label is None:
+                continue
+            formatted.append(
+                {
+                    "date": label,
+                    "datetime": iso,
+                    "team": event["team"],
+                    "sport": event["sport"],
+                    "opponent": event["opponent"],
+                    "type": event.get("type", "game"),
+                    "is_home": event["is_home"],
+                }
+            )
+        except Exception as exc:  # noqa: BLE001
+            print(f"Error formatting upcoming date: {exc}")
+
+        if len(formatted) >= limit:
+            break
+    return formatted
+
+
+def load_upcoming_snapshot(limit: int = 10) -> List[dict]:
+    """Load committed snapshot (for Vercel when ESPN is unreachable)."""
+    try:
+        with open(_SNAPSHOT_PATH, "r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except FileNotFoundError:
+        print(f"Upcoming snapshot missing: {_SNAPSHOT_PATH}")
+        return []
+    except Exception as exc:  # noqa: BLE001
+        print(f"Error reading upcoming snapshot: {exc}")
+        return []
+
+    events = payload.get("events") or []
+    # Snapshot may already be formatted; normalize to ISO-first rows then re-label.
+    raw = []
+    for event in events:
+        iso = event.get("datetime") or event.get("date")
+        if not iso:
+            continue
+        raw.append(
+            {
+                "date": iso,
+                "datetime": iso,
+                "team": event.get("team"),
+                "sport": event.get("sport"),
+                "opponent": event.get("opponent"),
+                "type": event.get("type", "game"),
+                "is_home": event.get("is_home", False),
+            }
+        )
+    raw.sort(key=lambda item: item.get("datetime") or "")
+    return _format_events(raw, limit)
+
+
+def save_upcoming_snapshot(events: List[dict], source: str = "espn") -> str:
+    """Persist upcoming events for serverless fallback."""
+    os.makedirs(os.path.dirname(_SNAPSHOT_PATH), exist_ok=True)
+    payload = {
+        "updated_at": datetime.now(timezone.utc).isoformat(),
+        "source": source,
+        "events": events,
+    }
+    with open(_SNAPSHOT_PATH, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2)
+        handle.write("\n")
+    return _SNAPSHOT_PATH
+
+
+def fetch_upcoming_events(limit: int = 10, *, allow_snapshot: bool = True) -> List[dict]:
+    """
+    Return the next upcoming games across tracked teams.
+
+    Prefer live ESPN. If ESPN fails/empty (common on Vercel), fall back to the
+    committed snapshot under src/data/upcoming_events.json.
+    """
     session = _session()
     upcoming: List[dict] = []
     errors: List[str] = []
@@ -159,53 +268,31 @@ def fetch_upcoming_events(limit: int = 10) -> List[dict]:
             print(f"Error fetching upcoming for {msg}")
 
     upcoming.sort(key=lambda item: item.get("date") or "")
+    # Raw schedule rows use ISO in "date"; normalize for formatter.
+    raw = [
+        {
+            "date": event["date"],
+            "datetime": event["date"],
+            "team": event["team"],
+            "sport": event["sport"],
+            "opponent": event["opponent"],
+            "type": event.get("type", "game"),
+            "is_home": event["is_home"],
+        }
+        for event in upcoming
+    ]
+    formatted = _format_events(raw, limit)
 
-    if date_parser is None:
-        # Without dateutil, return raw ISO dates for the soonest items.
-        formatted = []
-        for event in upcoming[:limit]:
-            formatted.append(
-                {
-                    "date": event["date"],
-                    "datetime": event["date"],
-                    "team": event["team"],
-                    "sport": event["sport"],
-                    "opponent": event["opponent"],
-                    "type": event["type"],
-                    "is_home": event["is_home"],
-                }
-            )
+    if formatted:
         return formatted
 
-    now = datetime.now(timezone.utc)
-    formatted = []
-    for event in upcoming:
-        try:
-            event_dt = date_parser.parse(event["date"])
-            if event_dt.tzinfo is None:
-                event_dt = event_dt.replace(tzinfo=timezone.utc)
-            now_cmp = now.astimezone(event_dt.tzinfo)
-            label = _relative_date_label(event_dt, now_cmp)
-            if label is None:
-                continue
-            formatted.append(
-                {
-                    "date": label,
-                    "datetime": event["date"],
-                    "team": event["team"],
-                    "sport": event["sport"],
-                    "opponent": event["opponent"],
-                    "type": event["type"],
-                    "is_home": event["is_home"],
-                }
-            )
-        except Exception as exc:  # noqa: BLE001
-            print(f"Error formatting upcoming date: {exc}")
-
-        if len(formatted) >= limit:
-            break
-
-    if errors and not formatted:
+    if errors:
         print(f"Upcoming events empty after errors: {errors}")
 
-    return formatted
+    if allow_snapshot:
+        snapshot = load_upcoming_snapshot(limit=limit)
+        if snapshot:
+            print(f"Using upcoming snapshot ({len(snapshot)} events)")
+            return snapshot
+
+    return []

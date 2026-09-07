@@ -21,11 +21,13 @@ class handler(BaseHTTPRequestHandler):
 
             from src.upcoming_schedule import fetch_upcoming_events
 
-            formatted_events = fetch_upcoming_events(limit=10)
+            # Live ESPN first; falls back to src/data/upcoming_events.json on Vercel blocks.
+            formatted_events = fetch_upcoming_events(limit=10, allow_snapshot=True)
             response = json_response(
                 {
                     "success": True,
                     "events": formatted_events,
+                    "count": len(formatted_events),
                     "timestamp": datetime.now().isoformat(),
                 }
             )
