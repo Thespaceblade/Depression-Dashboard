@@ -24,8 +24,8 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
   const name = teamName.toLowerCase();
   const initials = teamName.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
   const fallback = (
-    <div className="w-full h-full flex items-center justify-center bg-gray-700 rounded-full">
-      <span className="text-white font-bold text-xs">{initials}</span>
+    <div className="w-full h-full flex items-center justify-center bg-panel border border-line">
+      <span className="text-ink font-mono font-bold text-xs">{initials}</span>
     </div>
   );
   
@@ -97,8 +97,8 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
         src="/maxverstappen.jpeg" 
         alt="Max Verstappen"
         fallback={
-          <div className="w-full h-full flex items-center justify-center bg-red-600 rounded-full">
-            <span className="text-white font-bold text-xs">MV</span>
+          <div className="w-full h-full flex items-center justify-center bg-f1-red">
+            <span className="text-ink font-mono font-bold text-xs">MV</span>
           </div>
         }
       />
@@ -114,17 +114,16 @@ export const getTeamLogo = (teamName: string, sport: string): JSX.Element => {
           src="https://a.espncdn.com/i/teamlogos/leagues/500/fantasy.png" 
           alt="ESPN Fantasy"
           fallback={
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-600 to-blue-600 rounded-full">
-              <span className="text-white font-bold text-xs">ESPN</span>
+            <div className="w-full h-full flex items-center justify-center bg-led">
+              <span className="text-field font-mono font-bold text-xs">ESPN</span>
             </div>
           }
         />
       );
     }
-    // Generic fantasy fallback
     return (
-      <div className="w-full h-full flex items-center justify-center bg-purple-600 rounded-full">
-        <span className="text-white font-bold text-xs">FF</span>
+      <div className="w-full h-full flex items-center justify-center bg-panel border border-led">
+        <span className="text-led font-mono font-bold text-xs">FF</span>
       </div>
     );
   }
@@ -165,15 +164,9 @@ const NCAALogo = () => (
 // ESPN Fantasy Logo
 const ESPNFantasyLogo = () => (
   <svg viewBox="0 0 100 100" className="w-full h-full">
-    <defs>
-      <linearGradient id="fantasyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#6A0DAD" stopOpacity="1" />
-        <stop offset="100%" stopColor="#1E90FF" stopOpacity="1" />
-      </linearGradient>
-    </defs>
-    <rect width="100" height="100" rx="8" fill="url(#fantasyGradient)"/>
-    <text x="50" y="45" fontSize="18" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Arial, sans-serif">ESPN</text>
-    <text x="50" y="70" fontSize="20" fontWeight="bold" fill="white" textAnchor="middle" fontFamily="Arial, sans-serif">FANTASY</text>
+    <rect width="100" height="100" fill="#141a15" stroke="#ffb000" strokeWidth="3"/>
+    <text x="50" y="45" fontSize="18" fontWeight="bold" fill="#ffb000" textAnchor="middle" fontFamily="IBM Plex Mono, monospace">ESPN</text>
+    <text x="50" y="70" fontSize="16" fontWeight="bold" fill="#f2efe6" textAnchor="middle" fontFamily="IBM Plex Mono, monospace">FANTASY</text>
   </svg>
 );
 
