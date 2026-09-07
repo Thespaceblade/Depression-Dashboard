@@ -270,158 +270,20 @@ def get_recent_games():
 def get_upcoming_events():
     """Get upcoming games, races, and events"""
     try:
-        from src.sports_api import SportsDataFetcher
-        fetcher = SportsDataFetcher()
-        upcoming_events = []
-        
-        # Get upcoming NFL games (Cowboys)
-        try:
-            team_id = 6  # Cowboys
-            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/schedule"
-            response = fetcher.nfl.session.get(url, timeout=10)
-            if response.status_code == 200:
-                data = response.json()
-                events = data.get('events', [])
-                for event in events:
-                    competitions = event.get('competitions', [])
-                    if competitions:
-                        comp = competitions[0]
-                        status = comp.get('status', {})
-                        status_type = status.get('type', {})
-                        completed = status_type.get('completed', False)
-                        
-                        if not completed:  # Upcoming game
-                            date_str = event.get('date', '')
-                            competitors = comp.get('competitors', [])
-                            if len(competitors) == 2:
-                                away = next((c for c in competitors if not c.get('homeAway') == 'home'), None)
-                                home = next((c for c in competitors if c.get('homeAway') == 'home'), None)
-                                opponent = away.get('team', {}).get('displayName') if home and home.get('team', {}).get('id') == str(team_id) else home.get('team', {}).get('displayName') if away and away.get('team', {}).get('id') == str(team_id) else None
-                                
-                                if opponent:
-                                    upcoming_events.append({
-                                        "date": date_str,
-                                        "team": "Dallas Cowboys",
-                                        "sport": "NFL",
-                                        "opponent": opponent,
-                                        "type": "game",
-                                        "is_home": home and home.get('team', {}).get('id') == str(team_id) if home else False
-                                    })
-        except Exception as e:
-            print(f"Error fetching upcoming NFL games: {e}")
-        
-        # Get upcoming NBA games (Mavericks)
-        try:
-            team_id = 6  # Mavericks
-            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/schedule"
-            response = fetcher.nba.session.get(url, timeout=10)
-            if response.status_code == 200:
-                data = response.json()
-                events = data.get('events', [])
-                for event in events:
-                    competitions = event.get('competitions', [])
-                    if competitions:
-                        comp = competitions[0]
-                        status = comp.get('status', {})
-                        status_type = status.get('type', {})
-                        completed = status_type.get('completed', False)
-                        
-                        if not completed:
-                            date_str = event.get('date', '')
-                            competitors = comp.get('competitors', [])
-                            if len(competitors) == 2:
-                                away = next((c for c in competitors if c.get('homeAway') == 'away'), None)
-                                home = next((c for c in competitors if c.get('homeAway') == 'home'), None)
-                                opponent = away.get('team', {}).get('displayName') if home and home.get('team', {}).get('id') == str(team_id) else home.get('team', {}).get('displayName') if away and away.get('team', {}).get('id') == str(team_id) else None
-                                
-                                if opponent:
-                                    upcoming_events.append({
-                                        "date": date_str,
-                                        "team": "Dallas Mavericks",
-                                        "sport": "NBA",
-                                        "opponent": opponent,
-                                        "type": "game",
-                                        "is_home": home and home.get('team', {}).get('id') == str(team_id) if home else False
-                                    })
-        except Exception as e:
-            print(f"Error fetching upcoming NBA games: {e}")
-        
-        # Get upcoming NBA games (Warriors)
-        try:
-            team_id = 9  # Warriors
-            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{team_id}/schedule"
-            response = fetcher.nba.session.get(url, timeout=10)
-            if response.status_code == 200:
-                data = response.json()
-                events = data.get('events', [])
-                for event in events:
-                    competitions = event.get('competitions', [])
-                    if competitions:
-                        comp = competitions[0]
-                        status = comp.get('status', {})
-                        status_type = status.get('type', {})
-                        completed = status_type.get('completed', False)
-                        
-                        if not completed:
-                            date_str = event.get('date', '')
-                            competitors = comp.get('competitors', [])
-                            if len(competitors) == 2:
-                                away = next((c for c in competitors if c.get('homeAway') == 'away'), None)
-                                home = next((c for c in competitors if c.get('homeAway') == 'home'), None)
-                                opponent = away.get('team', {}).get('displayName') if home and home.get('team', {}).get('id') == str(team_id) else home.get('team', {}).get('displayName') if away and away.get('team', {}).get('id') == str(team_id) else None
-                                
-                                if opponent:
-                                    upcoming_events.append({
-                                        "date": date_str,
-                                        "team": "Golden State Warriors",
-                                        "sport": "NBA",
-                                        "opponent": opponent,
-                                        "type": "game",
-                                        "is_home": home and home.get('team', {}).get('id') == str(team_id) if home else False
-                                    })
-        except Exception as e:
-            print(f"Error fetching upcoming Warriors games: {e}")
-        
-        # Sort by date (upcoming first)
-        upcoming_events.sort(key=lambda x: x.get("date", ""))
-        
-        # Format dates and limit to next 10 events
-        formatted_events = []
-        for event in upcoming_events[:10]:
-            try:
-                event_date = date_parser.parse(event["date"])
-                now = datetime.now(event_date.tzinfo) if event_date.tzinfo else datetime.now()
-                days_until = (event_date.date() - now.date()).days
-                
-                if days_until >= 0:
-                    if days_until == 0:
-                        date_str = "Today"
-                    elif days_until == 1:
-                        date_str = "Tomorrow"
-                    else:
-                        date_str = f"In {days_until} days"
-                    
-                    formatted_events.append({
-                        "date": date_str,
-                        "datetime": event["date"],
-                        "team": event["team"],
-                        "sport": event["sport"],
-                        "opponent": event.get("opponent", "TBD"),
-                        "type": event["type"],
-                        "is_home": event.get("is_home", False)
-                    })
-            except Exception as e:
-                print(f"Error formatting date: {e}")
-        
+        from src.upcoming_schedule import fetch_upcoming_events
+
+        formatted_events = fetch_upcoming_events(limit=10)
         return jsonify({
             "success": True,
             "events": formatted_events,
             "timestamp": datetime.now().isoformat()
         })
     except Exception as e:
+        import traceback
         return jsonify({
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "traceback": traceback.format_exc()
         }), 500
 
 @app.route('/api/refresh', methods=['POST'])
