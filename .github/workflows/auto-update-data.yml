@@ -10,6 +10,9 @@ on:
     paths:
       - 'scripts/fetch_all_data.py'
       - 'src/sports_api.py'
+      - 'src/espn_client.py'
+      - 'src/upcoming_schedule.py'
+      - 'src/recent_games.py'
       - '.github/workflows/auto-update-data.yml'
     branches:
       - main

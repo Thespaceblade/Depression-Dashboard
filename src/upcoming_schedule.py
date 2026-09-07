@@ -14,6 +14,8 @@ from typing import Dict, List, Optional
 
 import requests
 
+from src.espn_client import build_session, espn_get_json
+
 try:
     from dateutil import parser as date_parser
 except ImportError:  # pragma: no cover
@@ -55,15 +57,7 @@ ESPN_TEAMS = [
 
 
 def _session() -> requests.Session:
-    session = requests.Session()
-    # Full Chrome UAs get HTTP 403 from ESPN; keep the lightweight bot-style UA.
-    session.headers.update(
-        {
-            "User-Agent": "Mozilla/5.0 (compatible; DepressionDashboard/1.0)",
-            "Accept": "application/json",
-        }
-    )
-    return session
+    return build_session()
 
 
 def _relative_date_label(event_dt: datetime, now: datetime) -> Optional[str]:
@@ -128,16 +122,13 @@ def _parse_event(event: dict, team_name: str, sport: str, team_id: str) -> Optio
 
 
 def _fetch_team_schedule(session: requests.Session, team: dict) -> List[dict]:
-    url = (
-        f"https://site.api.espn.com/apis/site/v2/sports/"
-        f"{team['path']}/teams/{team['team_id']}/schedule"
-    )
-    response = session.get(url, timeout=8)
-    if response.status_code != 200:
-        print(f"Upcoming schedule HTTP {response.status_code} for {team['name']}: {url}")
+    path = f"/apis/site/v2/sports/{team['path']}/teams/{team['team_id']}/schedule"
+    payload = espn_get_json(path, session=session, timeout=8)
+    if not payload:
+        print(f"Upcoming schedule empty/failed for {team['name']}: {path}")
         return []
 
-    events = response.json().get("events") or []
+    events = payload.get("events") or []
     parsed: List[dict] = []
     for event in events:
         item = _parse_event(event, team["name"], team["sport"], team["team_id"])
