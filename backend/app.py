@@ -167,95 +167,13 @@ def get_teams():
 def get_recent_games():
     """Get recent games timeline with enhanced data"""
     try:
-        calc = get_calculator()
-        games = []
-        
-        # Try to fetch enhanced game data from APIs
-        from src.sports_api import SportsDataFetcher
-        fetcher = SportsDataFetcher()
-        
-        # Process team games with real detailed data only
-        for team in calc.teams:
-            detailed_games = []
-            try:
-                if team.sport == 'NFL':
-                    detailed_games = fetcher.nfl.get_recent_games_detailed(team.name, 5)
-                elif team.sport == 'NBA':
-                    detailed_games = fetcher.nba.get_recent_games_detailed(team.name, 5)
-                elif team.sport == 'NCAA Basketball':
-                    detailed_games = fetcher.college_bball.get_recent_games_detailed(team.name, 5)
-                elif team.sport == 'NCAA Football':
-                    detailed_games = fetcher.college_football.get_recent_games_detailed(team.name, 5)
-                elif team.sport == 'MLB':
-                    mlb = getattr(fetcher, 'mlb', None)
-                    getter = getattr(mlb, 'get_recent_games_detailed', None) if mlb else None
-                    if getter:
-                        detailed_games = getter(team.name, 5)
-            except Exception as e:
-                print(f"Warning: Failed to fetch detailed games for {team.name} ({team.sport}): {e}")
-                import traceback
-                traceback.print_exc()
-                detailed_games = []
+        from src.recent_games import fetch_recent_games
 
-            # Only include real detailed games. Do not invent dates/opponents
-            # from recent_streak — that produced misleading synthetic timeline rows.
-            if not detailed_games:
-                continue
-
-            for game in detailed_games:
-                opponent = (game.get('opponent') or '').strip()
-                game_date = game.get('date', '')
-                if not opponent or opponent.lower() == 'unknown' or not game_date:
-                    continue
-
-                is_rivalry = opponent.lower() in [r.lower() for r in team.rivals]
-
-                try:
-                    from dateutil import parser as date_parser
-                    parsed_date = date_parser.parse(game_date)
-                    now = datetime.now(parsed_date.tzinfo) if parsed_date.tzinfo else datetime.now()
-                    days_ago = (now.date() - parsed_date.date()).days
-                    if days_ago == 0:
-                        date_str = "Today"
-                    elif days_ago == 1:
-                        date_str = "Yesterday"
-                    else:
-                        date_str = f"{days_ago} days ago"
-                except Exception:
-                    date_str = game_date
-
-                games.append({
-                    "date": date_str,
-                    "datetime": game_date,
-                    "team": team.name,
-                    "sport": team.sport,
-                    "result": game.get('result', '?'),
-                    "type": "game",
-                    "opponent": opponent,
-                    "team_score": game.get('team_score', 0),
-                    "opponent_score": game.get('opponent_score', 0),
-                    "score_margin": game.get('score_margin', 0),
-                    "is_home": game.get('is_home', False),
-                    "is_overtime": game.get('is_overtime', False),
-                    "is_rivalry": is_rivalry
-                })
-
-        # Sort by datetime when available
-        def sort_key(game):
-            dt = game.get('datetime', '')
-            if dt:
-                try:
-                    from dateutil import parser as date_parser
-                    return date_parser.parse(dt)
-                except Exception:
-                    pass
-            return datetime.min
-
-        games.sort(key=sort_key, reverse=True)
-
+        games = fetch_recent_games(limit=20, per_team=5, allow_snapshot=True)
         return jsonify({
             "success": True,
-            "games": games[:20],  # Last 20 real events
+            "games": games,
+            "count": len(games),
             "timestamp": datetime.now().isoformat()
         })
     except Exception as e:

@@ -95,9 +95,9 @@ jobs:
             exit 1
           fi
           echo "file_exists=true" >> $GITHUB_OUTPUT
-          echo "---- teams_config.json / upcoming snapshot diff (first 80 lines) ----"
-          git --no-pager diff -- teams_config.json src/data/upcoming_events.json | head -80 || true
-          if git diff --quiet -- teams_config.json src/data/upcoming_events.json; then
+          echo "---- teams_config / upcoming / recent snapshot diff (first 80 lines) ----"
+          git --no-pager diff -- teams_config.json src/data/upcoming_events.json src/data/recent_games.json | head -80 || true
+          if git diff --quiet -- teams_config.json src/data/upcoming_events.json src/data/recent_games.json; then
             echo "file_changed=false" >> $GITHUB_OUTPUT
           else
             echo "file_changed=true" >> $GITHUB_OUTPUT
@@ -109,7 +109,7 @@ jobs:
           git config --local user.email "jason.charwin360@gmail.com"
           git config --local user.name "Thespaceblade"
           git add -f teams_config.json
-          git add src/data/upcoming_events.json || true
+          git add src/data/upcoming_events.json src/data/recent_games.json || true
           if ! git diff --staged --quiet; then
             git pull --rebase origin main || git pull origin main || true
             git commit -m "Auto-update: $(date +'%Y-%m-%d %H:%M:%S UTC')"
