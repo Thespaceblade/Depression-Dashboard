@@ -5,9 +5,141 @@ Fetches scores and data from various sports APIs
 """
 
 import requests
-from typing import Dict, Optional, List
+from typing import Dict, Optional, List, Tuple
 from datetime import datetime, timedelta
 import json
+
+
+def _espn_headers() -> Dict[str, str]:
+    return {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        "Accept": "application/json",
+    }
+
+
+def _parse_record_items(items: List[dict]) -> Optional[Dict]:
+    if not items:
+        return None
+    total_record = next((item for item in items if item.get("type") == "total"), items[0])
+    stats = total_record.get("stats", [])
+
+    def stat(name: str, default=0):
+        raw = next((s.get("value") for s in stats if s.get("name") == name), default)
+        try:
+            return int(float(raw)) if raw is not None else default
+        except (TypeError, ValueError):
+            return default
+
+    wins = stat("wins")
+    losses = stat("losses")
+    ties = stat("ties")
+    played = wins + losses + ties
+    return {
+        "wins": wins,
+        "losses": losses,
+        "ties": ties,
+        "win_percentage": (wins / played) if played else 0,
+    }
+
+
+def derive_record_from_schedule(
+    session: requests.Session,
+    sport_path: str,
+    team_id: str,
+    season: Optional[int] = None,
+) -> Optional[Dict]:
+    """Build a W-L record from completed ESPN schedule games."""
+    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/teams/{team_id}/schedule"
+    if season is not None:
+        url += f"?season={season}"
+    response = session.get(url, timeout=15)
+    if response.status_code != 200:
+        return None
+
+    events = response.json().get("events") or []
+    wins = losses = ties = 0
+    recent: List[str] = []
+    for event in events:
+        competitions = event.get("competitions") or []
+        if not competitions:
+            continue
+        comp = competitions[0]
+        status = (comp.get("status") or {}).get("type") or {}
+        if not status.get("completed"):
+            continue
+        competitors = comp.get("competitors") or []
+        team = next(
+            (
+                c
+                for c in competitors
+                if str((c.get("team") or {}).get("id")) == str(team_id)
+            ),
+            None,
+        )
+        if not team:
+            continue
+        winner = team.get("winner")
+        if winner is True:
+            wins += 1
+            recent.append("W")
+        elif winner is False:
+            losses += 1
+            recent.append("L")
+        else:
+            ties += 1
+            recent.append("T")
+
+    played = wins + losses + ties
+    if played == 0:
+        return None
+    return {
+        "wins": wins,
+        "losses": losses,
+        "ties": ties,
+        "win_percentage": wins / played,
+        "recent_games": recent[-5:],
+    }
+
+
+def fetch_espn_team_record(
+    session: requests.Session,
+    sport_path: str,
+    team_id: str,
+    *,
+    allow_prior_season: bool = True,
+) -> Optional[Dict]:
+    """
+    Fetch a team record from ESPN.
+
+    Prefer the team endpoint record. If empty (common in offseason), derive from
+    the current schedule, then optionally the prior season schedule.
+    """
+    team_url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/teams/{team_id}"
+    try:
+        response = session.get(team_url, timeout=15)
+        if response.status_code == 200:
+            items = ((response.json().get("team") or {}).get("record") or {}).get("items") or []
+            parsed = _parse_record_items(items)
+            if parsed and (parsed["wins"] + parsed["losses"] + parsed.get("ties", 0)) > 0:
+                return parsed
+            # Keep an explicit 0-0 if the season has started but no games yet
+            if parsed and items:
+                schedule_now = derive_record_from_schedule(session, sport_path, team_id)
+                return schedule_now or parsed
+    except Exception as exc:  # noqa: BLE001
+        print(f"ESPN team record error ({sport_path}/{team_id}): {exc}")
+
+    current = derive_record_from_schedule(session, sport_path, team_id)
+    if current:
+        return current
+
+    if allow_prior_season:
+        prior_year = datetime.now().year - 1
+        prior = derive_record_from_schedule(session, sport_path, team_id, season=prior_year)
+        if prior:
+            prior["from_prior_season"] = prior_year
+            return prior
+    return None
 
 
 class SportsAPI:
@@ -15,9 +147,7 @@ class SportsAPI:
     
     def __init__(self):
         self.session = requests.Session()
-        self.session.headers.update({
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        })
+        self.session.headers.update(_espn_headers())
     
     def get_team_record(self, team_name: str, sport: str) -> Optional[Dict]:
         """Get current record for a team"""
@@ -38,38 +168,18 @@ class NFLAPI(SportsAPI):
     def get_team_record(self, team_name: str) -> Optional[Dict]:
         """Get Cowboys record from ESPN API"""
         try:
-            # Use ESPN's public API
             team_id = self.team_ids.get(team_name.lower(), None)
             if not team_id:
-                # Try to find by name
                 if 'dallas' in team_name.lower() and 'cowboys' in team_name.lower():
-                    team_id = 6  # Correct ID for Dallas Cowboys
+                    team_id = 6
                 else:
                     return None
-            
-            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
-                team = data.get('team', {})
-                record = team.get('record', {})
-                items = record.get('items', [])
-                
-                if items:
-                    # Find the "total" record (overall record, not home/away)
-                    total_record = next((item for item in items if item.get('type') == 'total'), items[0])
-                    stats = total_record.get('stats', [])
-                    wins = next((int(s['value']) for s in stats if s['name'] == 'wins'), 0)
-                    losses = next((int(s['value']) for s in stats if s['name'] == 'losses'), 0)
-                    ties = next((int(s['value']) for s in stats if s['name'] == 'ties'), 0)
-                    
-                    return {
-                        'wins': wins,
-                        'losses': losses,
-                        'ties': ties,
-                        'win_percentage': wins / (wins + losses + ties) if (wins + losses + ties) > 0 else 0
-                    }
+            return fetch_espn_team_record(
+                self.session,
+                "football/nfl",
+                str(team_id),
+                allow_prior_season=False,
+            )
         except Exception as e:
             print(f"Error fetching NFL data: {e}")
             return None
@@ -194,19 +304,20 @@ class NFLAPI(SportsAPI):
 
 
 class NBAAPI(SportsAPI):
-    """NBA API using nba_api"""
+    """NBA API using ESPN (nba_api optional fallback)"""
     
     def __init__(self):
         super().__init__()
+        self.teamgamelog = None
+        self.teams = None
         try:
-            from nba_api.stats.endpoints import teamgamelog, scoreboard
+            # Newer nba_api builds may not export scoreboard; import only what we need.
+            from nba_api.stats.endpoints import teamgamelog
             from nba_api.stats.static import teams
             self.teamgamelog = teamgamelog
-            self.scoreboard = scoreboard
             self.teams = teams
-        except ImportError:
-            print("Warning: nba_api not installed. Install with: pip install nba_api")
-            self.teamgamelog = None
+        except ImportError as e:
+            print(f"Warning: nba_api unavailable ({e}). Using ESPN for NBA data.")
     
     def get_team_id(self, team_name: str) -> Optional[int]:
         """Get team ID from name"""
@@ -225,8 +336,6 @@ class NBAAPI(SportsAPI):
     def get_team_record(self, team_name: str) -> Optional[Dict]:
         """Get team record (Mavericks or Warriors) - uses ESPN API for current standings"""
         try:
-            # Use ESPN API for current standings (more reliable)
-            # ESPN team IDs: Mavericks = 6, Warriors = 9
             espn_team_ids = {
                 'dallas mavericks': 6,
                 'mavericks': 6,
@@ -237,31 +346,16 @@ class NBAAPI(SportsAPI):
             espn_id = espn_team_ids.get(team_name.lower())
             if not espn_id:
                 return None
-            
-            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{espn_id}"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
-                team = data.get('team', {})
-                record = team.get('record', {})
-                items = record.get('items', [])
-                
-                if items:
-                    # Find the "total" record (overall record, not home/away)
-                    total_record = next((item for item in items if item.get('type') == 'total'), items[0])
-                    stats = total_record.get('stats', [])
-                    wins = next((int(s['value']) for s in stats if s['name'] == 'wins'), 0)
-                    losses = next((int(s['value']) for s in stats if s['name'] == 'losses'), 0)
-                    
-                    return {
-                        'wins': wins,
-                        'losses': losses,
-                        'win_percentage': wins / (wins + losses) if (wins + losses) > 0 else 0
-                    }
+
+            # Offseason: fall back to prior season schedule so records don't go stale/empty.
+            return fetch_espn_team_record(
+                self.session,
+                "basketball/nba",
+                str(espn_id),
+                allow_prior_season=True,
+            )
         except Exception as e:
             print(f"Error fetching NBA data for {team_name} from ESPN: {e}")
-            # Fallback to nba_api game log method (but filter to only completed games)
             if self.teamgamelog:
                 try:
                     team_id = self.get_team_id(team_name)
@@ -276,7 +370,6 @@ class NBAAPI(SportsAPI):
                         )
                         
                         df = game_log.get_data_frames()[0]
-                        # Only count games that have been played (have a result)
                         completed = df[df['WL'].notna()]
                         wins = len(completed[completed['WL'] == 'W'])
                         losses = len(completed[completed['WL'] == 'L'])
@@ -460,147 +553,127 @@ class MLBAPI(SportsAPI):
             self.Teams = None
     
     def get_team_record(self, team_name: str) -> Optional[Dict]:
-        """Get Rangers record from ESPN API"""
+        """Get Rangers record from ESPN API (sportsipy fallback)"""
         try:
-            # ESPN team ID for Texas Rangers is 13
-            url = "https://site.api.espn.com/apis/site/v2/sports/baseball/mlb/teams/13"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
-                team = data.get('team', {})
-                record = team.get('record', {})
-                items = record.get('items', [])
-                
-                if items:
-                    # Find the "total" record (overall record, not home/away)
-                    total_record = next((item for item in items if item.get('type') == 'total'), items[0])
-                    stats = total_record.get('stats', [])
-                    wins = next((int(s['value']) for s in stats if s['name'] == 'wins'), 0)
-                    losses = next((int(s['value']) for s in stats if s['name'] == 'losses'), 0)
-                    
-                    return {
-                        'wins': wins,
-                        'losses': losses,
-                        'win_percentage': wins / (wins + losses) if (wins + losses) > 0 else 0
-                    }
+            # ESPN team ID for Texas Rangers is 13 (not 140)
+            record = fetch_espn_team_record(
+                self.session,
+                "baseball/mlb",
+                "13",
+                allow_prior_season=True,
+            )
+            if record:
+                return record
         except Exception as e:
             print(f"Error fetching MLB data: {e}")
-            # Fallback to sportsipy if available
-            if self.Teams:
-                try:
-                    teams = self.Teams()
-                    for team in teams:
-                        if 'texas' in team.name.lower() and 'rangers' in team.name.lower():
-                            return {
-                                'wins': team.wins,
-                                'losses': team.losses,
-                                'win_percentage': team.win_percentage
-                            }
-                except Exception as e2:
-                    print(f"Fallback method also failed: {e2}")
+
+        if self.Teams:
+            try:
+                teams = self.Teams()
+                for team in teams:
+                    if 'texas' in team.name.lower() and 'rangers' in team.name.lower():
+                        return {
+                            'wins': team.wins,
+                            'losses': team.losses,
+                            'win_percentage': team.wins / (team.wins + team.losses) if (team.wins + team.losses) > 0 else 0
+                        }
+            except Exception as e2:
+                print(f"Fallback method also failed: {e2}")
         return None
 
 
 class F1API(SportsAPI):
-    """F1 API using OpenF1 REST API (simplified, no dependencies)"""
+    """F1 standings via Jolpica Ergast API (OpenF1 fallback)"""
     
     def __init__(self):
         super().__init__()
         self.openf1_base = "https://api.openf1.org/v1"
+        self.jolpica_base = "https://api.jolpi.ca/ergast/f1"
         # Verstappen's driver number is 1
         self.driver_number = 1
     
     def get_driver_standings(self, driver_name: str = "Verstappen") -> Optional[Dict]:
-        """Get Max Verstappen's championship position using OpenF1 API"""
+        """Get Max Verstappen's championship position"""
+        # Prefer Jolpica (Ergast-compatible) — reliable current standings JSON.
+        try:
+            url = f"{self.jolpica_base}/current/driverStandings.json"
+            response = self.session.get(url, timeout=15)
+            if response.status_code == 200:
+                payload = response.json()
+                lists = (
+                    payload.get("MRData", {})
+                    .get("StandingsTable", {})
+                    .get("StandingsLists", [])
+                )
+                if lists:
+                    standings = lists[0].get("DriverStandings", [])
+                    needle = driver_name.lower()
+                    for entry in standings:
+                        family = (entry.get("Driver") or {}).get("familyName", "")
+                        code = (entry.get("Driver") or {}).get("code", "")
+                        if needle in family.lower() or needle == code.lower() or "verstappen" in family.lower():
+                            return {
+                                "position": int(entry.get("position", 1)),
+                                "points": float(entry.get("points", 0) or 0),
+                                "wins": int(float(entry.get("wins", 0) or 0)),
+                            }
+        except Exception as e:
+            print(f"Jolpica F1 standings error: {e}")
+
+        # Fallback: OpenF1 session aggregation (best-effort)
         current_year = datetime.now().year
-        # F1 season typically runs March-November
         if datetime.now().month < 3:
             current_year -= 1
-        
         try:
-            # Use OpenF1's simple standings endpoint if available, otherwise calculate from sessions
-            # Try to get standings directly first
-            standings_url = f"{self.openf1_base}/standings?year={current_year}"
-            try:
-                response = self.session.get(standings_url, timeout=10)
-                if response.status_code == 200:
-                    standings = response.json()
-                    if standings:
-                        # Find Verstappen in standings (driver_number = 1)
-                        for entry in standings:
-                            if entry.get('driver_number') == self.driver_number:
-                                return {
-                                    'position': entry.get('position', 1),
-                                    'points': entry.get('points', 0),
-                                    'wins': entry.get('wins', 0)
-                                }
-            except Exception:
-                # Standings endpoint might not exist, continue to session-based method
-                pass
-            
-            # Fallback: Calculate from race sessions (simpler approach)
             url = f"{self.openf1_base}/sessions?year={current_year}&session_type=Race"
             response = self.session.get(url, timeout=10)
-            
             if response.status_code == 200:
-                sessions = response.json()
-                if sessions and len(sessions) > 0:
-                    # Sort sessions by date to process chronologically
-                    sessions.sort(key=lambda x: x.get('date_start', ''))
-                    
-                    driver_points = {}
-                    driver_wins = {}
-                    
-                    # Process only completed races (limit to last 10 for speed)
-                    completed_sessions = [s for s in sessions if s.get('date_end')][-10:]
-                    
-                    for session in completed_sessions:
-                        session_key = session.get('session_key')
-                        if not session_key:
-                            continue
-                        
+                sessions = response.json() or []
+                sessions = [s for s in sessions if s.get("date_end")]
+                sessions.sort(key=lambda x: x.get("date_start", ""))
+                driver_points = {}
+                driver_wins = {}
+                for session in sessions[-15:]:
+                    session_key = session.get("session_key")
+                    if not session_key:
+                        continue
+                    for endpoint in ("session_result", "results"):
                         try:
-                            # Get results for this race
-                            results_url = f"{self.openf1_base}/results?session_key={session_key}"
-                            results_response = self.session.get(results_url, timeout=5)
-                            
-                            if results_response.status_code == 200:
-                                results = results_response.json()
-                                if results:
-                                    for result in results:
-                                        driver_num = result.get('driver_number')
-                                        points = result.get('points', 0) or 0
-                                        position = result.get('position')
-                                        
-                                        if driver_num:
-                                            if driver_num not in driver_points:
-                                                driver_points[driver_num] = 0
-                                                driver_wins[driver_num] = 0
-                                            driver_points[driver_num] += float(points or 0)
-                                            if position == 1:
-                                                driver_wins[driver_num] += 1
+                            results_response = self.session.get(
+                                f"{self.openf1_base}/{endpoint}?session_key={session_key}",
+                                timeout=5,
+                            )
+                            if results_response.status_code != 200:
+                                continue
+                            results = results_response.json() or []
+                            if not results:
+                                continue
+                            for result in results:
+                                driver_num = result.get("driver_number")
+                                if driver_num is None:
+                                    continue
+                                points = float(result.get("points", 0) or 0)
+                                position = result.get("position")
+                                driver_points[driver_num] = driver_points.get(driver_num, 0) + points
+                                if position == 1:
+                                    driver_wins[driver_num] = driver_wins.get(driver_num, 0) + 1
+                            break
                         except Exception:
-                            # Skip this race if it fails, continue with others
                             continue
-                    
-                    # Find Verstappen (driver number 1) and calculate position
-                    if self.driver_number in driver_points:
-                        # Calculate position by sorting all drivers
-                        sorted_drivers = sorted(driver_points.items(), key=lambda x: x[1], reverse=True)
-                        position = next((i+1 for i, (num, pts) in enumerate(sorted_drivers) if num == self.driver_number), 1)
-                        
-                        return {
-                            'position': position,
-                            'points': driver_points[self.driver_number],
-                            'wins': driver_wins.get(self.driver_number, 0)
-                        }
-        except requests.exceptions.RequestException as e:
-            print(f"OpenF1 API connection error: {e}")
+                if self.driver_number in driver_points:
+                    sorted_drivers = sorted(driver_points.items(), key=lambda x: x[1], reverse=True)
+                    position = next(
+                        (i + 1 for i, (num, _) in enumerate(sorted_drivers) if num == self.driver_number),
+                        1,
+                    )
+                    return {
+                        "position": position,
+                        "points": driver_points[self.driver_number],
+                        "wins": driver_wins.get(self.driver_number, 0),
+                    }
         except Exception as e:
             print(f"OpenF1 API error: {e}")
-        
-        # Graceful fallback - return None so manual input can be used
+
         print(f"Warning: Could not fetch F1 standings for {driver_name}. Using manual data from config.")
         return None
     
@@ -684,30 +757,13 @@ class CollegeBasketballAPI(SportsAPI):
     
     def get_team_record(self, team_name: str) -> Optional[Dict]:
         """Get UNC Tar Heels basketball record"""
-        # ESPN API for college basketball is tricky
-        # We'll use a web scraping approach or ESPN API
         try:
-            # Try using ESPN's API endpoint
-            url = "https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/153"
-            response = self.session.get(url, timeout=10)
-            if response.status_code == 200:
-                data = response.json()
-                team = data.get('team', {})
-                record = team.get('record', {})
-                items = record.get('items', [])
-                if items:
-                    stats = items[0].get('stats', [])
-                    wins_raw = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
-                    losses_raw = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
-                    # Convert to int (ESPN API returns floats like 6.0, 1.0)
-                    # Use float() first to handle both int and float, then int() to ensure integer
-                    wins = int(float(wins_raw)) if wins_raw is not None else 0
-                    losses = int(float(losses_raw)) if losses_raw is not None else 0
-                    return {
-                        'wins': wins,
-                        'losses': losses,
-                        'win_percentage': wins / (wins + losses) if (wins + losses) > 0 else 0
-                    }
+            return fetch_espn_team_record(
+                self.session,
+                "basketball/mens-college-basketball",
+                "153",
+                allow_prior_season=True,
+            )
         except Exception as e:
             print(f"Error fetching college basketball data: {e}")
         return None
@@ -838,27 +894,12 @@ class CollegeFootballAPI(SportsAPI):
     def get_team_record(self, team_name: str) -> Optional[Dict]:
         """Get UNC Tar Heels football record"""
         try:
-            # UNC's ESPN team ID is 153
-            url = "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/153"
-            response = self.session.get(url, timeout=10)
-            if response.status_code == 200:
-                data = response.json()
-                team = data.get('team', {})
-                record = team.get('record', {})
-                items = record.get('items', [])
-                if items:
-                    stats = items[0].get('stats', [])
-                    wins_raw = next((s['value'] for s in stats if s['name'] == 'wins'), 0)
-                    losses_raw = next((s['value'] for s in stats if s['name'] == 'losses'), 0)
-                    # Convert to int (ESPN API returns floats like 6.0, 1.0)
-                    # Use float() first to handle both int and float, then int() to ensure integer
-                    wins = int(float(wins_raw)) if wins_raw is not None else 0
-                    losses = int(float(losses_raw)) if losses_raw is not None else 0
-                    return {
-                        'wins': wins,
-                        'losses': losses,
-                        'win_percentage': wins / (wins + losses) if (wins + losses) > 0 else 0
-                    }
+            return fetch_espn_team_record(
+                self.session,
+                "football/college-football",
+                "153",
+                allow_prior_season=False,
+            )
         except Exception as e:
             print(f"Error fetching college football data: {e}")
         return None
@@ -1061,20 +1102,32 @@ class SportsDataFetcher:
             'unc_basketball': self.college_bball.get_team_record('North Carolina Tar Heels'),
             'unc_football': self.college_football.get_team_record('North Carolina Tar Heels')
         }
+
+        for key, value in data.items():
+            if value is None:
+                print(f"⚠️  {key}: no data")
+            elif key == 'verstappen':
+                print(f"✅ {key}: P{value.get('position')} ({value.get('points')} pts)")
+            else:
+                print(
+                    f"✅ {key}: {value.get('wins')}-{value.get('losses')}"
+                    + (f"-{value.get('ties')}" if value.get('ties') else "")
+                    + (" (prior season)" if value.get('from_prior_season') else "")
+                )
         
-        # Add recent games
+        # Add recent games (prefer values already derived from schedule)
         if data['cowboys']:
-            data['cowboys']['recent_games'] = self.nfl.get_recent_games('Dallas Cowboys')
+            data['cowboys']['recent_games'] = data['cowboys'].get('recent_games') or self.nfl.get_recent_games('Dallas Cowboys')
         if data['mavericks']:
-            data['mavericks']['recent_games'] = self.nba.get_recent_games('Dallas Mavericks')
+            data['mavericks']['recent_games'] = data['mavericks'].get('recent_games') or self.nba.get_recent_games('Dallas Mavericks')
         if data['warriors']:
-            data['warriors']['recent_games'] = self.nba.get_recent_games('Golden State Warriors')
+            data['warriors']['recent_games'] = data['warriors'].get('recent_games') or self.nba.get_recent_games('Golden State Warriors')
         if data['verstappen']:
             data['verstappen']['recent_races'] = self.f1.get_recent_race_results('Verstappen')
         if data['unc_basketball']:
-            data['unc_basketball']['recent_games'] = self.college_bball.get_recent_games('North Carolina Tar Heels')
+            data['unc_basketball']['recent_games'] = data['unc_basketball'].get('recent_games') or self.college_bball.get_recent_games('North Carolina Tar Heels')
         if data['unc_football']:
-            data['unc_football']['recent_games'] = self.college_football.get_recent_games('North Carolina Tar Heels')
+            data['unc_football']['recent_games'] = data['unc_football'].get('recent_games') or self.college_football.get_recent_games('North Carolina Tar Heels')
         
         return data
     
