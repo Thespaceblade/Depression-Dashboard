@@ -452,6 +452,8 @@ def refresh_data():
             
             return jsonify({
                 "success": True,
+                "refreshed": True,
+                "mode": "live",
                 "message": "Data refreshed successfully from all sources",
                 "timestamp": datetime.now().isoformat(),
                 "output": result.stdout[-500:] if result.stdout else ""  # Last 500 chars
@@ -487,6 +489,8 @@ def refresh_data():
             
             return jsonify({
                 "success": True,
+                "refreshed": True,
+                "mode": "live",
                 "message": "Data refreshed (basic refresh, fantasy skipped)",
                 "timestamp": datetime.now().isoformat(),
                 "warning": str(e)

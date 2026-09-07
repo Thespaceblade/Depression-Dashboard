@@ -11,14 +11,27 @@ interface Props {
 export default function Header({ lastUpdated, onRefresh }: Props) {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [portfolioIconBroken, setPortfolioIconBroken] = useState(false);
+  const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
+    setStatusMessage(null);
     try {
-      await refreshData();
+      const result = await refreshData();
+      // Always reload displayed API payloads so the UI is current.
       onRefresh();
+
+      if (result.refreshed) {
+        setStatusMessage(result.message || 'Sports data refreshed.');
+      } else {
+        setStatusMessage(
+          result.message ||
+            'Dashboard reloaded. Sports records update on a schedule, not from this button.'
+        );
+      }
     } catch (error) {
       console.error('Failed to refresh:', error);
+      setStatusMessage('Could not reload dashboard data.');
     } finally {
       setIsRefreshing(false);
     }
@@ -48,6 +61,11 @@ export default function Header({ lastUpdated, onRefresh }: Props) {
             <p className="text-xs sm:text-sm text-gray-400">
               Last Updated: {formatTime(lastUpdated)}
             </p>
+            {statusMessage && (
+              <p className="text-xs sm:text-sm text-amber-300 mt-1 max-w-xl">
+                {statusMessage}
+              </p>
+            )}
           </div>
         </div>
         
@@ -55,11 +73,12 @@ export default function Header({ lastUpdated, onRefresh }: Props) {
           <button
             onClick={handleRefresh}
             disabled={isRefreshing}
+            title="Reload the dashboard. On Vercel, sports source data updates via scheduled cron."
             className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg text-sm sm:text-base font-semibold transition-colors duration-200 flex items-center gap-2"
           >
             <RefreshIcon spinning={isRefreshing} size={18} />
-            <span className="hidden sm:inline">{isRefreshing ? 'Refreshing...' : 'Refresh Data'}</span>
-            <span className="sm:hidden">{isRefreshing ? '...' : 'Refresh'}</span>
+            <span className="hidden sm:inline">{isRefreshing ? 'Reloading...' : 'Reload Dashboard'}</span>
+            <span className="sm:hidden">{isRefreshing ? '...' : 'Reload'}</span>
           </button>
 
           <div className="flex items-center gap-2">
