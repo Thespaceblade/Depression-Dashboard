@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import type { Team } from '../types';
 import { getTeamLogo } from '../utils/teamIcons';
-import { getDepressionIcon } from '../utils/icons';
 import { pointsToBorderColor } from '../utils/colors';
 
 interface Props {
@@ -9,141 +8,112 @@ interface Props {
   activityLabel?: string;
 }
 
-const getResultColor = (result: string): string => {
-  if (result === 'W' || result === 'P1') return 'bg-green-500';
-  if (result === 'L' || result === 'DNF') return 'bg-red-500';
-  if (result.startsWith('P')) return 'bg-yellow-500';
-  return 'bg-gray-500';
+const streakTone = (result: string): string => {
+  if (result === 'W' || result === 'P1') return 'text-win';
+  if (result === 'L' || result === 'DNF') return 'text-loss';
+  if (result.startsWith('P')) return 'text-led';
+  return 'text-muted';
 };
 
 export default function TeamCard({ team, activityLabel }: Props) {
   const [expanded, setExpanded] = useState(false);
   const teamLogo = getTeamLogo(team.name, team.sport);
-  const moodIcon = getDepressionIcon('', team.depression_points ?? 0, {
-    size: 48,
-    className: '',
-    uniqueKey: team.name, // Use team name as unique key for consistent image selection
-  });
-  
-  // Get dynamic border color based on depression points (red for bad impact, green for good impact)
-  const dynamicBorderColor = pointsToBorderColor(team.depression_points ?? 0);
+  const accent = pointsToBorderColor(team.depression_points ?? 0);
 
   return (
-    <div
-      className="bg-card-bg rounded-xl sm:rounded-2xl p-4 sm:p-6 border-2 shadow-xl card-hover cursor-pointer transition-all duration-300"
-      style={{ borderColor: dynamicBorderColor }}
+    <article
+      className="border-t border-line cursor-pointer transition-colors duration-200 hover:bg-panel/60"
+      style={{ borderLeft: `3px solid ${accent}` }}
       onClick={() => setExpanded(!expanded)}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between mb-3 sm:mb-4">
-        <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-          {/* Team Logo */}
-          <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0">
-            {teamLogo}
-          </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="text-lg sm:text-xl font-bold text-white truncate">{team.name}</h3>
-            <p className="text-xs sm:text-sm text-gray-400">{team.sport}</p>
-          </div>
-        </div>
-        <div className="text-right flex flex-col items-end gap-2 flex-shrink-0 ml-2">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center">
-            {moodIcon}
-          </div>
-        </div>
-      </div>
+      <div className="px-3 sm:px-4 py-4 sm:py-5 flex items-start gap-3 sm:gap-4">
+        <div className="w-10 h-10 sm:w-11 sm:h-11 flex-shrink-0">{teamLogo}</div>
 
-      {/* Record */}
-      <div className="mb-3 sm:mb-4">
-        {activityLabel && (
-          <p className="text-xs text-gray-500 mb-2 line-clamp-2">{activityLabel}</p>
-        )}
-        <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
-          {team.record}
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex-1 bg-gray-700 rounded-full h-2 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-blue-500 to-green-500 transition-all duration-500"
-              style={{ width: `${team.win_percentage}%` }}
-            />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h3 className="font-display text-lg sm:text-xl uppercase tracking-wide text-ink truncate">
+              {team.name}
+            </h3>
+            <p className="font-mono text-xl sm:text-2xl tabular-nums text-ink">{team.record}</p>
           </div>
-          <span className="text-xs sm:text-sm text-gray-400 min-w-[45px] sm:min-w-[50px] text-right">
+          <p className="label-caps mt-1">
+            {team.sport}
+            <span className="mx-2 text-line">/</span>
             {team.win_percentage.toFixed(1)}%
-          </span>
+          </p>
+          {activityLabel && (
+            <p className="mt-2 text-xs text-muted line-clamp-2">{activityLabel}</p>
+          )}
+          {team.recent_streak && team.recent_streak.length > 0 && (
+            <p className="mt-2 font-mono text-sm tracking-[0.2em]">
+              {team.recent_streak.slice(0, 5).map((result, idx) => (
+                <span key={idx} className={streakTone(result)}>
+                  {result}
+                  {idx < Math.min(team.recent_streak.length, 5) - 1 ? ' ' : ''}
+                </span>
+              ))}
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Recent Streak */}
-      {team.recent_streak && team.recent_streak.length > 0 && (
-        <div className="mb-3 sm:mb-4">
-          <p className="text-xs text-gray-500 mb-2">Recent Form</p>
-          <div className="flex gap-1.5 sm:gap-2">
-            {team.recent_streak.slice(0, 5).map((result, idx) => (
-              <div
-                key={idx}
-                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full ${getResultColor(result)} flex items-center justify-center text-white text-xs font-bold`}
-                title={result}
-              >
-                {result === 'W' ? 'W' : result === 'L' ? 'L' : result === 'DNF' ? 'DNF' : result}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Expandable Details */}
       {expanded && (
-        <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-700 animate-slide-up">
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-xs sm:text-sm text-gray-400 pb-2">
-              <span className="text-white font-semibold">Depression Points</span>
-              <span className={`font-bold ${(team.depression_points ?? 0) >= 0 ? 'text-red-400' : 'text-green-400'}`}>
-                {(team.depression_points ?? 0) >= 0 ? '+' : ''}{(team.depression_points ?? 0).toFixed(1)} pts
+        <div className="px-3 sm:px-4 pb-5 pl-[3.25rem] sm:pl-[4.25rem] animate-panel-expand overflow-hidden">
+          <div className="space-y-2 text-sm text-muted border-t border-line pt-4">
+            <div className="flex justify-between gap-3">
+              <span className="label-caps">Depression points</span>
+              <span
+                className={`font-mono ${(team.depression_points ?? 0) >= 0 ? 'text-loss' : 'text-win'}`}
+              >
+                {(team.depression_points ?? 0) >= 0 ? '+' : ''}
+                {(team.depression_points ?? 0).toFixed(1)}
               </span>
             </div>
-            <div className="text-xs sm:text-sm text-gray-400">
-              <strong className="text-white">Expected Performance:</strong> {team.expected_performance || 'N/A'}/10
+            <div className="flex justify-between gap-3">
+              <span>Expected</span>
+              <span className="font-mono text-ink">{team.expected_performance || 'N/A'}/10</span>
             </div>
-            {team.jasons_expectations && (
-              <div className="text-xs sm:text-sm text-gray-400">
-                <strong className="text-white">Jason's Expectations:</strong> {team.jasons_expectations}/10
+            {team.jasons_expectations != null && (
+              <div className="flex justify-between gap-3">
+                <span>Jason&apos;s expectations</span>
+                <span className="font-mono text-ink">{team.jasons_expectations}/10</span>
               </div>
             )}
-            {team.championship_position && (
-              <div className="text-xs sm:text-sm text-gray-400">
-                <strong className="text-white">Championship Position:</strong> P{team.championship_position}
+            {team.championship_position != null && (
+              <div className="flex justify-between gap-3">
+                <span>Championship</span>
+                <span className="font-mono text-ink">P{team.championship_position}</span>
               </div>
             )}
-            {team.recent_dnfs !== undefined && team.recent_dnfs > 0 && (
-              <div className="text-xs sm:text-sm text-red-400">
-                <strong>Recent DNFs:</strong> {team.recent_dnfs}
+            {team.recent_dnfs != null && team.recent_dnfs > 0 && (
+              <div className="flex justify-between gap-3 text-loss">
+                <span>Recent DNFs</span>
+                <span className="font-mono">{team.recent_dnfs}</span>
               </div>
             )}
             {Object.keys(team.breakdown).length > 0 && (
-              <div className="mt-2 sm:mt-3">
-                <p className="text-xs text-gray-500 mb-2">Breakdown:</p>
+              <div className="pt-2 space-y-1">
+                <p className="label-caps mb-2">Breakdown</p>
                 {Object.entries(team.breakdown).map(([key, value]) => (
-                  <div key={key} className="flex justify-between text-xs text-gray-400 mb-1">
-                    <span className="truncate mr-2">{key}:</span>
-                    <span className={`flex-shrink-0 ${value >= 0 ? 'text-red-400' : 'text-green-400'}`}>
-                      {value >= 0 ? '+' : ''}{value.toFixed(1)}
+                  <div key={key} className="flex justify-between gap-3 text-xs">
+                    <span className="truncate mr-2">{key}</span>
+                    <span className={`font-mono flex-shrink-0 ${value >= 0 ? 'text-loss' : 'text-win'}`}>
+                      {value >= 0 ? '+' : ''}
+                      {value.toFixed(1)}
                     </span>
                   </div>
                 ))}
               </div>
             )}
-            {team.notes && (
-              <div className="text-xs text-gray-500 italic mt-2">{team.notes}</div>
-            )}
+            {team.notes && <p className="text-xs italic pt-1">{team.notes}</p>}
+            <p className="label-caps pt-2">{expanded ? 'Tap to collapse' : 'Tap for details'}</p>
           </div>
         </div>
       )}
 
-      {/* Click hint */}
-      <div className="text-xs text-gray-600 text-center mt-2">
-        {expanded ? 'Tap to collapse' : 'Tap for details'}
-      </div>
-    </div>
+      {!expanded && (
+        <p className="px-3 sm:px-4 pb-3 pl-[3.25rem] sm:pl-[4.25rem] label-caps">Tap for details</p>
+      )}
+    </article>
   );
 }

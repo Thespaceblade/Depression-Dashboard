@@ -61,16 +61,18 @@ export const getEmotionalStateTitle = (score: number): string => {
 // Map depression score to folder number (1-10)
 // Score is 0-100 scale where 0 = least depressed, 100 = most depressed
 // Each folder covers exactly 10 points: Folder 1 = 0-10, Folder 10 = 90-100
-const getFolderNumberFromScore = (score: number): number => {
-  // Clamp score to 0-100 range
+export const getFolderNumberFromScore = (score: number): number => {
   const clampedScore = Math.max(0, Math.min(100, score));
-  
-  // Calculate folder number: divide score by 10 and add 1, but handle edge cases
-  // Score 0-9.99... → folder 1 (0/10 = 0, +1 = 1)
-  // Score 10-19.99... → folder 2 (10/10 = 1, +1 = 2)
-  // Score 90-100 → folder 10 (100/10 = 10, but we cap at 10)
-  if (clampedScore >= 100) return 10;     // Edge case: exactly 100
+  if (clampedScore >= 100) return 10;
   return Math.floor(clampedScore / 10) + 1;
+};
+
+/** Stable mood photo path for hero / full-bleed use (first image in band). */
+export const getMoodImageUrl = (score: number): string | null => {
+  const folderNum = getFolderNumberFromScore(score);
+  const available = EMOTIONAL_STATE_IMAGES[folderNum] || [];
+  if (available.length === 0) return null;
+  return `/emotional states/${folderNum}/${available[0]}`.replace(/ /g, '%20');
 };
 
 // Simple hash function to create a seed from a string
@@ -149,10 +151,10 @@ const EmotionalStateImage = ({
   }
 
   return (
-    <div 
-      className={`relative inline-block rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:scale-110 hover:shadow-[0_20px_40px_rgba(0,0,0,0.5)] hover:rotate-2 cursor-pointer ${className}`}
-      style={{ 
-        width: size, 
+    <div
+      className={`relative inline-block overflow-hidden ${className}`}
+      style={{
+        width: size,
         height: size,
       }}
     >
@@ -166,7 +168,6 @@ const EmotionalStateImage = ({
         }}
         onError={() => setImageError(true)}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </div>
   );
 };
