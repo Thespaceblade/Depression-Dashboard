@@ -232,12 +232,25 @@ def _fetch_team_recent(
 def _load_rivals_map() -> Dict[Tuple[str, str], List[str]]:
     """Map (team name, sport) -> rival names from teams_config.json."""
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    path = os.path.join(root, "teams_config.json")
-    try:
-        with open(path, "r", encoding="utf-8") as handle:
-            payload = json.load(handle)
-    except Exception as exc:  # noqa: BLE001
-        print(f"Could not load rivals from teams_config.json: {exc}")
+    candidates = [
+        os.path.join(root, "src", "data", "teams_config.json"),
+        os.path.join(os.path.dirname(__file__), "data", "teams_config.json"),
+        os.path.join(root, "teams_config.json"),
+    ]
+    payload = None
+    for path in candidates:
+        try:
+            with open(path, "r", encoding="utf-8") as handle:
+                payload = json.load(handle)
+            break
+        except FileNotFoundError:
+            continue
+        except Exception as exc:  # noqa: BLE001
+            print(f"Could not load rivals from {path}: {exc}")
+            return {}
+
+    if payload is None:
+        print("Could not load rivals: teams_config.json missing")
         return {}
 
     rivals: Dict[Tuple[str, str], List[str]] = {}

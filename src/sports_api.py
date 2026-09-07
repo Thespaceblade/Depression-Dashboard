@@ -1341,6 +1341,26 @@ class SportsDataFetcher:
             print("Config file was not updated to prevent data loss")
             import traceback
             traceback.print_exc()
+            return
+
+        # Mirror into src/data so Vercel includeFiles "src/**" always packages it (#17).
+        try:
+            mirror_path = os.path.join(
+                os.path.dirname(os.path.abspath(config_path)),
+                "src",
+                "data",
+                "teams_config.json",
+            )
+            # When config_path is already under the repo root:
+            repo_root = os.path.dirname(os.path.abspath(config_path))
+            if os.path.basename(config_path) == "teams_config.json":
+                mirror_path = os.path.join(repo_root, "src", "data", "teams_config.json")
+            os.makedirs(os.path.dirname(mirror_path), exist_ok=True)
+            with open(mirror_path, "w") as f:
+                json.dump(config, f, indent=2)
+            print(f"✅ Mirrored config -> {mirror_path}")
+        except Exception as mirror_err:
+            print(f"⚠️  Could not mirror teams_config into src/data: {mirror_err}")
 
 
 if __name__ == "__main__":
