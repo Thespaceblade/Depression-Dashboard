@@ -54,13 +54,10 @@ ESPN_TEAMS = [
 
 def _session() -> requests.Session:
     session = requests.Session()
+    # Full Chrome UAs get HTTP 403 from ESPN; keep the lightweight bot-style UA.
     session.headers.update(
         {
-            "User-Agent": (
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                "AppleWebKit/537.36 (KHTML, like Gecko) "
-                "Chrome/124.0.0.0 Safari/537.36"
-            ),
+            "User-Agent": "Mozilla/5.0 (compatible; DepressionDashboard/1.0)",
             "Accept": "application/json",
         }
     )
