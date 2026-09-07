@@ -9,12 +9,7 @@ from typing import Dict, Optional, List, Tuple
 from datetime import datetime, timedelta
 import json
 
-
-def _espn_headers() -> Dict[str, str]:
-    return {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-        "Accept": "application/json",
-    }
+from src.espn_client import build_session, espn_get_json, espn_headers as _espn_headers
 
 
 def _parse_record_items(items: List[dict]) -> Optional[Dict]:
@@ -49,14 +44,13 @@ def derive_record_from_schedule(
     season: Optional[int] = None,
 ) -> Optional[Dict]:
     """Build a W-L record from completed ESPN schedule games."""
-    url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/teams/{team_id}/schedule"
-    if season is not None:
-        url += f"?season={season}"
-    response = session.get(url, timeout=15)
-    if response.status_code != 200:
+    path = f"/apis/site/v2/sports/{sport_path}/teams/{team_id}/schedule"
+    params = {"season": season} if season is not None else None
+    payload = espn_get_json(path, session=session, params=params, timeout=15)
+    if not payload:
         return None
 
-    events = response.json().get("events") or []
+    events = payload.get("events") or []
     wins = losses = ties = 0
     recent: List[str] = []
     for event in events:
@@ -114,11 +108,11 @@ def fetch_espn_team_record(
     Prefer the team endpoint record. If empty (common in offseason), derive from
     the current schedule, then optionally the prior season schedule.
     """
-    team_url = f"https://site.api.espn.com/apis/site/v2/sports/{sport_path}/teams/{team_id}"
+    team_path = f"/apis/site/v2/sports/{sport_path}/teams/{team_id}"
     try:
-        response = session.get(team_url, timeout=15)
-        if response.status_code == 200:
-            items = ((response.json().get("team") or {}).get("record") or {}).get("items") or []
+        payload = espn_get_json(team_path, session=session, timeout=15)
+        if payload:
+            items = ((payload.get("team") or {}).get("record") or {}).get("items") or []
             parsed = _parse_record_items(items)
             if parsed and (parsed["wins"] + parsed["losses"] + parsed.get("ties", 0)) > 0:
                 return parsed
@@ -146,8 +140,7 @@ class SportsAPI:
     """Base class for sports API integrations"""
     
     def __init__(self):
-        self.session = requests.Session()
-        self.session.headers.update(_espn_headers())
+        self.session = build_session()
     
     def get_team_record(self, team_name: str, sport: str) -> Optional[Dict]:
         """Get current record for a team"""
@@ -196,11 +189,12 @@ class NFLAPI(SportsAPI):
             team_id = self.team_ids.get(team_name.lower(), 6)  # Default to Cowboys (ID 6)
             
             # Use schedule endpoint instead of events
-            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/{team_id}/schedule"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
+            data = espn_get_json(
+                f"/apis/site/v2/sports/football/nfl/teams/{team_id}/schedule",
+                session=self.session,
+                timeout=10,
+            )
+            if data:
                 events = data.get('events', [])
                 results = []
                 
@@ -404,11 +398,12 @@ class NBAAPI(SportsAPI):
                 return []
             
             # Use schedule endpoint instead of events (more reliable)
-            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/nba/teams/{espn_id}/schedule"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
+            data = espn_get_json(
+                f"/apis/site/v2/sports/basketball/nba/teams/{espn_id}/schedule",
+                session=self.session,
+                timeout=10,
+            )
+            if data:
                 events = data.get('events', [])
                 results = []
                 
@@ -812,11 +807,12 @@ class CollegeBasketballAPI(SportsAPI):
             team_id = 153
             
             # Use schedule endpoint instead of events (more reliable)
-            url = f"https://site.api.espn.com/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/schedule"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
+            data = espn_get_json(
+                f"/apis/site/v2/sports/basketball/mens-college-basketball/teams/{team_id}/schedule",
+                session=self.session,
+                timeout=10,
+            )
+            if data:
                 events = data.get('events', [])
                 results = []
                 
@@ -948,11 +944,12 @@ class CollegeFootballAPI(SportsAPI):
             team_id = 153
             
             # Use schedule endpoint instead of events (more reliable)
-            url = f"https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/{team_id}/schedule"
-            response = self.session.get(url, timeout=10)
-            
-            if response.status_code == 200:
-                data = response.json()
+            data = espn_get_json(
+                f"/apis/site/v2/sports/football/college-football/teams/{team_id}/schedule",
+                session=self.session,
+                timeout=10,
+            )
+            if data:
                 events = data.get('events', [])
                 results = []
                 
@@ -1146,6 +1143,23 @@ class SportsDataFetcher:
                     + (f"-{value.get('ties')}" if value.get('ties') else "")
                     + (" (prior season)" if value.get('from_prior_season') else "")
                 )
+
+        espn_team_keys = [
+            'cowboys', 'mavericks', 'warriors', 'rangers',
+            'unc_basketball', 'unc_football',
+        ]
+        missing = [k for k in espn_team_keys if not data.get(k)]
+        if len(missing) == len(espn_team_keys):
+            raise RuntimeError(
+                "All ESPN team record fetches failed (likely host/IP block). "
+                f"Missing: {', '.join(missing)}. "
+                "Refusing to silently leave teams_config.json stale."
+            )
+        if missing:
+            print(
+                f"⚠️  Partial ESPN failure — continuing with available teams. "
+                f"Missing: {', '.join(missing)}"
+            )
         
         # Add recent games (prefer values already derived from schedule)
         if data['cowboys']:

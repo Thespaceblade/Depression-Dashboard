@@ -14,6 +14,8 @@ from typing import Dict, List, Optional, Tuple
 
 import requests
 
+from src.espn_client import build_session, espn_get_json
+
 try:
     from dateutil import parser as date_parser
 except ImportError:  # pragma: no cover
@@ -67,15 +69,7 @@ ESPN_TEAMS = [
 
 
 def _session() -> requests.Session:
-    session = requests.Session()
-    # Full Chrome UAs get HTTP 403 from ESPN; keep the lightweight bot-style UA.
-    session.headers.update(
-        {
-            "User-Agent": "Mozilla/5.0 (compatible; DepressionDashboard/1.0)",
-            "Accept": "application/json",
-        }
-    )
-    return session
+    return build_session()
 
 
 def _score_value(score_obj) -> Optional[float]:
@@ -184,20 +178,17 @@ def _parse_completed_event(event: dict, team: dict) -> Optional[dict]:
 def _fetch_schedule_events(
     session: requests.Session, team: dict, season: Optional[int] = None
 ) -> List[dict]:
-    url = (
-        f"https://site.api.espn.com/apis/site/v2/sports/"
-        f"{team['path']}/teams/{team['team_id']}/schedule"
-    )
+    path = f"/apis/site/v2/sports/{team['path']}/teams/{team['team_id']}/schedule"
     params = {"season": season} if season is not None else None
-    response = session.get(url, params=params, timeout=10)
-    if response.status_code != 200:
+    payload = espn_get_json(path, session=session, params=params, timeout=10)
+    if not payload:
         print(
-            f"Recent schedule HTTP {response.status_code} for {team['name']}"
-            f"{f' season={season}' if season else ''}: {url}"
+            f"Recent schedule empty/failed for {team['name']}"
+            f"{f' season={season}' if season else ''}: {path}"
         )
         return []
 
-    events = response.json().get("events") or []
+    events = payload.get("events") or []
     parsed: List[dict] = []
     for event in events:
         item = _parse_completed_event(event, team)
