@@ -20,7 +20,7 @@ export default function GameTimeline({ games }: Props) {
           <CalendarIconComponent size={28} />
           <h2 className="text-2xl font-bold text-white">Recent Games & Events</h2>
         </div>
-        <p className="text-gray-400">No recent games to display</p>
+        <p className="text-gray-400">No verified recent games to display</p>
       </div>
     );
   }
