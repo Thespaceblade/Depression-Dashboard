@@ -1,7 +1,5 @@
 import { useState } from 'react';
 import { refreshData } from '../api';
-import { RefreshIcon } from '../utils/icons';
-import { FaGithub } from 'react-icons/fa';
 
 interface Props {
   lastUpdated: string | null;
@@ -10,7 +8,6 @@ interface Props {
 
 export default function Header({ lastUpdated, onRefresh }: Props) {
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [portfolioIconBroken, setPortfolioIconBroken] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   const handleRefresh = async () => {
@@ -18,7 +15,6 @@ export default function Header({ lastUpdated, onRefresh }: Props) {
     setStatusMessage(null);
     try {
       const result = await refreshData();
-      // Always reload displayed API payloads so the UI is current.
       onRefresh();
 
       if (result.refreshed) {
@@ -40,78 +36,48 @@ export default function Header({ lastUpdated, onRefresh }: Props) {
   const formatTime = (timestamp: string | null): string => {
     if (!timestamp) return 'Never';
     try {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString();
+      return new Date(timestamp).toLocaleTimeString();
     } catch {
       return 'Unknown';
     }
   };
 
   return (
-    <header className="bg-card-bg border-b-2 border-gray-700 p-3 sm:p-4 mb-6 sm:mb-8">
-      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <img 
-            src="/logo.svg" 
-            alt="Depression Calculator Logo" 
-            className="w-8 h-8 sm:w-10 sm:h-10"
-          />
-          <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-white">Depression Dashboard</h1>
-            <p className="text-xs sm:text-sm text-gray-400">
-              Last Updated: {formatTime(lastUpdated)}
-            </p>
-            {statusMessage && (
-              <p className="text-xs sm:text-sm text-amber-300 mt-1 max-w-xl">
-                {statusMessage}
-              </p>
-            )}
-          </div>
+    <header className="border-b border-line">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="label-caps">Last updated {formatTime(lastUpdated)}</p>
+          {statusMessage && (
+            <p className="font-mono text-xs text-led mt-1 max-w-xl">{statusMessage}</p>
+          )}
         </div>
-        
-        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-between sm:justify-end">
+
+        <div className="flex items-center gap-4 sm:gap-5 flex-wrap">
           <button
+            type="button"
             onClick={handleRefresh}
             disabled={isRefreshing}
             title="Reload the dashboard. On Vercel, sports source data updates via scheduled cron."
-            className="px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 text-white rounded-lg text-sm sm:text-base font-semibold transition-colors duration-200 flex items-center gap-2"
+            className="util-btn"
           >
-            <RefreshIcon spinning={isRefreshing} size={18} />
-            <span className="hidden sm:inline">{isRefreshing ? 'Reloading...' : 'Reload Dashboard'}</span>
-            <span className="sm:hidden">{isRefreshing ? '...' : 'Reload'}</span>
+            {isRefreshing ? 'Reloading…' : 'Reload'}
           </button>
-
-          <div className="flex items-center gap-2">
-            <a
-              href="https://jasonindata.vercel.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Jason Charwin Portfolio"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-blue-500 hover:border-blue-300 hover:bg-blue-500/10 flex items-center justify-center transition-all duration-200"
-            >
-              <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full overflow-hidden flex items-center justify-center bg-gray-900">
-                {portfolioIconBroken ? (
-                  <span className="text-gray-200 text-xs sm:text-sm font-semibold">JD</span>
-                ) : (
-                  <img
-                    src="/image.png"
-                    alt="Jason in Data"
-                    className="w-full h-full object-cover"
-                    onError={() => setPortfolioIconBroken(true)}
-                  />
-                )}
-              </div>
-            </a>
-            <a
-              href="https://github.com/Thespaceblade/Depression-Dashboard"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="GitHub Repository"
-              className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border border-gray-600 hover:border-blue-500 hover:bg-blue-500/10 flex items-center justify-center transition-all duration-200 text-gray-200"
-            >
-              <FaGithub size={16} className="sm:w-5 sm:h-5" />
-            </a>
-          </div>
+          <a
+            href="https://jasonindata.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="util-link"
+          >
+            Portfolio
+          </a>
+          <a
+            href="https://github.com/Thespaceblade/Depression-Dashboard"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="util-link"
+          >
+            GitHub
+          </a>
         </div>
       </div>
     </header>
