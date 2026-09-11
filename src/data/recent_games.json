@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-09-10T20:17:21.377914+00:00",
+  "updated_at": "2026-09-11T02:21:59.000633+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-09-10T20:10Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "result": "L",
+      "type": "game",
+      "opponent": "Seattle Mariners",
+      "team_score": 3,
+      "opponent_score": 4,
+      "score_margin": 1,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-09T20:10Z",
       "team": "Texas Rangers",
@@ -51,19 +64,6 @@
       "team_score": 3,
       "opponent_score": 6,
       "score_margin": 3,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-09-05T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "L",
-      "type": "game",
-      "opponent": "Tampa Bay Rays",
-      "team_score": 6,
-      "opponent_score": 7,
-      "score_margin": 1,
       "is_home": true,
       "is_overtime": false
     },
