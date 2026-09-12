@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-12T02:29:13.145911+00:00",
+  "updated_at": "2026-09-12T09:52:48.769878+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-12T01:40Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "Arizona Diamondbacks",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Today",
       "datetime": "2026-09-12T16:00Z",
@@ -131,6 +122,15 @@
     {
       "date": "In 12 days",
       "datetime": "2026-09-24T00:05Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "opponent": "New York Mets",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-09-24T18:35Z",
       "team": "Texas Rangers",
       "sport": "MLB",
       "opponent": "New York Mets",
