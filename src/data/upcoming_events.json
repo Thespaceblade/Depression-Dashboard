@@ -1,18 +1,9 @@
 {
-  "updated_at": "2026-09-12T19:57:54.642158+00:00",
+  "updated_at": "2026-09-13T02:28:07.325422+00:00",
   "source": "espn",
   "events": [
     {
       "date": "Today",
-      "datetime": "2026-09-12T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "opponent": "East Tennessee State Buccaneers",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "Tomorrow",
       "datetime": "2026-09-13T00:10Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -21,7 +12,7 @@
       "is_home": false
     },
     {
-      "date": "Tomorrow",
+      "date": "Today",
       "datetime": "2026-09-13T20:10Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -30,7 +21,7 @@
       "is_home": false
     },
     {
-      "date": "In 2 days",
+      "date": "Tomorrow",
       "datetime": "2026-09-14T00:20Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -39,7 +30,7 @@
       "is_home": false
     },
     {
-      "date": "In 4 days",
+      "date": "In 3 days",
       "datetime": "2026-09-16T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -48,7 +39,7 @@
       "is_home": true
     },
     {
-      "date": "In 5 days",
+      "date": "In 4 days",
       "datetime": "2026-09-17T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -57,7 +48,7 @@
       "is_home": true
     },
     {
-      "date": "In 6 days",
+      "date": "In 5 days",
       "datetime": "2026-09-18T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -66,7 +57,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-09-19T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -75,7 +66,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-09-19T16:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
@@ -84,7 +75,7 @@
       "is_home": false
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-09-19T23:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -93,7 +84,7 @@
       "is_home": true
     },
     {
-      "date": "In 8 days",
+      "date": "In 7 days",
       "datetime": "2026-09-20T18:35Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -102,7 +93,7 @@
       "is_home": true
     },
     {
-      "date": "In 8 days",
+      "date": "In 7 days",
       "datetime": "2026-09-20T20:25Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -111,7 +102,7 @@
       "is_home": true
     },
     {
-      "date": "In 11 days",
+      "date": "In 10 days",
       "datetime": "2026-09-23T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -120,7 +111,7 @@
       "is_home": true
     },
     {
-      "date": "In 12 days",
+      "date": "In 11 days",
       "datetime": "2026-09-24T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -129,13 +120,22 @@
       "is_home": true
     },
     {
-      "date": "In 12 days",
+      "date": "In 11 days",
       "datetime": "2026-09-24T18:35Z",
       "team": "Texas Rangers",
       "sport": "MLB",
       "opponent": "New York Mets",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 13 days",
+      "datetime": "2026-09-26T00:10Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "opponent": "Minnesota Twins",
+      "type": "game",
+      "is_home": false
     }
   ]
 }

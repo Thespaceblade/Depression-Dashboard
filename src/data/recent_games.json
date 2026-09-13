@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-09-12T19:57:54.892973+00:00",
+  "updated_at": "2026-09-13T02:28:07.911344+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-09-12T16:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "W",
+      "type": "game",
+      "opponent": "East Tennessee State Buccaneers",
+      "team_score": 35,
+      "opponent_score": 3,
+      "score_margin": 32,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-12T01:40Z",
       "team": "Texas Rangers",
@@ -246,19 +259,6 @@
       "team_score": 67,
       "opponent_score": 63,
       "score_margin": 4,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-01T01:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Virginia Tech Hokies",
-      "team_score": 89,
-      "opponent_score": 82,
-      "score_margin": 7,
       "is_home": true,
       "is_overtime": false
     }
