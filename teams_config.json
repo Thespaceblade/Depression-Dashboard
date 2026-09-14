@@ -5,7 +5,7 @@
       "sport": "NFL",
       "record": {
         "wins": 0,
-        "losses": 0,
+        "losses": 1,
         "ties": 0
       },
       "expected_performance": 8,
@@ -16,7 +16,9 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
+      "recent_streak": [
+        "L"
+      ],
       "recent_opponents": [],
       "recent_opponent_records": [],
       "recent_game_locations": [],

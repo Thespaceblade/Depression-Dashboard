@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-09-14T02:44:49.605597+00:00",
+  "updated_at": "2026-09-14T11:23:40.688963+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-09-14T00:20Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "L",
+      "type": "game",
+      "opponent": "New York Giants",
+      "team_score": 20,
+      "opponent_score": 28,
+      "score_margin": 8,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-13T20:10Z",
       "team": "Texas Rangers",
@@ -247,19 +260,6 @@
       "opponent_score": 76,
       "score_margin": 15,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-04T00:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Clemson Tigers",
-      "team_score": 67,
-      "opponent_score": 63,
-      "score_margin": 4,
-      "is_home": true,
       "is_overtime": false
     }
   ]

@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-14T02:44:48.988623+00:00",
+  "updated_at": "2026-09-14T11:23:39.972893+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-14T00:20Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "opponent": "New York Giants",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "In 2 days",
       "datetime": "2026-09-16T00:05Z",
@@ -136,6 +127,15 @@
       "opponent": "Minnesota Twins",
       "type": "game",
       "is_home": false
+    },
+    {
+      "date": "In 13 days",
+      "datetime": "2026-09-27T20:25Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Baltimore Ravens",
+      "type": "game",
+      "is_home": true
     }
   ]
 }
