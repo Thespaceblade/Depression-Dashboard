@@ -7,6 +7,11 @@ export interface Team {
   win_percentage: number;
   recent_streak: string[];
   depression_points: number;
+  scaled_score?: number;
+  mood_impact?: number;
+  recency_factor?: number;
+  from_prior_season?: number | null;
+  is_offseason?: boolean;
   breakdown: Record<string, number>;
   expected_performance?: number;
   jasons_expectations?: number;
@@ -28,6 +33,10 @@ export interface DepressionData {
     details?: Record<string, number>;
     record?: string;
     position?: string;
+    mood_impact?: number;
+    recency_factor?: number;
+    from_prior_season?: number | null;
+    is_offseason?: boolean;
   }>;
   timestamp: string;
 }

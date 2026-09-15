@@ -12,48 +12,63 @@ export default function DepressionScoreCard({ data }: Props) {
 
   return (
     <>
-      <section className="relative min-h-[88vh] sm:min-h-[92vh] w-full overflow-hidden animate-flood-in">
-        {moodUrl && (
-          <img
-            src={moodUrl}
-            alt=""
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-field via-field/55 to-field/20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-field/70 via-transparent to-field/40" />
+      <section className="relative w-full overflow-hidden animate-flood-in">
+        {/* Atmosphere only — mood photo is a reaction box, not the hero plane */}
+        <div className="absolute inset-0 bg-gradient-to-br from-flood via-field to-field" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(255,176,0,0.16),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_90%_80%,rgba(61,220,132,0.06),transparent_45%)]" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 min-h-[88vh] sm:min-h-[92vh] flex flex-col justify-end pb-12 sm:pb-16 pt-24">
-          <p className="label-caps text-led mb-3">Live emotional scoreboard</p>
-          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-[0.95] tracking-tight text-ink max-w-4xl">
-            Depression
-            <br />
-            Dashboard
-          </h1>
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-20 sm:pt-24 pb-12 sm:pb-16">
+          <div className="grid lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.85fr)] gap-8 lg:gap-12 items-end">
+            <div>
+              <p className="label-caps text-led mb-3">Live emotional scoreboard</p>
+              <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl uppercase leading-[0.95] tracking-tight text-ink">
+                Depression
+                <br />
+                Dashboard
+              </h1>
 
-          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-8">
-            <div className="animate-score-tick">
-              <p className="label-caps mb-1">Score</p>
-              <p className="font-mono text-6xl sm:text-7xl md:text-8xl font-semibold tabular-nums text-led leading-none">
-                {data.score.toFixed(1)}
-              </p>
+              <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-8">
+                <div className="animate-score-tick">
+                  <p className="label-caps mb-1">Score</p>
+                  <p className="font-mono text-6xl sm:text-7xl md:text-8xl font-semibold tabular-nums text-led leading-none">
+                    {data.score.toFixed(1)}
+                  </p>
+                </div>
+                <div className="pb-1 sm:pb-2">
+                  <p className="font-display text-2xl sm:text-3xl uppercase text-ink tracking-wide">
+                    {data.level}
+                  </p>
+                  <p className="mt-2 max-w-md text-sm sm:text-base text-muted leading-relaxed">
+                    How Jason&apos;s teams are treating his mood right now — current season hits harder than last season&apos;s leftovers.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setShowInfo(true)}
+                    className="util-link mt-3 inline-block border-b border-led/40 pb-0.5 hover:border-led"
+                    aria-label="Learn more about the depression score"
+                  >
+                    How the score works
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="pb-1 sm:pb-2">
-              <p className="font-display text-2xl sm:text-3xl uppercase text-ink tracking-wide">
-                {data.level}
-              </p>
-              <p className="mt-2 max-w-md text-sm sm:text-base text-muted leading-relaxed">
-                How bad it is for Jason&apos;s teams: wins, losses, and expectation gaps, scored in real time.
-              </p>
-              <button
-                type="button"
-                onClick={() => setShowInfo(true)}
-                className="util-link mt-3 inline-block border-b border-led/40 pb-0.5 hover:border-led"
-                aria-label="Learn more about the depression score"
-              >
-                How the score works
-              </button>
-            </div>
+
+            {moodUrl && (
+              <aside className="justify-self-start lg:justify-self-end w-full max-w-sm">
+                <p className="label-caps text-muted mb-2">Reaction</p>
+                <figure className="border border-line bg-panel/40 overflow-hidden">
+                  <img
+                    src={moodUrl}
+                    alt={`Mood reaction: ${data.level}`}
+                    className="block w-full aspect-[4/5] object-cover"
+                  />
+                  <figcaption className="px-3 py-2 border-t border-line font-mono text-xs uppercase tracking-wider text-muted">
+                    {data.level}
+                  </figcaption>
+                </figure>
+              </aside>
+            )}
           </div>
         </div>
       </section>
@@ -94,7 +109,7 @@ export default function DepressionScoreCard({ data }: Props) {
                 <p className="label-caps text-led mb-2">How it works</p>
                 <p>
                   Recent games, losses, rivalries, blowouts, and expectation gaps across Jason&apos;s teams feed the score.
-                  Newer results weigh more. Wins can pull it down, especially unexpected ones.
+                  Newer results weigh more. Prior-season and deep-offseason records fade the longer those games are behind him.
                 </p>
               </div>
             </div>
