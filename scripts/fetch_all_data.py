@@ -28,6 +28,23 @@ def main():
         fetcher.update_config_file(config_path)
         print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] ✅ Data fetch complete!")
 
+        # Belt-and-suspenders: Vercel reads src/data/teams_config.json (includeFiles src/**).
+        mirror_path = os.path.join(parent_dir, "src", "data", "teams_config.json")
+        try:
+            import shutil
+
+            os.makedirs(os.path.dirname(mirror_path), exist_ok=True)
+            shutil.copy2(config_path, mirror_path)
+            print(
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+                f"✅ Synced Vercel mirror -> {mirror_path}"
+            )
+        except Exception as mirror_err:  # noqa: BLE001
+            print(
+                f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
+                f"⚠️  Failed to sync teams_config mirror: {mirror_err}"
+            )
+
         # Refresh upcoming snapshot for Vercel (live ESPN often blocked there).
         try:
             events = fetch_upcoming_events(limit=15, allow_snapshot=False)
