@@ -4,6 +4,7 @@ Sports API Integration Module
 Fetches scores and data from various sports APIs
 """
 
+import os
 import requests
 from typing import Dict, Optional, List, Tuple
 from datetime import datetime, timedelta
