@@ -5,7 +5,7 @@
       "sport": "NFL",
       "record": {
         "wins": 0,
-        "losses": 0,
+        "losses": 1,
         "ties": 0
       },
       "expected_performance": 8,
@@ -16,7 +16,9 @@
         "Washington Commanders"
       ],
       "recent_rivalry_losses": [],
-      "recent_streak": [],
+      "recent_streak": [
+        "L"
+      ],
       "recent_opponents": [],
       "recent_opponent_records": [],
       "recent_game_locations": [],
@@ -163,8 +165,8 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 71,
-        "losses": 73,
+        "wins": 74,
+        "losses": 76,
         "ties": 0
       },
       "expected_performance": 5,
@@ -267,7 +269,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "record": {
-        "wins": 1,
+        "wins": 2,
         "losses": 0,
         "ties": 0
       },
@@ -281,6 +283,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "W"
       ],
       "recent_opponents": [],
