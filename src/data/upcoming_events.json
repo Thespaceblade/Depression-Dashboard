@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-17T02:46:43.507170+00:00",
+  "updated_at": "2026-09-17T10:45:11.813520+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-17T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "Boston Red Sox",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-09-18T00:05Z",
@@ -136,6 +127,15 @@
       "opponent": "Notre Dame Fighting Irish",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 17 days",
+      "datetime": "2026-10-04T17:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Houston Texans",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
