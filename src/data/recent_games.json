@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-09-19T15:07:58.296310+00:00",
+  "updated_at": "2026-09-19T19:51:04.059045+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-09-19T16:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "W",
+      "type": "game",
+      "opponent": "Clemson Tigers",
+      "team_score": 17,
+      "opponent_score": 15,
+      "score_margin": 2,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-19T00:05Z",
       "team": "Texas Rangers",
@@ -247,19 +260,6 @@
       "opponent_score": 80,
       "score_margin": 1,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-07T23:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "L",
-      "type": "game",
-      "opponent": "Duke Blue Devils",
-      "team_score": 61,
-      "opponent_score": 76,
-      "score_margin": 15,
-      "is_home": false,
       "is_overtime": false
     }
   ]
