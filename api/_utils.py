@@ -77,3 +77,46 @@ def error_response(error, status_code=500, details=None):
     if details:
         data['details'] = details
     return json_response(data, status_code)
+
+
+def _team_payload(team, team_result):
+    """Build API team dict including mood-impact sort key."""
+    MIN_RAW, MAX_RAW = -50.0, 100.0
+    raw = float(team_result.get("score") or 0)
+    scaled = ((raw - MIN_RAW) / (MAX_RAW - MIN_RAW)) * 100.0
+    scaled = max(0.0, min(100.0, scaled))
+    weight = team.impact_weight() if hasattr(team, "impact_weight") else float(getattr(team, "interest_level", 1.0) or 1.0)
+    mood_impact = abs(scaled - 50.0) * weight
+    total_games = team.wins + team.losses + getattr(team, "ties", 0)
+    win_percentage = round((team.wins / total_games * 100), 1) if total_games else 0
+    return {
+        "name": team.name,
+        "sport": team.sport,
+        "wins": team.wins,
+        "losses": team.losses,
+        "ties": getattr(team, "ties", 0),
+        "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if getattr(team, "ties", 0) else ""),
+        "win_percentage": win_percentage,
+        "recent_streak": team.recent_streak,
+        "depression_points": round(raw, 1),
+        "scaled_score": round(scaled, 1),
+        "mood_impact": round(mood_impact, 2),
+        "recency_factor": round(
+            float(
+                team_result.get("recency_factor")
+                if team_result.get("recency_factor") is not None
+                else (team.season_recency_factor() if hasattr(team, "season_recency_factor") else 1.0)
+            ),
+            3,
+        ),
+        "from_prior_season": getattr(team, "from_prior_season", None),
+        "is_offseason": team.is_in_offseason() if hasattr(team, "is_in_offseason") else False,
+        "breakdown": team_result.get("breakdown", {}),
+        "expected_performance": team.expected_performance,
+        "jasons_expectations": team.jasons_expectations,
+        "rivals": team.rivals,
+        "recent_rivalry_losses": team.recent_rivalry_losses,
+        "interest_level": team.interest_level,
+        "notes": team.notes,
+    }
+

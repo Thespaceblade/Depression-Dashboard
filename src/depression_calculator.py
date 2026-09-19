@@ -110,6 +110,9 @@ class Team:
     interest_level: float = 1.0  # Multiplier for teams Jason cares less about
     notes: str = ""
     is_offseason: bool = False  # True if team is in offseason
+    # ESPN season year when record came from a prior schedule (e.g. 2025).
+    # None means current-season / live record.
+    from_prior_season: Optional[int] = None
     
     # Game Context Parameters
     recent_game_locations: List[str] = field(default_factory=list)  # "home" or "away" for each recent game
@@ -152,9 +155,7 @@ class Team:
     
     def is_in_offseason(self) -> bool:
         """Check if team is currently in offseason based on sport and date"""
-        from datetime import datetime
         current_month = datetime.now().month
-        current_date = datetime.now()
         
         if self.sport == "MLB":
             # MLB season: March/April - October
@@ -176,6 +177,70 @@ class Team:
             else:  # NCAA Football
                 return current_month in [2, 3, 4, 5, 6, 7]
         return False
+
+    def _months_since_season_ended(self) -> int:
+        """Rough months since this sport's typical season end (for recency decay)."""
+        now = datetime.now()
+        # Typical end months (1-12)
+        end_month = {
+            "MLB": 10,
+            "NFL": 2,
+            "NBA": 6,
+            "NCAA Basketball": 4,
+            "NCAA Football": 1,
+        }.get(self.sport, now.month)
+
+        end_year = now.year
+        if self.from_prior_season:
+            # Prior season year is usually the year the season started / ESPN season id.
+            # Treat season end as end_month of that year (or next year for fall sports).
+            end_year = int(self.from_prior_season)
+            if self.sport in ("NFL", "NBA", "NCAA Football") and end_month <= 6:
+                end_year = int(self.from_prior_season) + 1
+        else:
+            # Most recent completed season end relative to now
+            if now.month < end_month or (now.month == end_month and now.day < 15):
+                end_year = now.year - 1
+                if self.sport in ("NFL", "NBA", "NCAA Football") and end_month <= 6:
+                    # end_month already in next calendar year after start year
+                    end_year = now.year - 1
+
+        # Build an approximate end date at mid-month
+        end_date = datetime(end_year, end_month, 15)
+        if end_date > now:
+            end_date = datetime(end_year - 1, end_month, 15)
+        months = (now.year - end_date.year) * 12 + (now.month - end_date.month)
+        return max(0, months)
+
+    def season_recency_factor(self) -> float:
+        """
+        How much this team's record should still move Jason's mood.
+
+        Current in-season live records: 1.0
+        Offseason / prior-season: decays the longer those games are in the past.
+        """
+        self.is_offseason = self.is_in_offseason()
+        using_stale_record = bool(self.from_prior_season) or self.is_offseason
+        if not using_stale_record:
+            return 1.0
+
+        months = self._months_since_season_ended()
+        # Prior-season flag means those results are at least one full season away —
+        # never treat them as fresh even if calendar months look short.
+        if self.from_prior_season:
+            months = max(months, 4)
+
+        if months <= 1:
+            return 0.18
+        if months <= 3:
+            return 0.08
+        if months <= 6:
+            return 0.04
+        return 0.015
+
+    def impact_weight(self) -> float:
+        """Weight used in the overall score — interest × season recency."""
+        return max(0.0, float(self.interest_level)) * self.season_recency_factor()
     
     def calculate_depression(self) -> Dict[str, float]:
         """Calculate depression contribution from this team"""
@@ -194,15 +259,12 @@ class Team:
             for team_name in individual_game_teams
         ) or self.sport == "F1"
         
-        # Check if in offseason
-        self.is_offseason = self.is_in_offseason()
-        
-        # If in offseason, drastically reduce impact (only 1% of normal - hardly any impact)
-        offseason_multiplier = 0.01 if self.is_offseason else 1.0
+        # Offseason / prior-season records fade with time (not a flat 1%).
+        recency = self.season_recency_factor()
         
         total_games = self.wins + self.losses
         if total_games == 0:
-            return {"score": 0, "breakdown": {}}
+            return {"score": 0, "breakdown": {}, "recency_factor": recency}
         
         win_pct = self.wins / total_games
         
@@ -629,18 +691,23 @@ class Team:
                     score += streak_bonus
                     breakdown[f"Recent Consecutive Wins (minimal)"] = streak_bonus
         
-        # Apply offseason multiplier to final score
-        final_score = score * offseason_multiplier
+        # Fade stale / prior-season results (longer away ⇒ less effect)
+        final_score = score * recency
         
-        # Update breakdown values if in offseason
-        if self.is_offseason and score > 0:
-            breakdown["Offseason (reduced impact)"] = final_score - score
+        if recency < 1.0 and score != 0:
+            label = (
+                "Prior season (faded)"
+                if self.from_prior_season
+                else "Offseason (faded with time)"
+            )
+            breakdown[label] = final_score - score
         
         return {
             "score": final_score,
             "breakdown": breakdown,
             "win_pct": win_pct,
-            "expected_win_pct": expected_win_pct
+            "expected_win_pct": expected_win_pct,
+            "recency_factor": recency,
         }
 
 
@@ -1004,7 +1071,8 @@ class DepressionCalculator:
                 "current_win_streak": team.current_win_streak,
                 "current_lose_streak": team.current_lose_streak,
                 "interest_level": team.interest_level,
-                "notes": team.notes
+                "notes": team.notes,
+                "from_prior_season": team.from_prior_season,
             })
         
         if self.f1_driver:
@@ -1096,7 +1164,8 @@ class DepressionCalculator:
                 current_win_streak=team_data.get("current_win_streak", 0),
                 current_lose_streak=team_data.get("current_lose_streak", 0),
                 interest_level=team_data.get("interest_level", 1.0),
-                notes=team_data.get("notes", "")
+                notes=team_data.get("notes", ""),
+                from_prior_season=team_data.get("from_prior_season"),
                 )
                 self.teams.append(team)
             except KeyError as e:
@@ -1228,6 +1297,10 @@ class DepressionCalculator:
         MIN_RAW_SCORE = -50.0  # Best possible for a single team
         MAX_RAW_SCORE = 100.0  # Worst possible for a single team
         
+        name_counts = {}
+        for team in self.teams:
+            name_counts[team.name] = name_counts.get(team.name, 0) + 1
+
         # Team contributions - scale each to 0-100 first
         for team in self.teams:
             result = team.calculate_depression()
@@ -1237,18 +1310,30 @@ class DepressionCalculator:
             team_scaled = ((team_raw_score - MIN_RAW_SCORE) / (MAX_RAW_SCORE - MIN_RAW_SCORE)) * 100.0
             team_scaled = max(0.0, min(100.0, team_scaled))  # Clamp to [0, 100]
             
-            # Weight by interest_level (teams you care more about have more impact)
-            weight = team.interest_level
+            # Weight by interest × season-recency so prior-season teams
+            # don't keep equal pull on the overall mood.
+            weight = team.impact_weight()
             scaled_scores.append((team_scaled, weight))
             total_weight += weight
             
-            # Store in breakdown (show scaled score for consistency)
-            if team_raw_score != 0:
-                breakdown[team.name] = {
+            mood_impact = abs(team_scaled - 50.0) * weight
+            # Disambiguate same-name teams (e.g. UNC BB + FB) so both appear
+            # and can be sorted by mood_impact on the client.
+            label = (
+                f"{team.name} ({team.sport})"
+                if name_counts.get(team.name, 0) > 1
+                else team.name
+            )
+            if team_raw_score != 0 or mood_impact > 0:
+                breakdown[label] = {
                     "score": team_scaled,  # Show scaled score in breakdown
                     "raw_score": team_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
-                    "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else "")
+                    "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else ""),
+                    "mood_impact": mood_impact,
+                    "recency_factor": result.get("recency_factor", team.season_recency_factor()),
+                    "from_prior_season": team.from_prior_season,
+                    "is_offseason": team.is_in_offseason(),
                 }
         
         # F1 contribution - scale to 0-100
@@ -1270,7 +1355,8 @@ class DepressionCalculator:
                     "score": f1_scaled,  # Show scaled score
                     "raw_score": f1_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
-                    "position": f"P{self.f1_driver.championship_position}"
+                    "position": f"P{self.f1_driver.championship_position}",
+                    "mood_impact": abs(f1_scaled - 50.0) * weight,
                 }
         
         # Fantasy contribution - scale to 0-100
@@ -1292,7 +1378,8 @@ class DepressionCalculator:
                     "score": fantasy_scaled,  # Show scaled score
                     "raw_score": fantasy_raw_score,  # Keep raw for reference
                     "details": result["breakdown"],
-                    "record": f"{self.fantasy_team.wins}-{self.fantasy_team.losses}"
+                    "record": f"{self.fantasy_team.wins}-{self.fantasy_team.losses}",
+                    "mood_impact": abs(fantasy_scaled - 50.0) * weight,
                 }
         
         # Calculate weighted average of all scaled scores
