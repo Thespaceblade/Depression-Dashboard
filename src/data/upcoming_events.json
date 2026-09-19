@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-19T02:32:29.960812+00:00",
+  "updated_at": "2026-09-19T10:04:06.990927+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-19T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "Toronto Blue Jays",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Today",
       "datetime": "2026-09-19T16:00Z",
@@ -136,6 +127,15 @@
       "opponent": "LA Clippers",
       "type": "game",
       "is_home": false
+    },
+    {
+      "date": "In 18 days",
+      "datetime": "2026-10-07T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Los Angeles Lakers",
+      "type": "game",
+      "is_home": true
     }
   ]
 }
