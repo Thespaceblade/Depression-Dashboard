@@ -165,7 +165,7 @@
       "name": "Texas Rangers",
       "sport": "MLB",
       "record": {
-        "wins": 77,
+        "wins": 78,
         "losses": 77,
         "ties": 0
       },
@@ -270,7 +270,7 @@
       "sport": "NCAA Football",
       "record": {
         "wins": 2,
-        "losses": 0,
+        "losses": 1,
         "ties": 0
       },
       "expected_performance": 8,

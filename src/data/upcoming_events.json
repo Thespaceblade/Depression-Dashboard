@@ -1,27 +1,9 @@
 {
-  "updated_at": "2026-09-19T19:51:03.434659+00:00",
+  "updated_at": "2026-09-20T02:43:57.785470+00:00",
   "source": "espn",
   "events": [
     {
       "date": "Today",
-      "datetime": "2026-09-19T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "opponent": "Clemson Tigers",
-      "type": "game",
-      "is_home": false
-    },
-    {
-      "date": "Today",
-      "datetime": "2026-09-19T23:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "Toronto Blue Jays",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "Tomorrow",
       "datetime": "2026-09-20T18:35Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -30,7 +12,7 @@
       "is_home": true
     },
     {
-      "date": "Tomorrow",
+      "date": "Today",
       "datetime": "2026-09-20T20:25Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -39,7 +21,7 @@
       "is_home": true
     },
     {
-      "date": "In 4 days",
+      "date": "In 3 days",
       "datetime": "2026-09-23T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -48,7 +30,7 @@
       "is_home": true
     },
     {
-      "date": "In 5 days",
+      "date": "In 4 days",
       "datetime": "2026-09-24T00:05Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -57,7 +39,7 @@
       "is_home": true
     },
     {
-      "date": "In 5 days",
+      "date": "In 4 days",
       "datetime": "2026-09-24T18:35Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -66,7 +48,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-09-26T00:10Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -75,7 +57,7 @@
       "is_home": false
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-09-26T20:10Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -84,7 +66,7 @@
       "is_home": false
     },
     {
-      "date": "In 8 days",
+      "date": "In 7 days",
       "datetime": "2026-09-27T19:10Z",
       "team": "Texas Rangers",
       "sport": "MLB",
@@ -93,7 +75,7 @@
       "is_home": false
     },
     {
-      "date": "In 8 days",
+      "date": "In 7 days",
       "datetime": "2026-09-27T20:25Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -102,7 +84,7 @@
       "is_home": true
     },
     {
-      "date": "In 14 days",
+      "date": "In 13 days",
       "datetime": "2026-10-03T04:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
@@ -111,7 +93,7 @@
       "is_home": true
     },
     {
-      "date": "In 15 days",
+      "date": "In 14 days",
       "datetime": "2026-10-04T17:00Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -120,7 +102,7 @@
       "is_home": false
     },
     {
-      "date": "In 15 days",
+      "date": "In 14 days",
       "datetime": "2026-10-04T23:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -129,11 +111,29 @@
       "is_home": false
     },
     {
-      "date": "In 18 days",
+      "date": "In 17 days",
       "datetime": "2026-10-07T02:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
       "opponent": "Los Angeles Lakers",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 18 days",
+      "datetime": "2026-10-08T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Portland Trail Blazers",
+      "type": "game",
+      "is_home": false
+    },
+    {
+      "date": "In 19 days",
+      "datetime": "2026-10-09T00:15Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Tampa Bay Buccaneers",
       "type": "game",
       "is_home": true
     }
