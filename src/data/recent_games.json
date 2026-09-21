@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-09-20T20:05:18.563276+00:00",
+  "updated_at": "2026-09-21T02:41:05.645122+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-09-20T20:25Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "W",
+      "type": "game",
+      "opponent": "Washington Commanders",
+      "team_score": 37,
+      "opponent_score": 20,
+      "score_margin": 17,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-09-20T18:35Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "result": "L",
+      "type": "game",
+      "opponent": "Toronto Blue Jays",
+      "team_score": 2,
+      "opponent_score": 7,
+      "score_margin": 5,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-19T23:05Z",
       "team": "Texas Rangers",
@@ -64,19 +90,6 @@
       "team_score": 7,
       "opponent_score": 3,
       "score_margin": 4,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-09-16T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "W",
-      "type": "game",
-      "opponent": "Boston Red Sox",
-      "team_score": 4,
-      "opponent_score": 2,
-      "score_margin": 2,
       "is_home": true,
       "is_overtime": false
     },
@@ -246,19 +259,6 @@
       "team_score": 134,
       "opponent_score": 128,
       "score_margin": 6,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-13T01:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "L",
-      "type": "game",
-      "opponent": "Clemson Tigers",
-      "team_score": 79,
-      "opponent_score": 80,
-      "score_margin": 1,
       "is_home": true,
       "is_overtime": false
     }
