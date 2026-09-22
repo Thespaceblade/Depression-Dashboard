@@ -105,7 +105,8 @@
       "current_win_streak": 0,
       "current_lose_streak": 0,
       "interest_level": 1.0,
-      "notes": "Luka magic"
+      "notes": "Luka magic",
+      "from_prior_season": 2025
     },
     {
       "name": "Golden State Warriors",
@@ -160,7 +161,8 @@
       "current_win_streak": 0,
       "current_lose_streak": 0,
       "interest_level": 1.0,
-      "notes": "Dynasty team"
+      "notes": "Dynasty team",
+      "from_prior_season": 2025
     },
     {
       "name": "Texas Rangers",
@@ -264,7 +266,8 @@
       "current_win_streak": 0,
       "current_lose_streak": 0,
       "interest_level": 1.0,
-      "notes": "College basketball - high expectations"
+      "notes": "College basketball - high expectations",
+      "from_prior_season": 2025
     },
     {
       "name": "North Carolina Tar Heels",

@@ -40,7 +40,23 @@ export default function TeamCard({ team, activityLabel }: Props) {
             {team.sport}
             <span className="mx-2 text-line">/</span>
             {team.win_percentage.toFixed(1)}%
+            {typeof team.mood_impact === 'number' && (
+              <>
+                <span className="mx-2 text-line">/</span>
+                {team.mood_impact.toFixed(1)} mood
+              </>
+            )}
           </p>
+          {(team.from_prior_season || (typeof team.recency_factor === 'number' && team.recency_factor < 1)) && (
+            <p className="mt-1 text-xs text-muted">
+              {team.from_prior_season
+                ? `Prior season (${team.from_prior_season}) — faded impact`
+                : 'Offseason — faded impact'}
+              {typeof team.recency_factor === 'number' && (
+                <span className="font-mono"> · ×{team.recency_factor.toFixed(2)}</span>
+              )}
+            </p>
+          )}
           {activityLabel && (
             <p className="mt-2 text-xs text-muted line-clamp-2">{activityLabel}</p>
           )}
