@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-23T02:43:37.427703+00:00",
+  "updated_at": "2026-09-23T10:34:04.424478+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-23T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "New York Mets",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-09-24T00:05Z",
@@ -136,6 +127,15 @@
       "opponent": "Pittsburgh Panthers",
       "type": "game",
       "is_home": false
+    },
+    {
+      "date": "In 18 days",
+      "datetime": "2026-10-11T00:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Sacramento Kings",
+      "type": "game",
+      "is_home": true
     }
   ]
 }
