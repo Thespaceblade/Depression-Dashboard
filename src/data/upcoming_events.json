@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-09-24T02:32:21.330066+00:00",
+  "updated_at": "2026-09-24T10:52:21.502105+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-09-24T00:05Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "opponent": "New York Mets",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Today",
       "datetime": "2026-09-24T18:35Z",
@@ -136,6 +127,15 @@
       "opponent": "Sacramento Kings",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 17 days",
+      "datetime": "2026-10-11T10:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "Houston Rockets",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
