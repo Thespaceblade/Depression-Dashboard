@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-03T15:31:17.519287+00:00",
+  "updated_at": "2026-10-03T20:26:02.608580+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-03T16:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "L",
+      "type": "game",
+      "opponent": "Notre Dame Fighting Irish",
+      "team_score": 26,
+      "opponent_score": 37,
+      "score_margin": 11,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-09-27T20:25Z",
       "team": "Dallas Cowboys",
@@ -246,19 +259,6 @@
       "team_score": 67,
       "opponent_score": 63,
       "score_margin": 4,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-01T01:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Virginia Tech Hokies",
-      "team_score": 89,
-      "opponent_score": 82,
-      "score_margin": 7,
       "is_home": true,
       "is_overtime": false
     }
