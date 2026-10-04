@@ -4,7 +4,7 @@
       "name": "Dallas Cowboys",
       "sport": "NFL",
       "record": {
-        "wins": 1,
+        "wins": 2,
         "losses": 2,
         "ties": 0
       },
@@ -17,6 +17,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "L"
