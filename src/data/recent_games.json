@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-07T03:37:56.831723+00:00",
+  "updated_at": "2026-10-07T12:25:27.403655+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-07T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Los Angeles Lakers",
+      "team_score": 124,
+      "opponent_score": 98,
+      "score_margin": 26,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-04T23:00Z",
       "team": "Golden State Warriors",
@@ -247,19 +260,6 @@
       "opponent_score": 74,
       "score_margin": 3,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2025-09-28T19:10Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "L",
-      "type": "game",
-      "opponent": "Cleveland Guardians",
-      "team_score": 8,
-      "opponent_score": 9,
-      "score_margin": 1,
-      "is_home": false,
       "is_overtime": false
     }
   ]
