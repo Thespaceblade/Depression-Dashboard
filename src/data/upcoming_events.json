@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-08T03:51:58.860770+00:00",
+  "updated_at": "2026-10-08T12:34:49.936499+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-08T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "Portland Trail Blazers",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-10-09T00:15Z",
@@ -134,6 +125,15 @@
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "opponent": "Miami Hurricanes",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 24 days",
+      "datetime": "2026-11-01T18:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Arizona Cardinals",
       "type": "game",
       "is_home": true
     }
