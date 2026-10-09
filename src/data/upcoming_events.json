@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-09T12:22:44.353568+00:00",
+  "updated_at": "2026-10-09T22:04:54.982787+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-09T12:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Houston Rockets",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-10-10T16:00Z",
@@ -134,6 +125,15 @@
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "opponent": "UConn Huskies",
+      "type": "game",
+      "is_home": false
+    },
+    {
+      "date": "In 30 days",
+      "datetime": "2026-11-08T18:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Indianapolis Colts",
       "type": "game",
       "is_home": false
     }

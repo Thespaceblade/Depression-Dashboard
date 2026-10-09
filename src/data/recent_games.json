@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-09T12:22:45.031040+00:00",
+  "updated_at": "2026-10-09T22:04:55.425530+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-09T12:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Houston Rockets",
+      "team_score": 117,
+      "opponent_score": 135,
+      "score_margin": 18,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-09T00:15Z",
       "team": "Dallas Cowboys",
@@ -159,71 +172,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-04-13T00:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Chicago Bulls",
-      "team_score": 149,
-      "opponent_score": 128,
-      "score_margin": 21,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-04-11T00:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "San Antonio Spurs",
-      "team_score": 120,
-      "opponent_score": 139,
-      "score_margin": 19,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-04-09T02:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Phoenix Suns",
-      "team_score": 107,
-      "opponent_score": 112,
-      "score_margin": 5,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-04-08T02:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "LA Clippers",
-      "team_score": 103,
-      "opponent_score": 116,
-      "score_margin": 13,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-04-05T23:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Los Angeles Lakers",
-      "team_score": 134,
-      "opponent_score": 128,
-      "score_margin": 6,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-03-13T01:30Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
@@ -260,6 +208,58 @@
       "opponent_score": 63,
       "score_margin": 4,
       "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-03-01T01:30Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Basketball",
+      "result": "W",
+      "type": "game",
+      "opponent": "Virginia Tech Hokies",
+      "team_score": 89,
+      "opponent_score": 82,
+      "score_margin": 7,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-02-24T00:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Basketball",
+      "result": "W",
+      "type": "game",
+      "opponent": "Louisville Cardinals",
+      "team_score": 77,
+      "opponent_score": 74,
+      "score_margin": 3,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2025-09-28T19:10Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "result": "L",
+      "type": "game",
+      "opponent": "Cleveland Guardians",
+      "team_score": 8,
+      "opponent_score": 9,
+      "score_margin": 1,
+      "is_home": false,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2025-09-27T23:15Z",
+      "team": "Texas Rangers",
+      "sport": "MLB",
+      "result": "L",
+      "type": "game",
+      "opponent": "Cleveland Guardians",
+      "team_score": 2,
+      "opponent_score": 3,
+      "score_margin": 1,
+      "is_home": false,
       "is_overtime": false
     }
   ]
