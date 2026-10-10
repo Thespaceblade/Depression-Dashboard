@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-10T16:43:13.915222+00:00",
+  "updated_at": "2026-10-10T20:58:33.314242+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-10T16:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "W",
+      "type": "game",
+      "opponent": "Pittsburgh Panthers",
+      "team_score": 21,
+      "opponent_score": 17,
+      "score_margin": 4,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-09T12:00Z",
       "team": "Dallas Mavericks",
@@ -245,19 +258,6 @@
       "opponent": "Cleveland Guardians",
       "team_score": 8,
       "opponent_score": 9,
-      "score_margin": 1,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2025-09-27T23:15Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "L",
-      "type": "game",
-      "opponent": "Cleveland Guardians",
-      "team_score": 2,
-      "opponent_score": 3,
       "score_margin": 1,
       "is_home": false,
       "is_overtime": false
