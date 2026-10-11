@@ -110,7 +110,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 1,
+        "wins": 2,
         "losses": 2,
         "ties": 0
       },
@@ -123,6 +123,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "L"
@@ -339,7 +340,7 @@
   },
   "f1_driver": {
     "name": "Max Verstappen",
-    "championship_position": 6,
+    "championship_position": 5,
     "expected_performance": 10,
     "jasons_expectations": 10,
     "recent_races": [],
