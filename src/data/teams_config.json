@@ -213,8 +213,8 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
       "record": {
-        "wins": 22,
-        "losses": 13,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
       "expected_performance": 8,
