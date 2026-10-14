@@ -111,7 +111,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 2,
+        "wins": 3,
         "losses": 2,
         "ties": 0
       },
@@ -127,6 +127,7 @@
         "L",
         "W",
         "L",
+        "W",
         "W"
       ],
       "recent_opponents": [],

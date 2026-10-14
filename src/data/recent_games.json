@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-14T02:59:16.301048+00:00",
+  "updated_at": "2026-10-14T10:57:37.525282+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-14T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Los Angeles Lakers",
+      "team_score": 101,
+      "opponent_score": 89,
+      "score_margin": 12,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-11T10:00Z",
       "team": "Dallas Mavericks",
@@ -246,19 +259,6 @@
       "team_score": 67,
       "opponent_score": 63,
       "score_margin": 4,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-01T01:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Virginia Tech Hokies",
-      "team_score": 89,
-      "opponent_score": 82,
-      "score_margin": 7,
       "is_home": true,
       "is_overtime": false
     }
