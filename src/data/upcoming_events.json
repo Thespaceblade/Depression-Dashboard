@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-15T02:38:15.515760+00:00",
+  "updated_at": "2026-10-15T10:38:40.469648+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-15T00:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "New Orleans Pelicans",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "In 2 days",
       "datetime": "2026-10-17T00:00Z",
@@ -134,6 +125,15 @@
       "team": "Dallas Cowboys",
       "sport": "NFL",
       "opponent": "Tennessee Titans",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 42 days",
+      "datetime": "2026-11-26T21:30Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Philadelphia Eagles",
       "type": "game",
       "is_home": true
     }
