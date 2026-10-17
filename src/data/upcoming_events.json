@@ -1,25 +1,7 @@
 {
-  "updated_at": "2026-10-17T02:26:41.458199+00:00",
+  "updated_at": "2026-10-17T09:57:30.429143+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-17T00:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Atlanta Hawks",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "Today",
-      "datetime": "2026-10-17T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "Portland Trail Blazers",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Today",
       "datetime": "2026-10-17T19:30Z",
@@ -136,6 +118,24 @@
       "opponent": "Philadelphia Eagles",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 42 days",
+      "datetime": "2026-11-28T05:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "opponent": "NC State Wolfpack",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 52 days",
+      "datetime": "2026-12-08T01:15Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Seattle Seahawks",
+      "type": "game",
+      "is_home": false
     }
   ]
 }

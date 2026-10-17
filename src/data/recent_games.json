@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-10-17T02:26:41.865898+00:00",
+  "updated_at": "2026-10-17T09:57:30.603390+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-17T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Portland Trail Blazers",
+      "team_score": 128,
+      "opponent_score": 118,
+      "score_margin": 10,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-10-17T00:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Atlanta Hawks",
+      "team_score": 111,
+      "opponent_score": 135,
+      "score_margin": 24,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-15T00:00Z",
       "team": "Dallas Mavericks",
@@ -120,19 +146,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-10-04T23:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "LA Clippers",
-      "team_score": 101,
-      "opponent_score": 104,
-      "score_margin": 3,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-10-04T17:00Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -247,19 +260,6 @@
       "opponent_score": 80,
       "score_margin": 1,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-07T23:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "L",
-      "type": "game",
-      "opponent": "Duke Blue Devils",
-      "team_score": 61,
-      "opponent_score": 76,
-      "score_margin": 15,
-      "is_home": false,
       "is_overtime": false
     }
   ]
