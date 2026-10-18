@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-17T19:55:42.633721+00:00",
+  "updated_at": "2026-10-18T02:26:46.354038+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-17T19:30Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "W",
+      "type": "game",
+      "opponent": "Duke Blue Devils",
+      "team_score": 24,
+      "opponent_score": 20,
+      "score_margin": 4,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-10T16:00Z",
       "team": "North Carolina Tar Heels",
@@ -117,19 +130,6 @@
       "opponent_score": 3,
       "score_margin": 32,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-08-29T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "W",
-      "type": "game",
-      "opponent": "TCU Horned Frogs",
-      "team_score": 15,
-      "opponent_score": 10,
-      "score_margin": 5,
-      "is_home": false,
       "is_overtime": false
     },
     {
