@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-19T02:40:47.357253+00:00",
+  "updated_at": "2026-10-19T11:44:10.388972+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-19T00:20Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "L",
+      "type": "game",
+      "opponent": "Green Bay Packers",
+      "team_score": 13,
+      "opponent_score": 23,
+      "score_margin": 10,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-17T19:30Z",
       "team": "North Carolina Tar Heels",
@@ -100,19 +113,6 @@
       "result": "L",
       "type": "game",
       "opponent": "Clemson Tigers",
-      "team_score": 20,
-      "opponent_score": 28,
-      "score_margin": 8,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-09-14T00:20Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "result": "L",
-      "type": "game",
-      "opponent": "New York Giants",
       "team_score": 20,
       "opponent_score": 28,
       "score_margin": 8,
