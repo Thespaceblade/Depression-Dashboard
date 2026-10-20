@@ -59,8 +59,8 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 1,
-        "losses": 3,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
       "expected_performance": 7,
@@ -113,8 +113,8 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 4,
-        "losses": 2,
+        "wins": 0,
+        "losses": 0,
         "ties": 0
       },
       "expected_performance": 6,
