@@ -1203,86 +1203,62 @@ class SportsDataFetcher:
         
         if "teams" not in config:
             config["teams"] = []
+
+        def _apply_record(team: dict, payload: dict) -> None:
+            """Copy W-L (+ streak) and prior-season marker onto a config team."""
+            if "record" not in team:
+                team["record"] = {}
+            if "wins" in payload:
+                team["record"]["wins"] = int(payload["wins"])
+            if "losses" in payload:
+                team["record"]["losses"] = int(payload["losses"])
+            if "ties" in payload:
+                team["record"]["ties"] = int(payload["ties"])
+            elif "ties" not in team["record"] and team.get("sport") == "NFL":
+                team["record"]["ties"] = 0
+            if payload.get("recent_games"):
+                team["recent_streak"] = payload["recent_games"]
+            # Persist whether this W-L is from a prior ESPN season so scoring can fade it.
+            if payload.get("from_prior_season"):
+                team["from_prior_season"] = int(payload["from_prior_season"])
+            else:
+                team.pop("from_prior_season", None)
         
         # Update Cowboys
         if data['cowboys']:
             for team in config['teams']:
                 if 'cowboys' in team['name'].lower():
-                    # Ensure record structure exists
-                    if 'record' not in team:
-                        team['record'] = {}
-                    team['record']['wins'] = int(data['cowboys'].get('wins', team['record'].get('wins', 0)))
-                    team['record']['losses'] = int(data['cowboys'].get('losses', team['record'].get('losses', 0)))
-                    # Preserve ties if not in API data
-                    if 'ties' in data['cowboys']:
-                        team['record']['ties'] = int(data['cowboys']['ties'])
-                    elif 'ties' not in team['record']:
-                        team['record']['ties'] = 0
-                    if 'recent_games' in data['cowboys']:
-                        team['recent_streak'] = data['cowboys']['recent_games']
+                    _apply_record(team, data['cowboys'])
         
         # Update Mavericks
         if data['mavericks']:
             for team in config['teams']:
                 if 'mavericks' in team.get('name', '').lower():
-                    if 'record' not in team:
-                        team['record'] = {}
-                    if 'wins' in data['mavericks']:
-                        team['record']['wins'] = int(data['mavericks']['wins'])
-                    if 'losses' in data['mavericks']:
-                        team['record']['losses'] = int(data['mavericks']['losses'])
-                    if 'recent_games' in data['mavericks'] and data['mavericks']['recent_games']:
-                        team['recent_streak'] = data['mavericks']['recent_games']
+                    _apply_record(team, data['mavericks'])
         
         # Update Warriors
         if data['warriors']:
             for team in config['teams']:
                 if 'warriors' in team.get('name', '').lower():
-                    if 'record' not in team:
-                        team['record'] = {}
-                    if 'wins' in data['warriors']:
-                        team['record']['wins'] = int(data['warriors']['wins'])
-                    if 'losses' in data['warriors']:
-                        team['record']['losses'] = int(data['warriors']['losses'])
-                    if 'recent_games' in data['warriors'] and data['warriors']['recent_games']:
-                        team['recent_streak'] = data['warriors']['recent_games']
+                    _apply_record(team, data['warriors'])
         
         # Update Rangers
         if data['rangers']:
             for team in config['teams']:
                 if 'rangers' in team.get('name', '').lower() and team.get('sport') == 'MLB':
-                    if 'record' not in team:
-                        team['record'] = {}
-                    if 'wins' in data['rangers']:
-                        team['record']['wins'] = int(data['rangers']['wins'])
-                    if 'losses' in data['rangers']:
-                        team['record']['losses'] = int(data['rangers']['losses'])
+                    _apply_record(team, data['rangers'])
         
         # Update UNC Basketball
         if data['unc_basketball']:
             for team in config['teams']:
                 if 'tar heels' in team.get('name', '').lower() and team.get('sport') == 'NCAA Basketball':
-                    if 'record' not in team:
-                        team['record'] = {}
-                    if 'wins' in data['unc_basketball']:
-                        team['record']['wins'] = int(data['unc_basketball']['wins'])
-                    if 'losses' in data['unc_basketball']:
-                        team['record']['losses'] = int(data['unc_basketball']['losses'])
-                    if 'recent_games' in data['unc_basketball'] and data['unc_basketball']['recent_games']:
-                        team['recent_streak'] = data['unc_basketball']['recent_games']
+                    _apply_record(team, data['unc_basketball'])
         
         # Update UNC Football
         if data['unc_football']:
             for team in config['teams']:
                 if 'tar heels' in team.get('name', '').lower() and team.get('sport') == 'NCAA Football':
-                    if 'record' not in team:
-                        team['record'] = {}
-                    if 'wins' in data['unc_football']:
-                        team['record']['wins'] = int(data['unc_football']['wins'])
-                    if 'losses' in data['unc_football']:
-                        team['record']['losses'] = int(data['unc_football']['losses'])
-                    if 'recent_games' in data['unc_football'] and data['unc_football']['recent_games']:
-                        team['recent_streak'] = data['unc_football']['recent_games']
+                    _apply_record(team, data['unc_football'])
         
         # Update Verstappen
         if data['verstappen']:

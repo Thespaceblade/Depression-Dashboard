@@ -72,10 +72,17 @@ def get_teams():
     try:
         calc = get_calculator()
         teams_data = []
-        
-        # Get team data
+        MIN_RAW, MAX_RAW = -50.0, 100.0
+
+        def _mood(raw, weight=1.0):
+            scaled = max(0.0, min(100.0, ((float(raw) - MIN_RAW) / (MAX_RAW - MIN_RAW)) * 100.0))
+            return scaled, abs(scaled - 50.0) * weight
+
         for team in calc.teams:
             team_result = team.calculate_depression()
+            raw = float(team_result.get("score") or 0)
+            weight = team.impact_weight() if hasattr(team, "impact_weight") else float(getattr(team, "interest_level", 1.0) or 1.0)
+            scaled, mood_impact = _mood(raw, weight)
             total_games = team.wins + team.losses + getattr(team, 'ties', 0)
             win_percentage = round((team.wins / total_games * 100), 1) if total_games > 0 else 0
             teams_data.append({
@@ -87,7 +94,12 @@ def get_teams():
                 "record": f"{team.wins}-{team.losses}" + (f"-{team.ties}" if hasattr(team, 'ties') and team.ties > 0 else ""),
                 "win_percentage": win_percentage,
                 "recent_streak": team.recent_streak,
-                "depression_points": round(team_result["score"], 1),
+                "depression_points": round(raw, 1),
+                "scaled_score": round(scaled, 1),
+                "mood_impact": round(mood_impact, 2),
+                "recency_factor": round(float(team_result.get("recency_factor") if team_result.get("recency_factor") is not None else team.season_recency_factor()), 3),
+                "from_prior_season": getattr(team, "from_prior_season", None),
+                "is_offseason": team.is_in_offseason(),
                 "breakdown": team_result["breakdown"],
                 "expected_performance": team.expected_performance,
                 "jasons_expectations": team.jasons_expectations,
@@ -96,10 +108,11 @@ def get_teams():
                 "interest_level": team.interest_level,
                 "notes": team.notes
             })
-        
-        # Get F1 driver data
+
         if calc.f1_driver:
             f1_result = calc.f1_driver.calculate_depression()
+            raw = float(f1_result.get("score") or 0)
+            scaled, mood_impact = _mood(raw, 1.0)
             teams_data.append({
                 "name": calc.f1_driver.name,
                 "sport": "F1",
@@ -108,7 +121,12 @@ def get_teams():
                 "record": f"P{calc.f1_driver.championship_position}",
                 "win_percentage": (calc.f1_driver.recent_races.count("W") / len(calc.f1_driver.recent_races) * 100) if calc.f1_driver.recent_races else 0,
                 "recent_streak": calc.f1_driver.recent_races,
-                "depression_points": round(f1_result["score"], 1),
+                "depression_points": round(raw, 1),
+                "scaled_score": round(scaled, 1),
+                "mood_impact": round(mood_impact, 2),
+                "recency_factor": 1.0,
+                "from_prior_season": None,
+                "is_offseason": False,
                 "breakdown": f1_result["breakdown"],
                 "championship_position": calc.f1_driver.championship_position,
                 "recent_dnfs": calc.f1_driver.recent_dnfs,
@@ -116,10 +134,11 @@ def get_teams():
                 "jasons_expectations": calc.f1_driver.jasons_expectations,
                 "notes": calc.f1_driver.notes
             })
-        
-        # Get fantasy team data
+
         if calc.fantasy_team:
             fantasy_result = calc.fantasy_team.calculate_depression()
+            raw = float(fantasy_result.get("score") or 0)
+            scaled, mood_impact = _mood(raw, 1.0)
             teams_data.append({
                 "name": calc.fantasy_team.name,
                 "sport": "Fantasy",
@@ -128,30 +147,19 @@ def get_teams():
                 "record": f"{calc.fantasy_team.wins}-{calc.fantasy_team.losses}",
                 "win_percentage": round((calc.fantasy_team.wins / (calc.fantasy_team.wins + calc.fantasy_team.losses) * 100), 1) if (calc.fantasy_team.wins + calc.fantasy_team.losses) > 0 else 0,
                 "recent_streak": calc.fantasy_team.recent_streak,
-                "depression_points": round(fantasy_result["score"], 1),
+                "depression_points": round(raw, 1),
+                "scaled_score": round(scaled, 1),
+                "mood_impact": round(mood_impact, 2),
+                "recency_factor": 1.0,
+                "from_prior_season": None,
+                "is_offseason": False,
                 "breakdown": fantasy_result["breakdown"],
                 "expected_performance": calc.fantasy_team.expected_performance,
                 "jasons_expectations": calc.fantasy_team.jasons_expectations
             })
-        else:
-            # Debug: log why fantasy team is missing
-            print("⚠️  Fantasy team is None in /api/teams endpoint")
-            import json
-            config_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "teams_config.json")
-            try:
-                with open(config_path, 'r') as f:
-                    config = json.load(f)
-                    fantasy_config = config.get('fantasy_team', {})
-                    print(f"   Config has fantasy_team: {bool(fantasy_config)}")
-                    print(f"   Config fantasy_team keys: {list(fantasy_config.keys())}")
-                    espn_config = fantasy_config.get('espn', {})
-                    print(f"   ESPN config present: {bool(espn_config)}")
-                    if espn_config:
-                        print(f"   ESPN league_id: {espn_config.get('league_id')}")
-                        print(f"   ESPN year: {espn_config.get('year')}")
-            except Exception as e:
-                print(f"   Error reading config: {e}")
-        
+
+        teams_data.sort(key=lambda t: t.get("mood_impact") or 0, reverse=True)
+
         return jsonify({
             "success": True,
             "teams": teams_data,
@@ -162,6 +170,7 @@ def get_teams():
             "success": False,
             "error": str(e)
         }), 500
+
 
 @app.route('/api/recent-games', methods=['GET'])
 def get_recent_games():

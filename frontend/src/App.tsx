@@ -82,17 +82,18 @@ function App() {
       .map((team, index) => {
         const key = teamKey(team.name, team.sport);
         const activity = activityMap.get(key);
+        const moodImpact = team.mood_impact ?? Math.abs(team.depression_points ?? 0);
 
         return {
           team,
           activityLabel: activity?.label,
-          order: activity?.order ?? 0,
+          moodImpact,
           fallbackIndex: index,
         };
       })
       .sort((a, b) => {
-        if (b.order === a.order) return a.fallbackIndex - b.fallbackIndex;
-        return b.order - a.order;
+        if (b.moodImpact === a.moodImpact) return a.fallbackIndex - b.fallbackIndex;
+        return b.moodImpact - a.moodImpact;
       });
   }, [teamsData, activityMap]);
 
@@ -126,7 +127,7 @@ function App() {
         {sortedTeams.length > 0 && (
           <section>
             <h2 className="section-title mb-1">Teams</h2>
-            <p className="label-caps mb-6">Most recent activity first</p>
+            <p className="label-caps mb-6">Biggest mood impact first</p>
             <div className="border-b border-line">
               {sortedTeams.map(({ team, activityLabel }) => (
                 <TeamCard

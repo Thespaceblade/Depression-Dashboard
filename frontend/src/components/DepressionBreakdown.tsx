@@ -34,28 +34,38 @@ export default function DepressionBreakdown({ data }: Props) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const breakdownEntries = Object.entries(data.breakdown);
+  const breakdownEntries = Object.entries(data.breakdown || {});
 
   if (breakdownEntries.length === 0) {
     return (
       <section>
         <h2 className="section-title mb-1">Breakdown</h2>
-        <p className="label-caps mb-6">Score contributors</p>
+        <p className="label-caps mb-6">What is moving the score</p>
         <p className="text-muted text-sm">No breakdown data available.</p>
       </section>
     );
   }
 
-  const labels = breakdownEntries.map(([name]) => name);
-  const values = breakdownEntries.map(([, entry]) => entry.score || 0);
-  const total = values.reduce((sum, val) => sum + val, 0);
+  const sortedContributors = breakdownEntries
+    .map(([name, entry]) => ({
+      name,
+      score: entry.score || 0,
+      moodImpact: entry.mood_impact ?? Math.abs((entry.score || 0) - 50),
+      percentage: 0,
+    }))
+    .sort((a, b) => b.moodImpact - a.moodImpact);
+
+  const impactTotal = sortedContributors.reduce((sum, c) => sum + c.moodImpact, 0);
+  sortedContributors.forEach((c) => {
+    c.percentage = impactTotal > 0 ? (c.moodImpact / impactTotal) * 100 : 0;
+  });
 
   const chartData = {
-    labels,
+    labels: sortedContributors.map((c) => c.name),
     datasets: [
       {
-        data: values,
-        backgroundColor: COLORS.slice(0, labels.length),
+        data: sortedContributors.map((c) => c.moodImpact),
+        backgroundColor: COLORS.slice(0, sortedContributors.length),
         borderColor: '#0c100e',
         borderWidth: 2,
       },
@@ -83,26 +93,18 @@ export default function DepressionBreakdown({ data }: Props) {
           label: (context: { label?: string; parsed?: number }) => {
             const label = context.label || '';
             const value = context.parsed || 0;
-            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : '0.0';
-            return `${label}: ${value.toFixed(1)} pts (${percentage}%)`;
+            const percentage = impactTotal > 0 ? ((value / impactTotal) * 100).toFixed(1) : '0.0';
+            return `${label}: ${value.toFixed(1)} impact (${percentage}%)`;
           },
         },
       },
     },
   };
 
-  const sortedContributors = breakdownEntries
-    .map(([name, entry]) => ({
-      name,
-      score: entry.score || 0,
-      percentage: total > 0 ? ((entry.score || 0) / total) * 100 : 0,
-    }))
-    .sort((a, b) => b.score - a.score);
-
   return (
     <section>
       <h2 className="section-title mb-1">Breakdown</h2>
-      <p className="label-caps mb-6">Score contributors</p>
+      <p className="label-caps mb-6">Biggest mood impact first</p>
 
       <div className="grid md:grid-cols-2 gap-8 items-start border-t border-line pt-6">
         <div className="flex justify-center">
@@ -117,7 +119,7 @@ export default function DepressionBreakdown({ data }: Props) {
               <div className="flex justify-between gap-3 text-sm mb-1.5">
                 <span className="text-ink truncate">{contributor.name}</span>
                 <span className="font-mono text-loss flex-shrink-0">
-                  {contributor.score.toFixed(1)}
+                  {contributor.moodImpact.toFixed(1)}
                 </span>
               </div>
               <div className="h-px w-full bg-line overflow-hidden">
