@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-10-23T20:51:05.033212+00:00",
+  "updated_at": "2026-10-24T02:46:26.009353+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-24T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Memphis Grizzlies",
+      "team_score": 34,
+      "opponent_score": 33,
+      "score_margin": 1,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-10-23T23:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Indiana Pacers",
+      "team_score": 121,
+      "opponent_score": 105,
+      "score_margin": 16,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-22T02:00Z",
       "team": "Golden State Warriors",
@@ -233,32 +259,6 @@
       "team_score": 8,
       "opponent_score": 9,
       "score_margin": 1,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2025-09-27T23:15Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "L",
-      "type": "game",
-      "opponent": "Cleveland Guardians",
-      "team_score": 2,
-      "opponent_score": 3,
-      "score_margin": 1,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2025-09-26T23:10Z",
-      "team": "Texas Rangers",
-      "sport": "MLB",
-      "result": "W",
-      "type": "game",
-      "opponent": "Cleveland Guardians",
-      "team_score": 7,
-      "opponent_score": 3,
-      "score_margin": 4,
       "is_home": false,
       "is_overtime": false
     }
