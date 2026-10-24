@@ -1,17 +1,17 @@
 {
-  "updated_at": "2026-10-24T02:46:26.009353+00:00",
+  "updated_at": "2026-10-24T10:04:13.726836+00:00",
   "source": "espn",
   "games": [
     {
       "datetime": "2026-10-24T02:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
-      "result": "W",
+      "result": "L",
       "type": "game",
       "opponent": "Memphis Grizzlies",
-      "team_score": 34,
-      "opponent_score": 33,
-      "score_margin": 1,
+      "team_score": 108,
+      "opponent_score": 111,
+      "score_margin": 3,
       "is_home": true,
       "is_overtime": false
     },

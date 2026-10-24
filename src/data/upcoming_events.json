@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-24T02:46:25.353341+00:00",
+  "updated_at": "2026-10-24T10:04:13.361248+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-24T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "Memphis Grizzlies",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Today",
       "datetime": "2026-10-24T23:30Z",
@@ -134,6 +125,15 @@
       "team": "Dallas Mavericks",
       "sport": "NBA",
       "opponent": "Sacramento Kings",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 10 days",
+      "datetime": "2026-11-03T03:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Phoenix Suns",
       "type": "game",
       "is_home": true
     }
