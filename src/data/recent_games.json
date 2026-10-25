@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-25T02:36:47.506905+00:00",
+  "updated_at": "2026-10-25T10:29:21.433346+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-25T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Phoenix Suns",
+      "team_score": 122,
+      "opponent_score": 131,
+      "score_margin": 9,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-25T00:00Z",
       "team": "Dallas Mavericks",
@@ -12,6 +25,19 @@
       "team_score": 106,
       "opponent_score": 122,
       "score_margin": 16,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-10-24T23:30Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "L",
+      "type": "game",
+      "opponent": "Syracuse Orange",
+      "team_score": 30,
+      "opponent_score": 31,
+      "score_margin": 1,
       "is_home": true,
       "is_overtime": false
     },
@@ -185,19 +211,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-09-12T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "W",
-      "type": "game",
-      "opponent": "East Tennessee State Buccaneers",
-      "team_score": 35,
-      "opponent_score": 3,
-      "score_margin": 32,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-03-13T01:30Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
@@ -246,19 +259,6 @@
       "team_score": 89,
       "opponent_score": 82,
       "score_margin": 7,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-02-24T00:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Louisville Cardinals",
-      "team_score": 77,
-      "opponent_score": 74,
-      "score_margin": 3,
       "is_home": true,
       "is_overtime": false
     }
