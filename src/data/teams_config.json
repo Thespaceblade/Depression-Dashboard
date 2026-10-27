@@ -4,7 +4,7 @@
       "name": "Dallas Cowboys",
       "sport": "NFL",
       "record": {
-        "wins": 2,
+        "wins": 3,
         "losses": 4,
         "ties": 0
       },
@@ -17,11 +17,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "L",
         "W",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -113,7 +113,7 @@
       "name": "Golden State Warriors",
       "sport": "NBA",
       "record": {
-        "wins": 0,
+        "wins": 1,
         "losses": 3,
         "ties": 0
       },
@@ -126,7 +126,7 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
-        "L",
+        "W",
         "L",
         "L",
         "L"
