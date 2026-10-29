@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-29T03:46:47.130181+00:00",
+  "updated_at": "2026-10-29T12:03:09.448651+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-29T01:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Oklahoma City Thunder",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "In 2 days",
       "datetime": "2026-10-31T00:00Z",
@@ -134,6 +125,15 @@
       "team": "Dallas Mavericks",
       "sport": "NBA",
       "opponent": "Brooklyn Nets",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-10T01:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "Indiana Pacers",
       "type": "game",
       "is_home": true
     }
