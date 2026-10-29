@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-28T22:03:45.836559+00:00",
+  "updated_at": "2026-10-29T03:46:47.357735+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-29T00:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Minnesota Timberwolves",
+      "team_score": 119,
+      "opponent_score": 114,
+      "score_margin": 5,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-27T02:00Z",
       "team": "Golden State Warriors",
@@ -247,19 +260,6 @@
       "opponent_score": 80,
       "score_margin": 1,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-03-07T23:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "L",
-      "type": "game",
-      "opponent": "Duke Blue Devils",
-      "team_score": 61,
-      "opponent_score": 76,
-      "score_margin": 15,
-      "is_home": false,
       "is_overtime": false
     }
   ]
