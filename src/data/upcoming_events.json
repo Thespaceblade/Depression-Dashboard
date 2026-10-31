@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-10-31T03:33:19.396976+00:00",
+  "updated_at": "2026-10-31T11:29:55.218594+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-10-31T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "Los Angeles Lakers",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "Today",
       "datetime": "2026-10-31T23:30Z",
@@ -136,6 +127,15 @@
       "opponent": "New Orleans Pelicans",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-12T02:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Houston Rockets",
+      "type": "game",
+      "is_home": false
     }
   ]
 }

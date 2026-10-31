@@ -1,17 +1,17 @@
 {
-  "updated_at": "2026-10-31T03:33:19.586872+00:00",
+  "updated_at": "2026-10-31T11:29:55.843745+00:00",
   "source": "espn",
   "games": [
     {
       "datetime": "2026-10-31T02:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
-      "result": "T",
+      "result": "W",
       "type": "game",
       "opponent": "Los Angeles Lakers",
-      "team_score": 53,
-      "opponent_score": 53,
-      "score_margin": 0,
+      "team_score": 112,
+      "opponent_score": 95,
+      "score_margin": 17,
       "is_home": true,
       "is_overtime": false
     },
