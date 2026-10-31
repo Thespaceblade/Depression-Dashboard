@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-10-30T21:50:49.278108+00:00",
+  "updated_at": "2026-10-31T03:33:19.586872+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-31T02:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "T",
+      "type": "game",
+      "opponent": "Los Angeles Lakers",
+      "team_score": 53,
+      "opponent_score": 53,
+      "score_margin": 0,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-10-31T00:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Houston Rockets",
+      "team_score": 116,
+      "opponent_score": 111,
+      "score_margin": 5,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-29T01:30Z",
       "team": "Dallas Mavericks",
@@ -129,32 +155,6 @@
       "team_score": 121,
       "opponent_score": 105,
       "score_margin": 16,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-22T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Los Angeles Lakers",
-      "team_score": 105,
-      "opponent_score": 127,
-      "score_margin": 22,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-22T00:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Houston Rockets",
-      "team_score": 110,
-      "opponent_score": 128,
-      "score_margin": 18,
       "is_home": false,
       "is_overtime": false
     },
