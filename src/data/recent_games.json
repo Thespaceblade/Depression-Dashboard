@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-10-31T20:51:14.696060+00:00",
+  "updated_at": "2026-11-01T03:39:44.198692+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-10-31T23:30Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "L",
+      "type": "game",
+      "opponent": "Miami Hurricanes",
+      "team_score": 35,
+      "opponent_score": 38,
+      "score_margin": 3,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-31T02:00Z",
       "team": "Golden State Warriors",
@@ -247,19 +260,6 @@
       "opponent_score": 34,
       "score_margin": 3,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-09-19T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "L",
-      "type": "game",
-      "opponent": "Clemson Tigers",
-      "team_score": 20,
-      "opponent_score": 28,
-      "score_margin": 8,
-      "is_home": false,
       "is_overtime": false
     }
   ]

@@ -274,7 +274,7 @@
       "sport": "NCAA Football",
       "record": {
         "wins": 4,
-        "losses": 3,
+        "losses": 4,
         "ties": 0
       },
       "expected_performance": 8,
@@ -288,9 +288,9 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "L",
-        "W",
-        "W",
         "L",
+        "W",
+        "W",
         "L"
       ],
       "recent_opponents": [],
