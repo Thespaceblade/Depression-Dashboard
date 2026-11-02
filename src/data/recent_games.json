@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-01T21:33:02.311022+00:00",
+  "updated_at": "2026-11-02T03:44:48.511497+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-01T18:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "L",
+      "type": "game",
+      "opponent": "Arizona Cardinals",
+      "team_score": 30,
+      "opponent_score": 33,
+      "score_margin": 3,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-10-31T23:30Z",
       "team": "North Carolina Tar Heels",
@@ -246,19 +259,6 @@
       "team_score": 26,
       "opponent_score": 37,
       "score_margin": 11,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-09-27T20:25Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "result": "L",
-      "type": "game",
-      "opponent": "Baltimore Ravens",
-      "team_score": 31,
-      "opponent_score": 34,
-      "score_margin": 3,
       "is_home": true,
       "is_overtime": false
     }
