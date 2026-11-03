@@ -1,7 +1,46 @@
 {
-  "updated_at": "2026-11-03T00:15:20.735173+00:00",
+  "updated_at": "2026-11-03T13:23:11.878982+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-03T03:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Phoenix Suns",
+      "team_score": 116,
+      "opponent_score": 113,
+      "score_margin": 3,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-03T01:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Sacramento Kings",
+      "team_score": 100,
+      "opponent_score": 115,
+      "score_margin": 15,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-03T00:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Basketball",
+      "result": "W",
+      "type": "game",
+      "opponent": "Western Carolina Catamounts",
+      "team_score": 80,
+      "opponent_score": 72,
+      "score_margin": 8,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-02T01:30Z",
       "team": "Golden State Warriors",
@@ -133,19 +172,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-10-25T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Phoenix Suns",
-      "team_score": 122,
-      "opponent_score": 131,
-      "score_margin": 9,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-10-25T00:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -169,19 +195,6 @@
       "opponent_score": 31,
       "score_margin": 1,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-23T23:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Indiana Pacers",
-      "team_score": 121,
-      "opponent_score": 105,
-      "score_margin": 16,
-      "is_home": false,
       "is_overtime": false
     },
     {
@@ -247,19 +260,6 @@
       "opponent_score": 30,
       "score_margin": 4,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-03T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "L",
-      "type": "game",
-      "opponent": "Notre Dame Fighting Irish",
-      "team_score": 26,
-      "opponent_score": 37,
-      "score_margin": 11,
-      "is_home": true,
       "is_overtime": false
     }
   ]

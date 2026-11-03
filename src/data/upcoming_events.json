@@ -1,25 +1,7 @@
 {
-  "updated_at": "2026-11-03T00:15:20.630814+00:00",
+  "updated_at": "2026-11-03T13:23:11.241288+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-03T01:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Sacramento Kings",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "Today",
-      "datetime": "2026-11-03T03:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "Phoenix Suns",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "In 2 days",
       "datetime": "2026-11-05T02:30Z",
@@ -134,6 +116,24 @@
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "opponent": "Louisville Cardinals",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-15T00:30Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "Cleveland Cavaliers",
+      "type": "game",
+      "is_home": false
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-15T21:25Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "San Francisco 49ers",
       "type": "game",
       "is_home": true
     }
