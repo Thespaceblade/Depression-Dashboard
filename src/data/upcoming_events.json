@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-11-05T04:33:48.535843+00:00",
+  "updated_at": "2026-11-05T13:47:58.037804+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-05T02:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "San Antonio Spurs",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-11-06T03:00Z",
@@ -136,6 +127,15 @@
       "opponent": "San Francisco 49ers",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 10 days",
+      "datetime": "2026-11-15T23:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "Boston Celtics",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
