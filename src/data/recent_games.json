@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-06T04:32:01.761106+00:00",
+  "updated_at": "2026-11-06T13:31:56.506541+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-06T03:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Miami Heat",
+      "team_score": 120,
+      "opponent_score": 100,
+      "score_margin": 20,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-05T02:30Z",
       "team": "Dallas Mavericks",
@@ -142,19 +155,6 @@
       "team_score": 119,
       "opponent_score": 114,
       "score_margin": 5,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-27T02:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Denver Nuggets",
-      "team_score": 134,
-      "opponent_score": 114,
-      "score_margin": 20,
       "is_home": false,
       "is_overtime": false
     },
