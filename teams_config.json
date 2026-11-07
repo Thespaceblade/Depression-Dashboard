@@ -270,7 +270,7 @@
       "name": "North Carolina Tar Heels",
       "sport": "NCAA Football",
       "record": {
-        "wins": 4,
+        "wins": 5,
         "losses": 4,
         "ties": 0
       },
@@ -284,11 +284,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "L",
         "W",
-        "W",
-        "L"
+        "W"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],

@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-07T12:12:30.215593+00:00",
+  "updated_at": "2026-11-07T21:16:27.919085+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-07T17:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "W",
+      "type": "game",
+      "opponent": "UConn Huskies",
+      "team_score": 38,
+      "opponent_score": 21,
+      "score_margin": 17,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-07T01:00Z",
       "team": "Dallas Mavericks",
@@ -247,19 +260,6 @@
       "opponent_score": 17,
       "score_margin": 4,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-09T00:15Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "result": "L",
-      "type": "game",
-      "opponent": "Tampa Bay Buccaneers",
-      "team_score": 16,
-      "opponent_score": 24,
-      "score_margin": 8,
-      "is_home": true,
       "is_overtime": false
     }
   ]

@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-11-07T12:12:30.059460+00:00",
+  "updated_at": "2026-11-07T21:16:27.540681+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-07T17:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "opponent": "UConn Huskies",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-11-08T01:30Z",
@@ -136,6 +127,15 @@
       "opponent": "Golden State Warriors",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-19T02:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Dallas Mavericks",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
