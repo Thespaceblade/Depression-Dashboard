@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-08T03:43:39.564664+00:00",
+  "updated_at": "2026-11-08T12:32:56.476532+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-08T01:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Orlando Magic",
+      "team_score": 126,
+      "opponent_score": 119,
+      "score_margin": 7,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-07T17:00Z",
       "team": "North Carolina Tar Heels",
@@ -182,19 +195,6 @@
       "opponent_score": 96,
       "score_margin": 24,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-29T00:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Minnesota Timberwolves",
-      "team_score": 119,
-      "opponent_score": 114,
-      "score_margin": 5,
-      "is_home": false,
       "is_overtime": false
     },
     {
