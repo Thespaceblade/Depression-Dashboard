@@ -4,7 +4,7 @@
       "name": "Dallas Cowboys",
       "sport": "NFL",
       "record": {
-        "wins": 3,
+        "wins": 4,
         "losses": 5,
         "ties": 0
       },
@@ -17,11 +17,11 @@
       ],
       "recent_rivalry_losses": [],
       "recent_streak": [
+        "W",
         "L",
         "W",
         "L",
-        "L",
-        "W"
+        "L"
       ],
       "recent_opponents": [],
       "recent_opponent_records": [],
@@ -59,7 +59,7 @@
       "name": "Dallas Mavericks",
       "sport": "NBA",
       "record": {
-        "wins": 5,
+        "wins": 6,
         "losses": 4,
         "ties": 0
       },
@@ -73,9 +73,9 @@
       "recent_rivalry_losses": [],
       "recent_streak": [
         "W",
-        "L",
-        "L",
         "W",
+        "L",
+        "L",
         "W"
       ],
       "recent_opponents": [],

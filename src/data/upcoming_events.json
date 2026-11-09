@@ -1,27 +1,9 @@
 {
-  "updated_at": "2026-11-08T21:31:29.628350+00:00",
+  "updated_at": "2026-11-09T03:56:36.843618+00:00",
   "source": "espn",
   "events": [
     {
-      "date": "Today",
-      "datetime": "2026-11-08T18:00Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "opponent": "Indianapolis Colts",
-      "type": "game",
-      "is_home": false
-    },
-    {
       "date": "Tomorrow",
-      "datetime": "2026-11-09T00:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Brooklyn Nets",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "In 2 days",
       "datetime": "2026-11-10T01:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -30,7 +12,7 @@
       "is_home": true
     },
     {
-      "date": "In 2 days",
+      "date": "Tomorrow",
       "datetime": "2026-11-10T03:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -39,7 +21,7 @@
       "is_home": true
     },
     {
-      "date": "In 4 days",
+      "date": "In 3 days",
       "datetime": "2026-11-12T02:30Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -48,7 +30,7 @@
       "is_home": false
     },
     {
-      "date": "In 5 days",
+      "date": "In 4 days",
       "datetime": "2026-11-13T01:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -57,7 +39,7 @@
       "is_home": false
     },
     {
-      "date": "In 6 days",
+      "date": "In 5 days",
       "datetime": "2026-11-14T02:30Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -66,7 +48,7 @@
       "is_home": false
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-11-15T00:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
@@ -75,7 +57,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-11-15T00:30Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -84,7 +66,7 @@
       "is_home": false
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-11-15T21:25Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -93,7 +75,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-11-15T23:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -102,7 +84,7 @@
       "is_home": false
     },
     {
-      "date": "In 9 days",
+      "date": "In 8 days",
       "datetime": "2026-11-17T01:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -111,7 +93,7 @@
       "is_home": false
     },
     {
-      "date": "In 11 days",
+      "date": "In 10 days",
       "datetime": "2026-11-19T02:30Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -120,7 +102,7 @@
       "is_home": true
     },
     {
-      "date": "In 11 days",
+      "date": "In 10 days",
       "datetime": "2026-11-19T02:30Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -129,13 +111,31 @@
       "is_home": false
     },
     {
-      "date": "In 12 days",
+      "date": "In 11 days",
       "datetime": "2026-11-20T01:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
       "opponent": "Memphis Grizzlies",
       "type": "game",
       "is_home": false
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-21T05:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "opponent": "Virginia Cavaliers",
+      "type": "game",
+      "is_home": false
+    },
+    {
+      "date": "In 13 days",
+      "datetime": "2026-11-22T01:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "LA Clippers",
+      "type": "game",
+      "is_home": true
     }
   ]
 }

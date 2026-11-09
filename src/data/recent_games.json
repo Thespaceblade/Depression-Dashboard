@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-11-08T21:31:29.935947+00:00",
+  "updated_at": "2026-11-09T03:56:37.243098+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-09T00:30Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Brooklyn Nets",
+      "team_score": 130,
+      "opponent_score": 93,
+      "score_margin": 37,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-08T18:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "W",
+      "type": "game",
+      "opponent": "Indianapolis Colts",
+      "team_score": 27,
+      "opponent_score": 23,
+      "score_margin": 4,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-08T01:30Z",
       "team": "Golden State Warriors",
@@ -185,19 +211,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-10-29T01:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Oklahoma City Thunder",
-      "team_score": 120,
-      "opponent_score": 96,
-      "score_margin": 24,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-10-27T00:15Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -245,19 +258,6 @@
       "opponent": "Duke Blue Devils",
       "team_score": 24,
       "opponent_score": 20,
-      "score_margin": 4,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-10T16:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "W",
-      "type": "game",
-      "opponent": "Pittsburgh Panthers",
-      "team_score": 21,
-      "opponent_score": 17,
       "score_margin": 4,
       "is_home": false,
       "is_overtime": false
