@@ -1,25 +1,7 @@
 {
-  "updated_at": "2026-11-10T01:01:36.061947+00:00",
+  "updated_at": "2026-11-10T14:03:01.580537+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-10T01:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "opponent": "Indiana Pacers",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "Today",
-      "datetime": "2026-11-10T03:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "New Orleans Pelicans",
-      "type": "game",
-      "is_home": true
-    },
     {
       "date": "In 2 days",
       "datetime": "2026-11-12T02:30Z",
@@ -136,6 +118,24 @@
       "opponent": "LA Clippers",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-22T18:00Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Tennessee Titans",
+      "type": "game",
+      "is_home": true
+    },
+    {
+      "date": "In 13 days",
+      "datetime": "2026-11-23T00:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "opponent": "Utah Jazz",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
