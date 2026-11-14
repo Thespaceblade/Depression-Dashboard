@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-11-14T04:23:53.936901+00:00",
+  "updated_at": "2026-11-14T12:47:46.737548+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-14T02:30Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "opponent": "San Antonio Spurs",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-11-15T00:00Z",
@@ -136,6 +127,15 @@
       "opponent": "Denver Nuggets",
       "type": "game",
       "is_home": false
+    },
+    {
+      "date": "In 12 days",
+      "datetime": "2026-11-26T03:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Sacramento Kings",
+      "type": "game",
+      "is_home": true
     }
   ]
 }
