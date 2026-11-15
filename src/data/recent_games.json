@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-11-14T21:52:01.010270+00:00",
+  "updated_at": "2026-11-15T04:08:15.608986+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-15T00:30Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Cleveland Cavaliers",
+      "team_score": 117,
+      "opponent_score": 127,
+      "score_margin": 10,
+      "is_home": false,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-15T00:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Football",
+      "result": "L",
+      "type": "game",
+      "opponent": "Louisville Cardinals",
+      "team_score": 14,
+      "opponent_score": 16,
+      "score_margin": 2,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-14T02:30Z",
       "team": "Golden State Warriors",
@@ -185,19 +211,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-11-05T02:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "San Antonio Spurs",
-      "team_score": 111,
-      "opponent_score": 112,
-      "score_margin": 1,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-11-03T00:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
@@ -247,19 +260,6 @@
       "opponent_score": 21,
       "score_margin": 17,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-24T23:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "result": "L",
-      "type": "game",
-      "opponent": "Syracuse Orange",
-      "team_score": 30,
-      "opponent_score": 31,
-      "score_margin": 1,
-      "is_home": true,
       "is_overtime": false
     }
   ]
