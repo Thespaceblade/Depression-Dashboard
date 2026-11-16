@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-11-15T22:20:45.356434+00:00",
+  "updated_at": "2026-11-16T04:07:33.989127+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-15T23:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Boston Celtics",
+      "team_score": 94,
+      "opponent_score": 131,
+      "score_margin": 37,
+      "is_home": false,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-15T21:25Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "result": "L",
+      "type": "game",
+      "opponent": "San Francisco 49ers",
+      "team_score": 40,
+      "opponent_score": 46,
+      "score_margin": 6,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-15T00:30Z",
       "team": "Dallas Mavericks",
@@ -172,19 +198,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-11-07T01:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Utah Jazz",
-      "team_score": 112,
-      "opponent_score": 100,
-      "score_margin": 12,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-11-07T00:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Basketball",
@@ -247,19 +260,6 @@
       "opponent_score": 38,
       "score_margin": 3,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-10-27T00:15Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "result": "W",
-      "type": "game",
-      "opponent": "Philadelphia Eagles",
-      "team_score": 38,
-      "opponent_score": 21,
-      "score_margin": 17,
-      "is_home": false,
       "is_overtime": false
     }
   ]
