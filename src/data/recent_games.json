@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-11-18T23:45:13.733354+00:00",
+  "updated_at": "2026-11-19T05:22:08.310444+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-19T01:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Golden State Warriors",
+      "team_score": 116,
+      "opponent_score": 94,
+      "score_margin": 22,
+      "is_home": true,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-19T01:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Dallas Mavericks",
+      "team_score": 94,
+      "opponent_score": 116,
+      "score_margin": 22,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-17T01:00Z",
       "team": "Golden State Warriors",
@@ -159,19 +185,6 @@
       "is_overtime": false
     },
     {
-      "datetime": "2026-11-09T00:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Brooklyn Nets",
-      "team_score": 130,
-      "opponent_score": 93,
-      "score_margin": 37,
-      "is_home": true,
-      "is_overtime": false
-    },
-    {
       "datetime": "2026-11-08T18:00Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -182,19 +195,6 @@
       "opponent_score": 23,
       "score_margin": 4,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-08T01:30Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "W",
-      "type": "game",
-      "opponent": "Orlando Magic",
-      "team_score": 126,
-      "opponent_score": 119,
-      "score_margin": 7,
-      "is_home": true,
       "is_overtime": false
     },
     {
