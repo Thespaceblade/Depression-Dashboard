@@ -1,16 +1,7 @@
 {
-  "updated_at": "2026-11-21T13:58:25.936059+00:00",
+  "updated_at": "2026-11-21T22:39:19.492782+00:00",
   "source": "espn",
   "events": [
-    {
-      "date": "Today",
-      "datetime": "2026-11-21T17:30Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Football",
-      "opponent": "Virginia Cavaliers",
-      "type": "game",
-      "is_home": false
-    },
     {
       "date": "Tomorrow",
       "datetime": "2026-11-22T01:00Z",
@@ -136,6 +127,15 @@
       "opponent": "Orlando Magic",
       "type": "game",
       "is_home": true
+    },
+    {
+      "date": "In 17 days",
+      "datetime": "2026-12-08T01:15Z",
+      "team": "Dallas Cowboys",
+      "sport": "NFL",
+      "opponent": "Seattle Seahawks",
+      "type": "game",
+      "is_home": false
     }
   ]
 }
