@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-23T16:59:38.810770+00:00",
+  "updated_at": "2026-11-24T03:40:54.022071+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-24T01:00Z",
+      "team": "North Carolina Tar Heels",
+      "sport": "NCAA Basketball",
+      "result": "W",
+      "type": "game",
+      "opponent": "Monmouth Hawks",
+      "team_score": 85,
+      "opponent_score": 45,
+      "score_margin": 40,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-23T01:30Z",
       "team": "Golden State Warriors",
@@ -247,19 +260,6 @@
       "opponent_score": 21,
       "score_margin": 17,
       "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-07T00:00Z",
-      "team": "North Carolina Tar Heels",
-      "sport": "NCAA Basketball",
-      "result": "W",
-      "type": "game",
-      "opponent": "Wofford Terriers",
-      "team_score": 109,
-      "opponent_score": 70,
-      "score_margin": 39,
-      "is_home": true,
       "is_overtime": false
     }
   ]
