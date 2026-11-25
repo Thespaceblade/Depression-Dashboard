@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-25T01:47:39.454919+00:00",
+  "updated_at": "2026-11-25T16:35:33.777151+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-25T03:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Denver Nuggets",
+      "team_score": 120,
+      "opponent_score": 101,
+      "score_margin": 19,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-24T01:00Z",
       "team": "North Carolina Tar Heels",
@@ -169,19 +182,6 @@
       "opponent_score": 46,
       "score_margin": 6,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-15T00:30Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Cleveland Cavaliers",
-      "team_score": 117,
-      "opponent_score": 127,
-      "score_margin": 10,
-      "is_home": false,
       "is_overtime": false
     },
     {
