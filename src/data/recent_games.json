@@ -1,7 +1,20 @@
 {
-  "updated_at": "2026-11-26T01:23:41.311018+00:00",
+  "updated_at": "2026-11-26T16:07:47.513350+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-26T03:00Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Sacramento Kings",
+      "team_score": 129,
+      "opponent_score": 110,
+      "score_margin": 19,
+      "is_home": true,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-25T03:00Z",
       "team": "Dallas Mavericks",
@@ -195,19 +208,6 @@
       "opponent_score": 16,
       "score_margin": 2,
       "is_home": true,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-14T02:30Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "San Antonio Spurs",
-      "team_score": 85,
-      "opponent_score": 123,
-      "score_margin": 38,
-      "is_home": false,
       "is_overtime": false
     },
     {
