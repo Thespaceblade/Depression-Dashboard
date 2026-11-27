@@ -1,18 +1,9 @@
 {
-  "updated_at": "2026-11-26T16:07:46.997865+00:00",
+  "updated_at": "2026-11-27T01:21:38.475267+00:00",
   "source": "espn",
   "events": [
     {
-      "date": "Today",
-      "datetime": "2026-11-26T21:30Z",
-      "team": "Dallas Cowboys",
-      "sport": "NFL",
-      "opponent": "Philadelphia Eagles",
-      "type": "game",
-      "is_home": true
-    },
-    {
-      "date": "In 2 days",
+      "date": "Tomorrow",
       "datetime": "2026-11-28T02:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -21,7 +12,7 @@
       "is_home": false
     },
     {
-      "date": "In 2 days",
+      "date": "Tomorrow",
       "datetime": "2026-11-28T02:30Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -30,7 +21,7 @@
       "is_home": false
     },
     {
-      "date": "In 2 days",
+      "date": "Tomorrow",
       "datetime": "2026-11-28T17:00Z",
       "team": "North Carolina Tar Heels",
       "sport": "NCAA Football",
@@ -39,7 +30,7 @@
       "is_home": true
     },
     {
-      "date": "In 4 days",
+      "date": "In 3 days",
       "datetime": "2026-11-30T01:30Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -48,7 +39,7 @@
       "is_home": true
     },
     {
-      "date": "In 5 days",
+      "date": "In 4 days",
       "datetime": "2026-12-01T01:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -57,7 +48,7 @@
       "is_home": true
     },
     {
-      "date": "In 6 days",
+      "date": "In 5 days",
       "datetime": "2026-12-02T03:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -66,7 +57,7 @@
       "is_home": true
     },
     {
-      "date": "In 7 days",
+      "date": "In 6 days",
       "datetime": "2026-12-03T01:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -75,7 +66,7 @@
       "is_home": true
     },
     {
-      "date": "In 12 days",
+      "date": "In 11 days",
       "datetime": "2026-12-08T01:15Z",
       "team": "Dallas Cowboys",
       "sport": "NFL",
@@ -84,7 +75,7 @@
       "is_home": false
     },
     {
-      "date": "In 17 days",
+      "date": "In 16 days",
       "datetime": "2026-12-13T01:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -93,7 +84,7 @@
       "is_home": false
     },
     {
-      "date": "In 19 days",
+      "date": "In 18 days",
       "datetime": "2026-12-15T01:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -102,7 +93,7 @@
       "is_home": true
     },
     {
-      "date": "In 19 days",
+      "date": "In 18 days",
       "datetime": "2026-12-15T01:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -111,7 +102,7 @@
       "is_home": false
     },
     {
-      "date": "In 21 days",
+      "date": "In 20 days",
       "datetime": "2026-12-17T00:00Z",
       "team": "Golden State Warriors",
       "sport": "NBA",
@@ -120,7 +111,7 @@
       "is_home": false
     },
     {
-      "date": "In 21 days",
+      "date": "In 20 days",
       "datetime": "2026-12-17T00:30Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
@@ -129,11 +120,20 @@
       "is_home": false
     },
     {
-      "date": "In 22 days",
+      "date": "In 21 days",
       "datetime": "2026-12-18T00:00Z",
       "team": "Dallas Mavericks",
       "sport": "NBA",
       "opponent": "Philadelphia 76ers",
+      "type": "game",
+      "is_home": false
+    },
+    {
+      "date": "In 22 days",
+      "datetime": "2026-12-19T00:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "opponent": "Toronto Raptors",
       "type": "game",
       "is_home": false
     }
