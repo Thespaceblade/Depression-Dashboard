@@ -1,7 +1,33 @@
 {
-  "updated_at": "2026-11-28T00:55:44.909103+00:00",
+  "updated_at": "2026-11-28T14:51:18.472612+00:00",
   "source": "espn",
   "games": [
+    {
+      "datetime": "2026-11-28T02:30Z",
+      "team": "Golden State Warriors",
+      "sport": "NBA",
+      "result": "L",
+      "type": "game",
+      "opponent": "Portland Trail Blazers",
+      "team_score": 94,
+      "opponent_score": 116,
+      "score_margin": 22,
+      "is_home": false,
+      "is_overtime": false
+    },
+    {
+      "datetime": "2026-11-28T02:00Z",
+      "team": "Dallas Mavericks",
+      "sport": "NBA",
+      "result": "W",
+      "type": "game",
+      "opponent": "Phoenix Suns",
+      "team_score": 113,
+      "opponent_score": 109,
+      "score_margin": 4,
+      "is_home": false,
+      "is_overtime": false
+    },
     {
       "datetime": "2026-11-28T00:00Z",
       "team": "North Carolina Tar Heels",
@@ -9,9 +35,9 @@
       "result": "L",
       "type": "game",
       "opponent": "West Virginia Mountaineers",
-      "team_score": 30,
-      "opponent_score": 41,
-      "score_margin": 11,
+      "team_score": 59,
+      "opponent_score": 72,
+      "score_margin": 13,
       "is_home": true,
       "is_overtime": false
     },
@@ -181,32 +207,6 @@
       "team_score": 94,
       "opponent_score": 116,
       "score_margin": 22,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-17T01:00Z",
-      "team": "Golden State Warriors",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "New Orleans Pelicans",
-      "team_score": 94,
-      "opponent_score": 115,
-      "score_margin": 21,
-      "is_home": false,
-      "is_overtime": false
-    },
-    {
-      "datetime": "2026-11-15T23:00Z",
-      "team": "Dallas Mavericks",
-      "sport": "NBA",
-      "result": "L",
-      "type": "game",
-      "opponent": "Boston Celtics",
-      "team_score": 94,
-      "opponent_score": 131,
-      "score_margin": 37,
       "is_home": false,
       "is_overtime": false
     },
